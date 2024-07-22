@@ -274,3 +274,13 @@ FCM_DJANGO_SETTINGS = {
     "ONE_DEVICE_PER_USER": False,
     "DELETE_INACTIVE_DEVICES": False,
 }
+
+
+# Email 
+
+EMAIL_BACKEND= 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'no-reply@securitytroops.com' 
+EMAIL_HOST_PASSWORD = 'Stroops2018'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

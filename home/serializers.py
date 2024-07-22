@@ -150,7 +150,7 @@ class UserCreationSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = User
-		fields = ('country', 'state', 'username','password','cpassword','email','mobile','first_name','last_name', 'fcm_token', 'fcm_type', 'father', 'locate')
+		fields = ('country', 'state', 'username','password','cpassword','email','mobile','first_name','last_name', 'fcm_token', 'fcm_type', 'locate')
 		extra_kwargs = {
 			'country': {'required': True},
 			'state': {'required': True},
@@ -170,7 +170,7 @@ class UserCreationSerializer(serializers.ModelSerializer):
 		return serializer.data
 
 	def create(self, validated_data):
-		user = User.objects.create_user(service=validated_data.get('service', None), country=validated_data['country'], father=validated_data.get('father'), locate=validated_data['locate'], state=validated_data['state'], username=validated_data['mobile'], email=validated_data['email'], password=validated_data['password'], mobile=validated_data['mobile'], first_name = validated_data['first_name'], last_name = validated_data['last_name'])
+		user = User.objects.create_user(country=validated_data['country'], locate=validated_data['locate'], state=validated_data['state'], username=validated_data['mobile'], email=validated_data['email'], password=validated_data['password'], mobile=validated_data['mobile'], first_name = validated_data['first_name'], last_name = validated_data['last_name'])
 		if user:
 			user.is_active = False
 			otp = ' '.join(random.choice(string.digits[1:]) for _ in range(5))
