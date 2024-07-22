@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="wide wow-animation" lang="en">
+	<head>
+		<title>{% block title %}{% endblock %} Easy Meal</title>
+		<meta name="viewport" content="width=device-width height=device-height initial-scale=1.0">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<style>
+			#main {
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				font-size: 60px;
+				font-style: oblique;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				padding: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="main">
+			<h4>Welcome to Easy Meal</h4>
+		</div>
+		{% block script %}
+		{% endblock %}
+		<script type="module">
+		  // Import the functions you need from the SDKs you need
+		  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+		  import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-messaging.js";
+		  // import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-analytics.js";
+		  // TODO: Add SDKs for Firebase products that you want to use
+		  // https://firebase.google.com/docs/web/setup#available-libraries
+
+		  // Your web app's Firebase configuration
+		  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+		  const firebaseConfig = {
+		    apiKey: "AIzaSyBZgRCZexv8ErSYGyo6IpbO1Q438e-CFTA",
+		    authDomain: "timestint-st.firebaseapp.com",
+		    projectId: "timestint-st",
+		    storageBucket: "timestint-st.appspot.com",
+		    messagingSenderId: "507688135519",
+		    appId: "1:507688135519:web:1b3a39ef85863310fce4ea",
+		    measurementId: "G-6XJ70609DK"
+		  };
+
+		  // Initialize Firebase
+		  const app = initializeApp(firebaseConfig);
+		  const messaging = getMessaging();
+			getToken(messaging, { vapidKey: 'BHzwzJsxsIu-lTCvdZQfK1eqfCJd1tqDzGySY9DEjX6CwlZA1LB42062q2bv9uH3B2R18H_TVxbGVZl9X0yZjwI' }).then((currentToken) => {
+			  if (currentToken) {
+			    // Send the token to your server and update the UI if necessary
+			    console.log("Token is : ", currentToken);
+			  } else {
+			    // Show permission request UI
+			    console.log('No registration token available. Request permission to generate one.');
+			    // ...
+			  }
+			}).catch((err) => {
+			  console.log('An error occurred while retrieving token. ', err);
+			  // ...
+			});
+		</script>
+	</body>
+</html>
