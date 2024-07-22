@@ -2,6 +2,8 @@ from django.db import models
 from django.forms.models import model_to_dict
 from django.db.models.fields.files import ImageFieldFile, FileField
 from django.db.models.fields import UUIDField
+from django.core.mail import send_mail
+from django.template import loader
 from django.conf import settings
 from django.apps import apps
 import datetime
@@ -91,3 +93,43 @@ def aws_image_size(image):
 def save_notifications(title,body,ntype='Blog',slug=None,user=None,image=settings.EASYLOGO):
 	Notifications = apps.get_model(app_label='home', model_name='Notifications')
 	Notifications.objects.create(title=title,body=body,image=image,user=user,ntype=ntype,slug=slug)
+
+def str2bool(v):
+    if type(v) == bool:
+        return v
+    return v.lower() in ("True", "true")
+
+def send_sms(number,message):
+	res = requests.get("https://login.bulksmsgateway.in/sendmessage.php?user=Emango&password=Emango@123&mobile="+str(number)+"&message="+ str(message) +"&sender=EMAGCC&type=3&template_id=1007168733299326066")
+
+def custom_mail(subject,email_template_name,user,c):
+	email = loader.render_to_string(email_template_name, c)
+	send_mail(subject, email, f'Security Troops <{settings.DEFAULT_FROM_EMAIL}>' , [user.email], html_message=email, fail_silently=False)
+
+def percentage(instance):
+	per = 0
+	if instance.first_name:
+		per += 10
+	if instance.gender:
+		per += 10
+	if instance.image:
+		per += 20
+	if instance.country:
+		per += 10
+	if instance.state:
+		per += 10
+	if instance.city:
+		per += 10
+	if instance.latitude:
+		per += 10
+	if instance.dob:
+		per += 10
+	if instance.address:
+		per += 10
+	return per
+
+def contains_specialchars(s):
+    special_characters = '''
+		'!"#$%&\'()*+,./:;<=>?@[\\]^`{|}~
+	'''
+    return any(char in special_characters for char in s)

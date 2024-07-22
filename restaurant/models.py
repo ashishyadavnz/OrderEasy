@@ -73,12 +73,12 @@ class Category(BaseModel):
 		self.new_words=counts
 		return super().save(*args, **kwargs)
 	
-class Cusine(BaseModel):
-	"""docstring for Cusine"""
-	category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="cusine_category", blank=True,null=True)
+class Cuisine(BaseModel):
+	"""docstring for Cuisine"""
+	category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="cuisine_category", blank=True,null=True)
 	title = models.CharField(max_length=160)
 	slug = AutoSlugField(max_length=160, populate_from=['title'], unique=True, editable=True)
-	image = models.ImageField(upload_to='restaurant/cusine/image', blank=True)	
+	image = models.ImageField(upload_to='restaurant/cuisine/image', blank=True)	
 	content = RichTextUploadingField()
 	words = models.PositiveIntegerField(default=0)
 	new_words = models.PositiveIntegerField(default=0)
@@ -87,7 +87,7 @@ class Cusine(BaseModel):
 	meta_description = models.TextField()
 
 	class Meta:
-		verbose_name_plural = '03. Cusines'
+		verbose_name_plural = '03. Cuisines'
 	
 	def __str__(self):
 		return (self.title)
@@ -104,7 +104,7 @@ class Cusine(BaseModel):
 class Menu(BaseModel):
 	"""docstring for Menu"""
 	restaurant = models.ForeignKey(Restaurant, on_delete=models.PROTECT, related_name="menu_restaurant")
-	cusine = models.ForeignKey(Cusine, on_delete=models.PROTECT, related_name="menu_cusine")
+	cuisine = models.ForeignKey(Cuisine, on_delete=models.PROTECT, related_name="menu_cuisine")
 	price = models.PositiveIntegerField(default=1)
 	start = models.TimeField()
 	end = models.TimeField()
@@ -117,7 +117,7 @@ class Menu(BaseModel):
 		verbose_name_plural = '04. Menu'
 	
 	def __str__(self):
-		return (self.cusine)
+		return (self.cuisine)
 
 	def save(self, *args, **kwargs):
 		trackupdate(self)

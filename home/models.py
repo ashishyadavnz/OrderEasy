@@ -104,6 +104,14 @@ class User(AbstractUser, BaseModel):
 	image_tag.short_description = 'Image'
 	image_tag.allow_tags = True
 
+	def display(self):
+		username= ""
+		if self.first_name == '':
+			username = self.username
+		else:
+			username = self.first_name+' '+self.last_name
+		return username
+
 	def clean(self):
 		super().clean()
 		if self.dob:

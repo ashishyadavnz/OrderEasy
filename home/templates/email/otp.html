@@ -1,0 +1,144 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ST Email</title>
+    <style>
+        #mail-body {background-image: linear-gradient(#cedcf2, #a0b6e8); background-repeat: no-repeat; background-size: cover; font-family: Arial, Helvetica, sans-serif;}
+        #main {margin: 3%  13% 4%;box-sizing: border-box;}
+        .logo-img {text-align: center; margin:2%;}
+        .logo-img img {width: 15%;height: auto;padding-top: 2%;}
+        .f-bar {display: flex;}
+        .left-bar {width: 70%;}
+        .hero-container {
+            /* display: flex; */
+            border-radius: 20px;
+            margin: 2.5% 0;
+            padding: 3% 7%;
+            background-color: white;
+            background-image: url("Bg-logo.png");
+            /* background-image: url("https://securitytroops.com/media/user/logo-st-128.png"); */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 25%;
+        }
+        .h9 {font-size: 61px; margin-bottom: 2%;}
+        p {font-size: 22px; margin: 4px;}
+        h4 {text-align: center;font-size: 20px; margin-bottom: 0;padding-bottom: 0;}
+        .know-msg {text-align: center; font-size: 20px;}
+        .know-msg span:nth-child(2) {color: blue;}
+        .otp {
+            border: 2px solid #00abd3;
+            border-radius: 10px;
+            font-size: 56px;
+            padding: 1px 3px;
+            /* font-weight: bold; */
+            color: #00abd3;
+            padding: 0 1%;
+        }
+        .otp-text {display: flex;align-items: center;margin: 4% 0;}
+        .text {padding: 10px; margin: 2% 10px; font-size: 22px;}
+        .middle {display: flex;}
+        @media screen and (max-width: 777px) {
+            #main {margin: 3% 4% 4%;}
+            .hero-container {background-size: 70%;padding: 7% 7%;}
+            .f-bar {display: block;}
+            .left-bar {width: 100%;}
+            .otp-text {display: grid;justify-content: center;}
+            .otp {text-align: center;font-size: 22px;}
+            .h9 {font-size: 26px;}
+            p {font-size: 12px; text-align: center;}
+            .text {font-size: 12px;}
+            h4 {font-size: 12px;}
+            .know-msg {font-size: 12px;display: grid;}
+            .troops {margin: 12px !important;}
+            .troops h4 {font-size: 14px !important;margin-top: 0 !important;}
+            .unsunscribe u {font-size: 14px !important;}
+            .unsunscribe {margin-top: 4% !important;}
+            .copyright p {font-size: 10px !important;}
+            .side-logo-mobile {display: block !important;margin-top: 5%;}
+            .logo-img img {width: 50%;}
+            .side-logo {display: none;}
+            .social-icons {margin-top: 10% !important;}
+            .social-icons img {height: 30px;width: 30px;}
+        }
+        .side-logo {text-align: center; width: 30%;}
+        .side-logo img {width: 70%;height: auto;}
+        .side-logo-mobile {display: none;text-align: center;}
+        .side-logo-mobile img {width: 30%;height: auto; align-self: center;}
+        .troops {margin: 20px;}
+        .troops h4 {text-align: center;font-size: 23px;color: white;}
+        .copyright {font-size: 18px; }
+        .copyright p {text-align: center;font-size: 18px; }
+        .copyright span {color: blue; }
+        .unsunscribe {font-size: 20px;padding-bottom: 2%; margin-top: 1%;}
+        .unsunscribe u {font-size: 23px;color: white;}
+        .unsunscribe p {text-align: center;}
+        .social-icons {
+            /* display: flex;
+            justify-content: center; */
+            text-align: center;
+            margin-top: 2%;
+            margin-bottom: 0;
+        }
+        .social-icons img {margin: 0 1%;}
+    </style>
+</head>
+<body id="mail-body">
+    <div id="main">
+        <div class="logo-img">
+            <img src="{% static 'images/email-log-st.png' %}" alt="Security Troops" >
+            <!-- <img src="https://securitytroops.com/static/images/logo-st.png" onmouseover="hovertext(this);" alt="Security Troops" > -->
+        </div>
+        <div class="hero-container">
+            <div class="f-bar">
+                <div class="left-bar">
+                    <p class="h9">Welcome!</p>
+                    <p>We are excited to have you as part of our Security Troops community!</p>
+                    <p>To ensure the security of your account and protect your personal information, we require OTP verification.</p>
+                    <p class="otp-text"><span class="otp">{{otp}}</span><span class="text"> Only valid for 10 mins.</span></p>
+                </div>
+                <div class="side-logo">
+                    <img src="{% static 'images/Lock.png' %}" alt="Security Lock" >
+                    <!-- <img src="https://t3.ftcdn.net/jpg/02/22/48/70/360_F_222487074_FhJOsxsxLDQtjpL9e2rbsn28OXOxiSko.jpg" alt="Security Lock" > -->
+                </div>
+            </div>
+            <div>
+                <p>We value your privacy and are commited to maintaining the utmost security for your account.</p>
+                <h4>Didn't request this OTP?</h4>
+                <p class="know-msg"><span>If you didn't request an OTP,</span> <span onmouseover="hovertext(this);">let us know.</span></p>
+            </div>
+            <div class="side-logo-mobile">
+                <img src="{% static 'images/Lock.png' %}" alt="Security Lock" > 
+                <!-- <img src="https://t3.ftcdn.net/jpg/02/22/48/70/360_F_222487074_FhJOsxsxLDQtjpL9e2rbsn28OXOxiSko.jpg" alt="Security Lock" > -->
+            </div>
+        </div>
+        <div class="social-icons">
+            <img src="{% static 'images/Facebook.png' %}" alt="Facebook" height="45" width="45" >
+            <!-- <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHAMEMRi-vDVu9VNw1waQPfZvMAEYx90xPKSOgqBPAWQ&s" onmouseover="hovertext(this);" alt="Facebook" height="45" width="45" > -->
+            <img src="{% static 'images/Instagram.png' %}" alt="Instagram" height="45" width="45" >
+            <!-- <img src="https://images.unsplash.com/photo-1634942537034-2531766767d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aW5zdGFncmFtJTIwbG9nb3xlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80" onmouseover="hovertext(this);" alt="Instagram" height="45" width="45" > -->
+            <img src="{% static 'images/twitter.png' %}" alt="Twitter" height="45" width="45" >
+            <!-- <img src="https://store-images.s-microsoft.com/image/apps.45406.9007199266244427.4d45042b-d7a5-4a83-be66-97779553b24d.2a88a418-b96d-44a6-ad4f-5e0ee6289b2c" onmouseover="hovertext(this);" alt="Twitter" height="45" width="45" > -->
+        </div>
+        <div class="troops">
+            <h4>Security Troops</h4>
+        </div>
+        <div class="copyright">
+            <p>&copy; Security Troops, Inc.,Attention: Community Support, Malviya Nagar Jaipur</p>
+            <p>To help keep your account secure, please don't forward this email. <span onmouseover="hovertext(this);">Learn more</span></p>
+        </div>  
+        <div class="unsunscribe">
+            <p><u onmouseover="hovertext(this);">Unsubscribe</u></p>
+        </div>
+    </div>
+    <script>
+        function hovertext(x) {
+            x.style.cursor = "pointer";
+        }
+    </script>
+</body>
+</html>

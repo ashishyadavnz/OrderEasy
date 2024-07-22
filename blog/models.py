@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils import timezone
 from datetime import timedelta, date
 from ckeditor_uploader.fields import RichTextUploadingField
 from django_extensions.db.fields import AutoSlugField
@@ -8,8 +7,8 @@ from django.utils.html import strip_tags
 from firebase_admin.messaging import Message, Notification
 from fcm_django.models import FCMDevice
 from home.models import User, trackupdate, save_notifications, BaseModel, settings
-# Create your models here.
 
+# Create your models here.
 
 status = (("Draft","Draft"),("Schedule","Schedule"),("Active","Active"),("Inactive","Inactive"),("Delete","Delete"))
 

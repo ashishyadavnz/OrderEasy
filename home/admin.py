@@ -19,13 +19,13 @@ class AddressInline(admin.StackedInline):
 class MenuInline(admin.StackedInline):
     model = Menu
     extra = 0
-    fields = ('restaurant', 'cusine', 'price', 'start', 'available', 'keyword', 'meta_title', 'meta_description', 'status')
-    raw_id_fields = ['restaurant', 'cusine']
+    fields = ('restaurant', 'cuisine', 'price', 'start', 'available', 'keyword', 'meta_title', 'meta_description', 'status')
+    raw_id_fields = ['restaurant', 'cuisine']
     classes = ['collapse']
 
 INLINE_CONFIG = {
     User: [AddressInline],
-    Cusine: [MenuInline],
+    Cuisine: [MenuInline],
     Restaurant: [MenuInline],
 }
 
