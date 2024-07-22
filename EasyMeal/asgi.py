@@ -34,7 +34,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', dbfile)
 
 django_asgi_app = get_asgi_application()
 
-from home.routing import websocket_urlpatterns
+from support.routing import websocket_urlpatterns
 
 application = ProtocolTypeRouter(
     {
