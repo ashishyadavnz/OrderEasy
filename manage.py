@@ -23,11 +23,11 @@ def main():
         os.environ['DJANGO_SETTINGS_MODULE'] = "EasyMeal.settings.local"
     elif '--test' in sys.argv:
         os.environ['DJANGO_SETTINGS_MODULE'] = "EasyMeal.settings.testing"
-    # else:
-    #     f = open(".git/HEAD", "r")
-    #     if 'ref: refs/heads/testing' in f.read() and 'EasyMeal.settings.local' != os.environ['DJANGO_SETTINGS_MODULE']:
-    #         os.environ['DJANGO_SETTINGS_MODULE'] = "EasyMeal.settings.testing"
-    #     f.close()
+    else:
+        f = open(".git/HEAD", "r")
+        if 'ref: refs/heads/testing' in f.read() and 'EasyMeal.settings.local' != os.environ['DJANGO_SETTINGS_MODULE']:
+            os.environ['DJANGO_SETTINGS_MODULE'] = "EasyMeal.settings.testing"
+        f.close()
 
     try:
         sys.argv.remove('--dev')
