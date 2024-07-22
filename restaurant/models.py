@@ -5,7 +5,6 @@ from home.models import *
 
 class Restaurant(BaseModel):
 	"""docstring for Restaurant"""
-	# site = models.ForeignKey(Site, on_delete=models.PROTECT,null=True,blank=True)
 	owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name='owner')
 	country = models.ForeignKey(Country, on_delete=models.PROTECT)
 	state = models.ForeignKey(State, on_delete=models.PROTECT)
@@ -25,7 +24,6 @@ class Restaurant(BaseModel):
 	start = models.TimeField()
 	end = models.TimeField()
 	members = models.PositiveIntegerField(default=0)
-	gst = models.CharField(max_length=20,null=True,blank=True)
 	rating = models.FloatField(default=0)
 	latitude = models.FloatField(default=26.8513) 
 	longitude = models.FloatField(default=75.8064)
@@ -39,7 +37,6 @@ class Restaurant(BaseModel):
 
 	class Meta:
 		verbose_name_plural = "01. Restaurants"
-		# unique_together = ('site', 'title')
 
 	def __str__(self):
 		return self.title
