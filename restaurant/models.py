@@ -62,7 +62,7 @@ class Category(BaseModel):
 		verbose_name_plural = '02. Categories'
 	
 	def __str__(self):
-		return (self.title)
+		return self.title
 
 	def save(self, *args, **kwargs):
 		trackupdate(self)
@@ -90,7 +90,7 @@ class Cuisine(BaseModel):
 		verbose_name_plural = '03. Cuisines'
 	
 	def __str__(self):
-		return (self.title)
+		return self.title
 
 	def save(self, *args, **kwargs):
 		trackupdate(self)
@@ -117,7 +117,7 @@ class Menu(BaseModel):
 		verbose_name_plural = '04. Menu'
 	
 	def __str__(self):
-		return (self.cuisine)
+		return str(self.cuisine)
 
 	def save(self, *args, **kwargs):
 		trackupdate(self)
