@@ -60,8 +60,8 @@
 							</svg>
 						</a>
 						<div class="extras bag">
-							<a href="javascript:void(0)" class="menu-btn">
-								<i class="fa-solid fa-bag-shopping"></i>
+							<a href="javascript:void(0)" class="menu-btn"id="desktop-menu">
+								<i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
 							</a>
 							<div class="bar-menu">
 								<i class="fa-solid fa-bars"></i>
@@ -312,41 +312,41 @@
 	<section class="posts-section-blog gap">
 		<div class="container">
 			<div class="row">
+				{% for post in posts %}
+				{% if forloop.first %}
 				<div class="col-lg-12" data-aos="fade-up" data-aos-delay="200" data-aos-duration="300">
 					<div class="news-posts-one full">
 						<div class="blog-post-data-img">
-							<img alt="man" src="https://bslthemes.com/html/quickeat/assets/img/blog-2.jpg" />
+							<img alt="{{ post.title }}" src="{{ post.thumbnail.url }}" />
 							<div class="quickeat">
-								<a href="#">news</a>
-								<a href="#">quickeat</a>
+								{% for tag in post.tag.all %}
+                                    <a href="#">{{ tag.title }}</a>
+                                {% endfor %}
 							</div>
 						</div>
 						<div class="blog-post-data-img">
-							<h3>We Have Received An Award For The Quality Of Our Work</h3>
+							<h3>{{ post.title }}</h3>
 							<p>
-								Scelerisque purus semper eget duis at. Tincidunt ornare massa
-								eget egestas purus viverra. Morbi enim nunc faucibus a
-								pellentesque. Lobortis elementum nibh tellus molestie nunc
-								non...
+								{{ post.content|truncatechars:240|safe  }}
 							</p>
 							<a href="#">Read More<i class="fa-solid fa-arrow-right"></i></a>
 							<ul class="data">
 								<li>
-									<h6><i class="fa-solid fa-user"></i>by Quickeat</h6>
+									<h6><i class="fa-solid fa-user"></i>by {{ post.author.username }}</h6>
 								</li>
 								<li>
 									<h6>
-										<i class="fa-regular fa-calendar-days"></i>01.Jan. 2022
+										<i class="fa-regular fa-calendar-days"></i>{{ post.timestamp|date:"d.M.Y" }}
 									</h6>
 								</li>
 								<li>
-									<h6><i class="fa-solid fa-eye"></i>132</h6>
+									<h6><i class="fa-solid fa-eye"></i>{{ post.view }}</h6>
 								</li>
 							</ul>
 						</div>
 					</div>
 				</div>
-                {% for post in posts %}
+				{% else %}
                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 aos-init aos-animate" data-aos="flip-up" data-aos-delay="200" data-aos-duration="300">
                     <div class="news-posts-one full">
                         <div class="news-posts-one blog">
@@ -373,6 +373,7 @@
                         </div>
                     </div>
                 </div>
+				{% endif %}
             {% endfor %}
 				<div class="button-gap" data-aos="fade-up" data-aos-delay="200" data-aos-duration="300">
 					<a href="#" class="button button-2 non">See All<i class="fa-solid fa-arrow-right"></i></a>
