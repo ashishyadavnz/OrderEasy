@@ -14,6 +14,7 @@ router.register('active-account', api.ActiveAccountView, basename='api_active_ac
 router.register('change-password', api.ChangePasswordView, basename='api_change_password')
 router.register('users', api.UsersViewSet, basename='api_users')
 router.register('profile', api.ProfileViewSet, basename='api_profile')
+router.register('address', api.AddressViewSet, basename='api_address')
 router.register('banner', api.BannerViewSet, basename='api_banner')
 router.register('devices', api.FCMDeviceViewSet)
 router.register('user-details', api.UserDetailViewSet, basename='api_user_details')
