@@ -58,23 +58,23 @@
 					<nav class="navbar">
 				      <ul class="navbar-links">
 				        <li class="navbar-dropdown">
-				          <a href="indexThem.html">Home</a>
+				          <a href="{ % url 'home:home-page'  %}">Home</a>
 				        </li>
 				        <li class="navbar-dropdown">
 				          <a href="about.html">About Us</a>
 				        </li>
 				        <li class="navbar-dropdown">
-				          <a href="{% url 'restaurant' %}">Restaurants</a>
+				          <a href="{%  url  'restaurant:restaurant'  %}">Restaurants</a>
 				          <div class="dropdown">
-				            <a href="{% url 'restaurant' %}">Restaurants</a>
-				            <a href="restaurants-card.html">Restaurant Card</a>
+				            <a href="{%  url  'restaurant:restaurant'  %}">Restaurants</a>
+				            <a href="{%  url  'restaurant:restaurant-card'  %}">Restaurant Card</a>
 				            <a href="checkout.html">Checkout</a>
 						  </div>
 				        </li>
 				        <li class="navbar-dropdown">
 				          <a href="#">Pages</a>
 				          <div class="dropdown">
-				            <a href="{% url 'blog_page' %}">Blog</a>
+				            <a href="{% url  'blog:blog_page'  %}">Blog</a>
 				            <a href="/single-blog.html">Single Blog</a>
 				            <a href="/service.html">Services</a>
 				            <a href="/faq.html">FAQ</a>
@@ -197,7 +197,7 @@
           	</div>
 			<ul>
 
-				  <li><a href="indexThem.html">Home</a>
+				  <li><a href="{ % url 'home:home-page'  %}">Home</a>
 				  </li>
 
 				  <li><a href="about.html">About Us</a></li>
@@ -206,8 +206,8 @@
 
 					<ul class="sub-menu">
 
-                      <li><a href="{% url 'restaurant' %}">Restaurants</a></li>
-				      <li><a href="restaurants-card.html">Restaurant Card</a></li>
+                      <li><a href="{%  url  'restaurant:restaurant'  %}">Restaurants</a></li>
+				      <li><a href="{%  url  'restaurant:restaurant-card'  %}">Restaurant Card</a></li>
 				      <li><a href="checkout.html">Checkout</a></li>
                     </ul>
 
@@ -243,9 +243,9 @@
 				<div class="col-lg-6" data-aos="fade-up"  data-aos-delay="300" data-aos-duration="400">
 					<div class="about-text">
 						<ul class="crumbs d-flex">
-							<li><a href="indexThem.html">Home</a></li>
-							<li><a href="{% url 'restaurant' %}"><i class="fa-solid fa-right-long"></i>Restaurants</a></li>
-							<li class="two"><a href="/indexThem.html"><i class="fa-solid fa-right-long"></i>The Wilmington</a></li>
+							<li><a href="{ % url 'home:home-page'  %}">Home</a></li>
+							<li><a href="{%  url  'restaurant:restaurant'  %}"><i class="fa-solid fa-right-long"></i>Restaurants</a></li>
+							<li class="two"><a href="/{ % url 'home:home-page'  %}"><i class="fa-solid fa-right-long"></i>The Wilmington</a></li>
 						</ul>
 						{% for res in restaurants %}
 						{% if forloop.first %}
@@ -646,9 +646,9 @@
 					<div class="menu">
 						<h4>Menu</h4>
 						<ul class="footer-menu">
-							<li><a href="indexThem.html">home<i class="fa-solid fa-arrow-right"></i></a></li>
+							<li><a href="{ % url 'home:home-page'  %}">home<i class="fa-solid fa-arrow-right"></i></a></li>
 							<li><a href="about.html">about us<i class="fa-solid fa-arrow-right"></i></a></li>
-							<li><a href="{% url 'restaurant' %}">Restaurants<i class="fa-solid fa-arrow-right"></i></a></li>
+							<li><a href="{%  url  'restaurant:restaurant'  %}">Restaurants<i class="fa-solid fa-arrow-right"></i></a></li>
 							<li><a href="contact.html">Contacts<i class="fa-solid fa-arrow-right"></i></a></li>
 						</ul>
 					</div>

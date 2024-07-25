@@ -1,24 +1,8 @@
-<!DOCTYPE html>
-<html lang="zxx">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quickeat - Single Blog Page</title>
-  <link rel="icon" href="assets/img/fav-icon.png">
-	<!-- CSS only -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-	<link rel="stylesheet" href="assets/css/responsive.css">
-    <link rel="stylesheet" href="assets/css/own.css">
-    <link rel="stylesheet" href="assets/css/own-car.css">
-    <link rel="stylesheet" href="assets/css/nice.css">
-    <link rel="stylesheet" href="assets/css/color.css">
-    <link rel="stylesheet" href="assets/css/aos.css">
-    <link rel="stylesheet" href="assets/css/new.css">
-
-	<!-- Font Awesome 5 -->
-	<script src="https://kit.fontawesome.com/27a041baf1.js" crossorigin="anonymous"></script>
-</head>
-<body class="menu-layer">
+{% extends "index.html" %}
+{% load custom_filter %}
+{% load static %}
+{% block content %}
+<div class="menu-layer">
 	<!-- loader start-->
 	<div class="page-loader">
 		<div class="wrapper">
@@ -39,7 +23,7 @@
 			<div class="row align-items-center">
 				<div class="col-xl-2">
 					<div class="header-style">
-						<a href="/indexThem.html">
+						<a href="/{% url 'home:home-page' %}">
 							<svg xmlns="http://www.w3.org/2000/svg" width="163" height="38" viewBox="0 0 163 38">
   <g id="Logo" transform="translate(-260 -51)">
     <g id="Logo-2" data-name="Logo" transform="translate(260 51)">
@@ -73,24 +57,24 @@
 					<nav class="navbar">
 				      <ul class="navbar-links">
 				        <li class="navbar-dropdown">
-				          <a href="indexThem.html">Home</a>
+				          <a href="{% url 'home:home-page' %}">Home</a>
 				        </li>
 				        <li class="navbar-dropdown">
 				          <a href="about.html">About Us</a>
 				        </li>
 				        <li class="navbar-dropdown">
-				          <a href="restuarants.html">Restaurants</a>
+				          <a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
 				          <div class="dropdown">
-				            <a href="restuarants.html">Restaurants</a>
-				            <a href="restaurants-card.html">Restaurant Card</a>
+				            <a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
+				            <a href="{% url 'restaurant:restaurant-card' %}">Restaurant Card</a>
 				            <a href="checkout.html">Checkout</a>
 						  </div>
 				        </li>
 				        <li class="navbar-dropdown">
 				          <a href="#">Pages</a>
 				          <div class="dropdown">
-				            <a href="/blog.html">Blog</a>
-				            <a href="/single-blog.html">Single Blog</a>
+				            <a href="{% url 'blog:blog_page' %}">Blog</a>
+				            <a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a>
 				            <a href="/service.html">Services</a>
 				            <a href="/faq.html">FAQ</a>
 				            <a href="/pricing-table.html">Pricing Table</a>
@@ -190,7 +174,7 @@
 
 
             <div class="res-log">
-            	<a href="/indexThem.html">
+            	<a href="/{% url 'home:home-page' %}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="163" height="38" viewBox="0 0 163 38">
                   <g id="Logo-m" transform="translate(-260 -51)">
                     <g id="Logo-2-m" data-name="Logo" transform="translate(260 51)">
@@ -212,7 +196,7 @@
           	</div>
 			<ul>
 
-				  <li><a href="indexThem.html">Home</a>
+				  <li><a href="{% url 'home:home-page' %}">Home</a>
 				  </li>
 
 				  <li><a href="about.html">About Us</a></li>
@@ -221,8 +205,8 @@
 
 					<ul class="sub-menu">
 
-                      <li><a href="restuarants.html">Restaurants</a></li>
-				      <li><a href="restaurants-card.html">Restaurant Card</a></li>
+                      <li><a href="{% url 'restaurant:restaurant' %}">Restaurants</a></li>
+				      <li><a href="{% url 'restaurant:restaurant-card' %}">Restaurant Card</a></li>
 				      <li><a href="checkout.html">Checkout</a></li>
                     </ul>
 
@@ -231,8 +215,8 @@
 
 					<ul class="sub-menu">
 
-                       <li><a href="blog.html">Blog</a></li>
-				       <li><a href="single-blog.html">Single Blog</a></li>
+                       <li><a href="{% url 'blog:blog_page' %}">Blog</a></li>
+					   <a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a>
 				       <li><a href="service.html">Services</a></li>
 				       <li><a href="faq.html">FAQ</a></li>
 				       <li><a href="pricing-table.html">Pricing Table</a></li>
@@ -258,31 +242,39 @@
 					<div class="offset-xl-2 col-xl-6 col-lg-12">
 						<div class="about-text">
 							<ul class="crumbs d-flex">
-								<li><a href="indexThem.html">Home</a></li>
-								<li><a href="indexThem.html"><i class="fa-solid fa-right-long"></i>blog</a></li>
-								<li class="two"><a href="indexThem.html"><i class="fa-solid fa-right-long"></i>Single Blog Page</a></li>
+								<li><a href="{% url 'home:home-page' %}">Home</a></li>
+								<li><a href="{% url 'home:home-page' %}"><i class="fa-solid fa-right-long"></i>blog</a></li>
+								<li class="two"><a href="#"><i class="fa-solid fa-right-long"></i>Blog Details</a></li>
 							</ul>
 							<div class="quickeat">
-									<a href="#">restaurants</a>
-									<a href="#">cooking</a>
-								</div>
-							<h2>127+ Couriers On Our Team!</h2>
+								{% for tag in post.tag.all %}
+									<a href="#">{{ tag.title }}</a>
+								{% endfor %}
+							</div>
+							<h2>{{ post.title }}</h2>
 							<ul class="data">
-								<li><h6><i class="fa-regular fa-calendar-days"></i>01.Jan. 2022</h6></li>
-								<li><h6><i class="fa-solid fa-eye"></i>132</h6></li>
+								<li><h6><i class="fa-regular fa-calendar-days"></i>{{ post.timestamp|date:"d.M.Y" }}</h6></li>
+								<li><h6><i class="fa-solid fa-eye"></i>{{ post.view }}</h6></li>
 							</ul>
 						</div>
 					</div>
 					<div class="col-lg-2">
 						<div class="name-dedails">
-							<img alt="girl" src="https://bslthemes.com/html/quickeat/assets/img/author-img-2.jpg">
-							<h6>Roxie Gilbert</h6>
+							<img alt="{{ post.author.username }}" src="{{post.author.image.url}}" class="img-fluid" style="border-radius: 50%; height: 100px !important;"  >
+							<h6>{{ post.author.username }}</h6>
 							<span>press secretary Quickeat</span>
 						</div>
 					</div>
 					<div class="col-lg-12">
 						<div class="img-blog-full">
-							<img alt="blog-page-img" src="https://bslthemes.com/html/quickeat/assets/img/blog-page-1.jpg">
+							{% if post.featured %}
+								<img alt="{{ post.title }}" src="{{ post.featured.url }}" class="img-fluid">
+							{% else %}
+								<img alt="{{ post.title }}" src="{% static 'path/to/default_image.jpg' %}" class="img-fluid">
+							{% endif %}
+						</div>
+						<div class="post-content">
+							<!-- {{ post.content|safe }} -->
 						</div>
 					</div>
 				</div>
@@ -294,189 +286,111 @@
   		<div class="row">
   			<div class="offset-xl-2 col-xl-8 col-lg-12">
   				<div class="title-container">
-  					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor <span>incididunt ut labore et</span> dolore magna aliqua. Iaculis nunc sed augue lacus viverra vitae congue eu consequat. Id consectetur purus ut faucibus pulvinar elementum integer. <span>Vitae congue mauris</span> rhoncus aenean vel elit scelerisque. Mollis nunc sed id semper. Ac orci phasellus egestas tellus rutrum tellus pellentesque.<br><br>
+  					<p><br><br>
 
-					Urna nec tincidunt praesent semper feugiat nibh sed pulvinar proin. Enim praesent elementum facilisis leo vel fringilla est. Porta nibh venenatis cras sed felis eget velit aliquet sagittis. At in tellus integer feugiat scelerisque varius. Tincidunt arcu non sodales neque sodales ut etiam sit amet. Auctor urna nunc id cursus metus.</p><br>
-					<h2>H2 Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
-					<p><b>Iaculis nunc sed augue lacus viverra.</b><br>
-						Id consectetur purus ut faucibus pulvinar elementum integer. Vitae congue mauris rhoncus aenean vel elit scelerisque. Mollis nunc sed id semper. Ac orci phasellus egestas tellus rutrum tellus pellentesque. Urna nec tincidunt praesent semper feugiat nibh sed.
-						<br><br>
-						<b>Enim praesent elementum facilisis leo vel fringilla est.</b><br>
-						Porta nibh venenatis cras sed felis eget velit aliquet sagittis. At in tellus integer feugiat scelerisque varius. Tincidunt arcu non sodales neque sodales ut etiam sit amet. Auctor urna nunc id cursus metus. Eros donec ac odio tempor orci dapibus ultrices in. Suspendisse sed nisi lacus sed. Sed risus ultricies tristique nulla aliquet. Aenean vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant.</p>
-
-	  				<div class="quote">
-	  					<div class="quote-text">
-	  					<img alt="quote" src="https://bslthemes.com/html/quickeat/assets/img/elements-1.svg">
-	  					<div class="quote-icon">
-	  						<h4>Whenever you feel like criticizing any one,» he told me, «just remember that all the people in this world haven’t had the advantages that you’ve had.</h4>
-	  					</div>
-	  					</div>
-	  					<h6>Francis Scott Key Fitzgerald "The Great Gatsby"</h6>
-	  				</div>
-	  				<h3>H3 Massa massa ultricies mi quis hendrerit. Sed enim ut sem viverra aliquet eget sit amet.</h3>
-	  				<p>Velit egestas dui id ornare arcu odio ut. Lacus suspendisse faucibus interdum posuere lorem ipsum. Commodo sed egestas egestas fringilla phasellus faucibus. Nullam vehicula ipsum a arcu cursus vitae. Nulla facilisi morbi tempus iaculis urna id. Tortor dignissim convallis aenean et. At erat pellentesque adipiscing commodo elit at.</p>
-	  				<div class="row">
-	  					<div class="col-lg-6">
-	  						<div class="photo-blog">
-	  							<img alt="img" src="https://bslthemes.com/html/quickeat/assets/img/photo-12.jpg">
-	  						</div>
-	  					</div>
-	  					<div class="col-lg-6">
-	  						<div class="photo-blog">
-	  							<img alt="img" src="https://bslthemes.com/html/quickeat/assets/img/photo-13.jpg">
-	  						</div>
-	  					</div>
-	  				</div>
-	  				<h4>H4 Quis imperdiet massa tincidunt nunc pulvinar sapien et. Eu consequat ac felis donec et odio. Platea dictumst quisque sagittis purus.</h4>
-	  				<p>In fermentum posuere urna nec. Vestibulum lectus mauris ultrices eros in cursus turpis massa. Nisl purus in mollis nunc sed id. At urna condimentum mattis pellentesque id. Neque ornare aenean euismod elementum nisi quis eleifend quam adipiscing. Sit amet aliquam id diam.</p>
-	  				<ul class="blog-list">
-	  					<li>In fermentum posuere urna nec;</li>
-						<li>Vestibulum lectus mauris ultrices eros;</li>
-						<li>In cursus turpis massa;</li>
-						<li>Nisl purus in mollis nunc sed id;</li>
-						<li>At urna condimentum mattis;</li>
-						<li>IPellentesque habitant morbi tristique.</li>
-	  				</ul>
-	  				<p>At erat pellentesque adipiscing commodo elit. Dignissim enim sit amet venenatis urna cursus eget nunc. Ut ornare lectus sit amet est placerat in egestas erat. Ante metus dictum at tempor. Pulvinar elementum integer enim neque volutpat ac tincidunt vitae semper.</p>
-	  				<h6 class="data">Updated:  December 26, 2022</h6>
+						{{ post.content|safe }}</p><br>
+	  				
 	  				<div class="quickeat tags">
-										<a href="/restuarants.html">restaurants</a>
+										<a href="/{% url 'restaurant:restaurant' %}">restaurants</a>
 										<a href="#">cooking</a>
 									</div>
 		  			</div>
-	  			<div class="author-gap">
-		  			<div class="row align-items-center">
-		  				<div class="col-lg-4">
-				  			<div class="previous-posts">
-				  				<img alt="img" src="https://bslthemes.com/html/quickeat/assets/img/author-posts-2.jpg">
-				  				<div>
-				  					<h6>How Restaurants Can Engage with Millennials in 2022</h6>
-				  					<a href="#">Prev. Posts by this author</a>
-				  				</div>
-				  			</div>
-			  			</div>
-			  			<div class="col-lg-4">
-			  				<div class="name-dedails">
-									<img alt="girl" src="https://bslthemes.com/html/quickeat/assets/img/girl.jpg">
-									<h6>Roxie Gilbert</h6>
-									<span>press secretary Quickeat</span>
-									<ul class="social-media">
-									<li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>
-									<li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
-									<li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
-								</ul>
+					  <div class="author-gap">
+						<div class="row">
+							<div class="col-lg-4">
+								{% if previous_post %}
+								<div class="previous-posts">
+									<img alt="{{ previous_post.title }}" src="{{ previous_post.thumbnail.url }}" class="img-fluid" style="height:80px !important">
+									<div>
+										<h6>{{ previous_post.title |truncatechars:30 }}</h6>
+										<a href="{% url 'blog:blog_detail' previous_post.slug %}">Prev. Posts by this author</a>
+									</div>
+								</div>
+								{% endif %}
 							</div>
-			  			</div>
-			  			<div class="col-lg-4">
-				  			<div class="previous-posts next">
-				  				<div>
-				  					<h6>Why You Should Optimize Your Menu for Delivery</h6>
-				  					<a href="#">Next Post by this author</a>
-				  				</div>
-				  				<img alt="img" src="https://bslthemes.com/html/quickeat/assets/img/author-posts-2.jpg">
-				  			</div>
-			  			</div>
-		  			</div>
-	  			</div>
-	  			<div class="comment">
-	  				<h2><span>9</span> Comments</h2>
-	  			</div>
-	  			<ul class="comment gap no-top">
-	  				<li>
-		  				<div class="comment-text">
-		  					<p>Vitae congue mauris rhoncus aenean vel elit scelerisque. Mollis nunc sed id semper. Ac orci phasellus egestas tellus rutrum tellus pellentesque. Urna nec tincidunt praesent semper feugiat nibh sed pulvinar proin. Enim praesent elementum facilisis leo vel fringilla est. Porta nibh venenatis cras sed felis eget velit aliquet sagittis. At in tellus integer feugiat scelerisque varius.</p>
-		  					<a href="#"><span>Reply<i class="fa-solid fa-reply"></i></span></a>
-		  				</div>
-		  				<div class="author-name-comment">
-		  					<div>
-								<h6>Jackie Johnson</h6>
-			  					<span>30.Dec. 2022</span>
-		  					</div>
-			  					<img alt="man" src="https://bslthemes.com/html/quickeat/assets/img/author-img-3.jpg">
-		  				</div>
-	  				</li>
-	  				<li class="reply one">
-		  				<div class="comment-text">
-		  					<p>Auctor urna nunc id cursus metus. Eros donec ac odio tempor orci dapibus ultrices in. Suspendisse sed nisi lacus sed. Sed risus ultricies tristique nulla aliquet.</p>
-		  					<a href="#"><span>Reply<i class="fa-solid fa-reply"></i></span></a>
-		  				</div>
-		  				<div class="author-name-comment">
-		  					<img alt="man" src="https://bslthemes.com/html/quickeat/assets/img/author-img-4.jpg">
-		  					<div>
-								<h6>Annie Adamson</h6>
-			  					<span>30.Dec. 2022</span>
-		  					</div>
-
-		  				</div>
-	  				</li>
-	  				<li class="reply two">
-		  				<div class="comment-text">
-		  					<p>Ac felis donec et odio pellentesque. Amet nisl suscipit adipiscing bibendum est ultricies. Tincidunt augue interdum velit euismod. Vitae sapien pellentesque habitant morbi. Feugiat nibh sed pulvinar proin gravida.</p>
-		  					<a href="#"><span>Reply<i class="fa-solid fa-reply"></i></span></a>
-		  				</div>
-		  				<div class="author-name-comment">
-		  					<img alt="man" src="https://bslthemes.com/html/quickeat/assets/img/author-img-2.jpg">
-		  					<div>
-								<h6>Annie Adamson</h6>
-			  					<span>30.Dec. 2022</span>
-		  					</div>
-
-		  				</div>
-	  				</li>
-	  				<li class="reply three">
-		  				<div class="comment-text">
-		  					<p>Tortor condimentum lacinia quis vel eros donec ac odio tempor. Varius sit amet mattis vulputate enim. Velit egestas dui id ornare arcu odio ut. Lacus suspendisse faucibus interdum posuere lorem ipsum. Commodo sed egestas egestas fringilla phasellus.</p>
-		  					<a href="#"><span>Reply<i class="fa-solid fa-reply"></i></span></a>
-		  				</div>
-		  				<div class="author-name-comment">
-		  					<img alt="man" src="https://bslthemes.com/html/quickeat/assets/img/author-img-1.jpg">
-		  					<div>
-								<h6>Annie Adamson</h6>
-			  					<span>30.Dec. 2022</span>
-		  					</div>
-
-		  				</div>
-	  				</li>
-	  				<li class="hide-button">
-	  					<a href="#"><h6>Hide<i class="fa-solid fa-angle-up"></i></h6></a>
-	  				</li>
-	  				<li>
-		  				<div class="comment-text">
-		  					<p>Vitae congue mauris rhoncus aenean vel elit scelerisque. Mollis nunc sed id semper. Ac orci phasellus egestas tellus rutrum tellus pellentesque. Urna nec tincidunt praesent semper feugiat nibh sed pulvinar proin. Enim praesent elementum facilisis leo vel fringilla est. Porta nibh venenatis cras sed felis eget velit aliquet sagittis. At in tellus integer feugiat scelerisque varius.</p>
-		  					<a href="#"><span>Reply<i class="fa-solid fa-reply"></i></span></a>
-		  				</div>
-		  				<div class="author-name-comment">
-		  					<div>
-								<h6>Edgar Johnson</h6>
-			  					<span>30.Dec. 2022</span>
-		  					</div>
-			  					<img alt="man" src="https://bslthemes.com/html/quickeat/assets/img/author-img-4.jpg">
-		  				</div>
-	  				</li>
-	  				<li class="show-all-button">
-	  					<h6>4 more answers <a href="#"><span>Show All<i class="fa-solid fa-angle-down"></i></span></a></h6>
-	  				</li>
-	  				<li>
-	  					<div class="button-gap">
-							<a href="#" class="button button-2 non">See all comments<i class="fa-solid fa-angle-down"></i></a>
+							<div class="col-lg-4 text-center ">
+								<div class="name-details">
+									<img alt="{{ post.author.username }}" src="{{ post.author.image.url }}" class="img-fluid" style="border-radius: 50%; height: 80px; width: 80px;">
+									<h6>{{ post.author.username }}</h6>
+									<ul class="social-media justify-content-center ">
+										<li><a href="{{ post.author.profile.facebook }}"><i class="fa-brands fa-facebook-f"></i></a></li>
+										<li><a href="{{ post.author.profile.instagram }}"><i class="fa-brands fa-instagram"></i></a></li>
+										<li><a href="{{ post.author.profile.twitter }}"><i class="fa-brands fa-twitter"></i></a></li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								{% if next_post %}
+								<div class="previous-posts next">
+									<div>
+										<h6>{{ next_post.title |truncatechars:30 }}</h6>
+										<a href="{% url 'blog:blog_detail' next_post.slug %}" >Next Post by this author</a>
+									</div>
+									<img alt="{{ next_post.title }}" src="{{ next_post.thumbnail.url }}" class="img-fluid" style="height:80px !important">
+								</div>
+								{% endif %}
+							</div>
 						</div>
-					</li>
-	  			</ul>
-	  			<div class="comment">
-	  				<h2>Leave your comment</h2>
-	  				<form class="comment-blog">
-	  					<textarea placeholder="Enter you comment"></textarea>
-	  					<div class="row">
-	  						<div class="col-lg-6">
-	  							<input type="text" name="name" placeholder="Your Name">
-	  						</div>
-	  						<div class="col-lg-6">
-	  							<input type="text" name="Email" placeholder="Email Address">
-	  						</div>
-	  					</div>
-	  					<button class="button-price">Publish a comment</button>
-	  				</form>
-	  			</div>
+					</div>
+					<div class="comment">
+						<h2><span>{{ comments.count }}</span> Comments</h2>
+					</div>
+					<ul class="comment gap no-top">
+						{% for comment in comments %}
+						<li>
+							<div class="comment-text">
+								<p>{{ comment.content }}</p>
+								<a href="#"><span>Reply<i class="fa-solid fa-reply"></i></span></a>
+							</div>
+							<div class="author-name-comment">
+								<div>
+									<h6>{{ comment.name }}</h6>
+									<span>{{ comment.timestamp|date:"d.M.Y" }}</span>
+								</div>
+								<img alt="author" src="{% if comment.user and comment.user.profile_picture %}{{ comment.user.profile_picture.url }}{% else %}https://bslthemes.com/html/quickeat/assets/img/author-img-3.jpg{% endif %}">
+							</div>
+						</li>
+						{% endfor %}
+						
+						{% if comments.count > 4 %}
+						<li class="show-all-button">
+							<h6>{{ comments.count|add:"-4" }} more answers <a href="#"><span>Show All<i class="fa-solid fa-angle-down"></i></span></a></h6>
+						</li>
+						{% endif %}
+						<li>
+							<div class="button-gap">
+								<a href="#" class="button button-2 non">See all comments<i class="fa-solid fa-angle-down"></i></a>
+							</div>
+						</li>
+					</ul>
+					<div class="comment">
+						<h2>Leave your comment</h2>
+						<form class="comment-blog" method="post" action="{% url 'blog:add_comment' post.slug %}">
+							{% csrf_token %}
+							<textarea name="content" placeholder="Enter your comment"></textarea>
+							<div class="row">
+								<div class="col-lg-6">
+									<input type="text" name="name" placeholder="Your Name">
+								</div>
+								<div class="col-lg-6">
+									<input type="email" name="email" placeholder="Email Address" style="width: 100%;
+									    height: 60px;
+									    border-radius: 10px;
+									    border: 1px solid #CFCFCF;
+									    color: #CFCFCF;
+									    outline: none;
+									    padding-left: 20px;
+									    margin: 20px 0;
+									">	</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<input type="text" name="mobile" placeholder="Mobile Number">
+								</div>
+							</div>
+							<button class="button-price">Publish a comment</button>
+						</form>
+					</div>
   			</div>
   		</div>
   	</div>
@@ -487,7 +401,7 @@
 			<div class="row">
 				<div class="col-lg-5 col-md-6 col-sm-12">
 					<div class="footer-description">
-						<a href="/indexThem.html">
+						<a href="/{% url 'home:home-page' %}">
               <svg xmlns="http://www.w3.org/2000/svg" width="163" height="38" viewBox="0 0 163 38">
                 <g id="Logo-w" transform="translate(-260 -51)">
                   <g id="Logo-2-w" data-name="Logo-w" transform="translate(260 51)">
@@ -517,9 +431,9 @@
 					<div class="menu">
 						<h4>Menu</h4>
 						<ul class="footer-menu">
-							<li><a href="indexThem.html">home<i class="fa-solid fa-arrow-right"></i></a></li>
+							<li><a href="{% url 'home:home-page' %}">home<i class="fa-solid fa-arrow-right"></i></a></li>
 							<li><a href="about.html">about us<i class="fa-solid fa-arrow-right"></i></a></li>
-							<li><a href="restuarants.html">Restaurants<i class="fa-solid fa-arrow-right"></i></a></li>
+							<li><a href="{% url 'restaurant:restaurant' %}">Restaurants<i class="fa-solid fa-arrow-right"></i></a></li>
 							<li><a href="contact.html">Contacts<i class="fa-solid fa-arrow-right"></i></a></li>
 						</ul>
 					</div>
@@ -581,4 +495,6 @@
   <link rel="stylesheet" href="https://bslthemes.com/bslthms-advanced-btns/assets/style.css">
   <script src="https://bslthemes.com/bslthms-advanced-btns/assets/script.js"></script>
   <!-- bslthemes.com buttons assets end -->
-</body>
+</div>
+
+{% endblock %}
