@@ -1,24 +1,6 @@
-<!DOCTYPE html>
-<html lang="zxx">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quickeat - FAQ</title>
-  <link rel="icon" href="assets/img/fav-icon.png">
-	<!-- CSS only -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-	<link rel="stylesheet" href="assets/css/responsive.css">
-    <link rel="stylesheet" href="assets/css/own.css">
-    <link rel="stylesheet" href="assets/css/own-car.css">
-    <link rel="stylesheet" href="assets/css/nice.css">
-    <link rel="stylesheet" href="assets/css/color.css">
-    <link rel="stylesheet" href="assets/css/aos.css">
-    <link rel="stylesheet" href="assets/css/new.css">
+{% extends "index.html" %} {% load static %} {% block content %}
 
-	<!-- Font Awesome 5 -->
-	<script src="https://kit.fontawesome.com/27a041baf1.js" crossorigin="anonymous"></script>
-</head>
-<body class="menu-layer">
+<div class="menu-layer">
 	<!-- loader start-->
 	<div class="page-loader">
 		<div class="wrapper">
@@ -39,7 +21,7 @@
 			<div class="row align-items-center">
 				<div class="col-xl-2">
 					<div class="header-style">
-						<a href="/indexThem.html">
+						<a href="/{% url 'home:home-page' %}">
 							<svg xmlns="http://www.w3.org/2000/svg" width="163" height="38" viewBox="0 0 163 38">
   <g id="Logo" transform="translate(-260 -51)">
     <g id="Logo-2" data-name="Logo" transform="translate(260 51)">
@@ -73,26 +55,26 @@
 					<nav class="navbar">
 				      <ul class="navbar-links">
 				        <li class="navbar-dropdown">
-				          <a href="/indexThem.html">Home</a>
+				          <a href="{% url 'home:home-page' %}">Home</a>
 				        </li>
 				        <li class="navbar-dropdown">
-				          <a href="/about.html">About Us</a>
+				          <a href="{% url 'home:about-page' %}">About Us</a>
 				        </li>
 				        <li class="navbar-dropdown">
 				          <a href="#">Restaurants</a>
 				          <div class="dropdown">
-				            <a href="restuarants.html">Restaurants</a>
-				            <a href="restaurant-card.html">Restaurant Card</a>
+				            <a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
+				            <a href="{% url 'restaurant:restaurant-card' %}">Restaurant Card</a>
 				            <a href="checkout.html">Checkout</a>
 				          </div>
 				        </li>
 				        <li class="navbar-dropdown">
 				          <a href="#">Pages</a>
 				          <div class="dropdown">
-				            <a href="blog.html">Blog</a>
+				            <a href="{% url 'blog:blog_page' %}">Blog</a>
 				            <a href="single-blog.html">Single Blog</a>
 				            <a href="service.html">Services</a>
-				            <a href="faq.html">FAQ</a>
+				            <a href="{% url 'home:faq' %}">FAQ</a>
 				            <a href="pricing-table.html">Pricing Table</a>
 				            <a href="become-partner.html">Become A Partner</a>
 				            <a href="404.html">404</a>
@@ -190,7 +172,7 @@
 
 
             <div class="res-log">
-            	<a href="/indexThem.html">
+            	<a href="/{% url 'home:home-page' %}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="163" height="38" viewBox="0 0 163 38">
                   <g id="Logo-m" transform="translate(-260 -51)">
                     <g id="Logo-2-m" data-name="Logo" transform="translate(260 51)">
@@ -212,16 +194,16 @@
           	</div>
 			<ul>
 
-				  <li><a href="indexThem.html">Home</a>
+				  <li><a href="{% url 'home:home-page' %}">Home</a>
 				  </li>
 
-				  <li><a href="about.html">About Us</a></li>
+				  <li><a href="{% url 'home:about-page' %}">About Us</a></li>
 
                   <li class="menu-item-has-children"><a href="JavaScript:void(0)">Restaurants</a>
 
 					<ul class="sub-menu">
 
-                      <li><a href="restuarants.html">Restaurants</a></li>
+                      <li><a href="{%  url  'restaurant:restaurant'  %}">Restaurants</a></li>
 				      <li><a href="restaurants-card.html">Restaurant Card</a></li>
 				      <li><a href="checkout.html">Checkout</a></li>
                     </ul>
@@ -234,7 +216,7 @@
                        <li><a href="blog.html">Blog</a></li>
 				       <li><a href="single-blog.html">Single Blog</a></li>
 				       <li><a href="service.html">Services</a></li>
-				       <li><a href="faq.html">FAQ</a></li>
+				       <li><a href="{% url 'home:faq' %}">FAQ</a></li>
 				       <li><a href="pricing-table.html">Pricing Table</a></li>
 				       <li><a href="become-partner.html">Become A Partner</a></li>
 				       <li><a href="404.html">404</a></li>
@@ -258,8 +240,8 @@
 					<div class="col-lg-6" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
 						<div class="about-text">
 							<ul class="crumbs d-flex">
-								<li><a href="indexThem.html">Home</a></li>
-								<li class="two"><a href="/indexThem.html"><i class="fa-solid fa-right-long"></i>FAQ</a></li>
+								<li><a href="{% url 'home:home-page' %}">Home</a></li>
+								<li class="two"><a href="/{% url 'home:home-page' %}"><i class="fa-solid fa-right-long"></i>FAQ</a></li>
 							</ul>
 							<h2>Want to join partnership?</h2>
 							<p>Egestas sed tempus urna et pharetra pharetra massa. Fermentum posuere urna nec tincidunt praesent semper.</p>
@@ -278,203 +260,132 @@
   </section>
   <!-- tabs questions -->
   <section class="tabs gap no-bottom">
+    <div class="container">
+        <div class="tabs-img-back">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="Provides">
+                        <div class="nav nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <button class="nav-link active" id="v-pills-delivery-tab" data-bs-toggle="pill"
+                                data-bs-target="#v-pills-delivery" type="button" role="tab"
+                                aria-controls="v-pills-delivery" aria-selected="true">Delivery</button>
+                            <button class="nav-link" id="v-pills-technical-tab" data-bs-toggle="pill"
+                                data-bs-target="#v-pills-technical" type="button" role="tab"
+                                aria-controls="v-pills-technical" aria-selected="false">Technical</button>
+                            <button class="nav-link" id="v-pills-restaurants-tab" data-bs-toggle="pill"
+                                data-bs-target="#v-pills-restaurants" type="button" role="tab"
+                                aria-controls="v-pills-restaurants" aria-selected="false">Restaurants</button>
+                        </div>
+                        <form>
+                            <input type="text" placeholder="Enter question keywords">
+                            <button><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </form>
+                    </div>
+                </div>
 
-      <div class="container">
+                <div class="col-lg-12 gap">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <div class="tab-pane fade show active" id="v-pills-delivery" role="tabpanel"
+								aria-labelledby="v-pills-delivery-tab">
+								{% for faq in delivery_faqs %}
+								<div class="questions">
+									<i class="fa-solid fa-q"></i>
+									<h6>{{ faq.question }}</h6>
+								</div>
+								<div class="questions answer">
+									<p>{{ faq.answer }}</p>
+									<i class="fa-solid fa-a"></i>
+								</div>
+								{% endfor %}
+								<div class="button-gap">
+									<a href="#" class="button button-2 non">See all questions<i class="fa-solid fa-chevron-down"></i></a>
+								</div>
+							</div>
 
-      <div class="tabs-img-back">
+							<div class="tab-pane fade" id="v-pills-technical" role="tabpanel"
+								aria-labelledby="v-pills-technical-tab">
+								{% for faq in technical_faqs %}
+								<div class="questions">
+									<i class="fa-solid fa-q"></i>
+									<h6>{{ faq.question }}</h6>
+								</div>
+								<div class="questions answer">
+									<p>{{ faq.answer }}</p>
+									<i class="fa-solid fa-a"></i>
+								</div>
+								{% endfor %}
+								<div class="button-gap">
+									<a href="#" class="button button-2 non">See all questions<i class="fa-solid fa-chevron-down"></i></a>
+								</div>
+							</div>
 
-      <div class="row">
-
-           <div class="col-lg-12">
-
-               <div class="Provides">
-
-
-               <div class="nav nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                 <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Delivery</button>
-                 <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button"              role="tab" aria-controls="v-pills-profile" aria-selected="false">Technical</button>
-                 <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Restaurants</button>
-
-               </div>
-               <form>
-               	<input type="text" placeholder="Enter question keywords">
-               	<button><i class="fa-solid fa-magnifying-glass"></i></button>
-               </form>
-
-              </div>
-
-             </div>
-
-           <div class="col-lg-12 gap">
-
-               <div class="tab-content" id="v-pills-tabContent">
-
-                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-
-                 	<div class="questions">
-                 		<i class="fa-solid fa-q"></i>
-                 		<h6>Question 1. Volutpat maecenas volutpat blandit aliquam etiam erat velit. Diam donec adipiscing tristique risus nec feugiat in fermentum posuere?</h6>
-                 	</div>
-                 	<div class="questions answer">
-                 		<p>Quis ipsum suspendisse ultrices gravida dictum. Aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices. Ut sem nulla pharetra diam sit amet nisl suscipit. Diam vulputate ut pharetra sit amet aliquam id diam maecenas. Amet mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien.<br><br>
-
-						Suspendisse ultrices gravida dictum fusce ut. Tempor commodo ullamcorper a lacus vestibulum sed. Risus at ultrices mi tempus imperdiet. Proin sagittis nisl rhoncus mattis rhoncus urna neque.</p>
-						<i class="fa-solid fa-a"></i>
-                 	</div>
-                 	<div class="questions">
-                 		<i class="fa-solid fa-q"></i>
-                 		<h6>Question 2. Id neque aliquam vestibulum morbi. Integer vitae justo eget magna fermentum iaculis eu non diam. Nam libero justo laoreet sit amet cursus sit amet. Platea dictumst quisque sagittis purus sit amet volutpat consequat?</h6>
-                 	</div>
-                 	<div class="questions answer">
-                 		<p>Condimentum mattis pellentesque id nibh tortor id aliquet lectus. Massa id neque aliquam vestibulum morbi blandit cursus risus. Elementum sagittis vitae et leo duis ut diam quam. A cras semper auctor neque vitae tempus quam pellentesque. Cursus vitae congue mauris rhoncus aenean vel. Ut aliquam purus sit amet luctus venenatis lectus magna. Fringilla est ullamcorper eget nulla. Tempor id eu nisl nunc mi ipsum faucibus vitae.<br><br>
-                 			<b>
-                 		Massa tincidunt nunc pulvinar sapien et ligula ullamcorper malesuada.</b><br><br>
-						Non curabitur gravida arcu ac tortor dignissim convallis aenean. Odio pellentesque diam volutpat commodo sed egestas egestas. Sed sed risus pretium quam vulputate. Egestas egestas fringilla phasellus faucibus. Sit amet est placerat in egestas erat imperdiet sed. Varius sit amet mattis vulputate enim nulla aliquet.</p>
-						<i class="fa-solid fa-a"></i>
-                 	</div>
-                 	<div class="questions">
-                 		<i class="fa-solid fa-q"></i>
-                 		<h6>Question 3. Mi proin sed libero enim sed faucibus turpis in. Tristique senectus et netus et malesuada fames ac turpis. Congue eu consequat ac felis. Fringilla urna porttitor rhoncus dolor purus non enim?</h6>
-                 	</div>
-                 	<div class="questions answer">
-                 		<p>- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua;
-						- Dis parturient montes nascetur ridiculus mus mauris. Metus vulputate eu scelerisque felis imperdiet. Sit amet massa vitae tortor;
-						- Viverra accumsan in nisl nisi scelerisque eu ultrices vitae auctor. Quam vulputate dignissim suspendisse in est. Augue mauris augue neque gravida in fermentum et;<br><br>
-
-						Feugiat sed lectus vestibulum mattis. Sit amet luctus venenatis lectus magna fringilla. Viverra orci sagittis eu volutpat odio facilisis mauris. Porttitor leo a diam sollicitudin tempor id eu. Lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci. Diam vulputate ut pharetra sit. Odio aenean sed adipiscing diam donec.</p>
-						<i class="fa-solid fa-a"></i>
-                 	</div>
-                 	<div class="questions">
-                 		<i class="fa-solid fa-q"></i>
-                 		<h6>Question 4. Ullamcorper sit amet risus nullam eget felis eget. Ullamcorper a lacus vestibulum sed arcu non odio euismod. Quisque egestas diam in arcu cursus?</h6>
-                 	</div>
-                 	<div class="questions answer">
-                 		<p>Posuere ac ut consequat semper. Pharetra diam sit amet nisl. Sed pulvinar proin gravida hendrerit lectus a. Sagittis vitae et leo duis ut diam quam. Turpis egestas maecenas pharetra convallis posuere. Tincidunt lobortis feugiat vivamus at augue eget arcu dictum. Ipsum dolor sit amet consectetur.
-                 			<br><br>
-						Nulla pharetra diam sit amet nisl suscipit adipiscing bibendum. Nulla porttitor massa id neque aliquam vestibulum morbi blandit cursus. Massa placerat duis ultricies lacus sed turpis tincidunt id aliquet. Mus mauris vitae ultricies leo integer malesuada.</p>
-						<i class="fa-solid fa-a"></i>
-                 	</div>
-                 	<div class="button-gap">
-						<a href="#" class="button button-2 non">See all questions<i class="fa-solid fa-chevron-down"></i></a>
-					</div>
-
-                 </div>
-                 <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                   	<div class="questions">
-                 		<i class="fa-solid fa-q"></i>
-                 		<h6>Question 1. Volutpat maecenas volutpat blandit aliquam etiam erat velit. Diam donec adipiscing tristique risus nec feugiat in fermentum posuere?</h6>
-                 	</div>
-                 	<div class="questions answer">
-                 		<p>Quis ipsum suspendisse ultrices gravida dictum. Aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices. Ut sem nulla pharetra diam sit amet nisl suscipit. Diam vulputate ut pharetra sit amet aliquam id diam maecenas. Amet mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien.<br><br>
-
-						Suspendisse ultrices gravida dictum fusce ut. Tempor commodo ullamcorper a lacus vestibulum sed. Risus at ultrices mi tempus imperdiet. Proin sagittis nisl rhoncus mattis rhoncus urna neque.</p>
-						<i class="fa-solid fa-a"></i>
-                 	</div>
-                 	<div class="questions">
-                 		<i class="fa-solid fa-q"></i>
-                 		<h6>Question 2. Id neque aliquam vestibulum morbi. Integer vitae justo eget magna fermentum iaculis eu non diam. Nam libero justo laoreet sit amet cursus sit amet. Platea dictumst quisque sagittis purus sit amet volutpat consequat?</h6>
-                 	</div>
-                 	<div class="questions answer">
-                 		<p>Condimentum mattis pellentesque id nibh tortor id aliquet lectus. Massa id neque aliquam vestibulum morbi blandit cursus risus. Elementum sagittis vitae et leo duis ut diam quam. A cras semper auctor neque vitae tempus quam pellentesque. Cursus vitae congue mauris rhoncus aenean vel. Ut aliquam purus sit amet luctus venenatis lectus magna. Fringilla est ullamcorper eget nulla. Tempor id eu nisl nunc mi ipsum faucibus vitae.<br><br>
-                 			<b>
-                 		Massa tincidunt nunc pulvinar sapien et ligula ullamcorper malesuada.</b><br><br>
-						Non curabitur gravida arcu ac tortor dignissim convallis aenean. Odio pellentesque diam volutpat commodo sed egestas egestas. Sed sed risus pretium quam vulputate. Egestas egestas fringilla phasellus faucibus. Sit amet est placerat in egestas erat imperdiet sed. Varius sit amet mattis vulputate enim nulla aliquet.</p>
-						<i class="fa-solid fa-a"></i>
-                 	</div>
-
-
-                 	<div class="button-gap">
-						<a href="#" class="button button-2 non">See all questions<i class="fa-solid fa-chevron-down"></i></a>
-					</div>
-
-                 </div>
-                 <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-                	<div class="questions">
-                 		<i class="fa-solid fa-q"></i>
-                 		<h6>Question 1. Volutpat maecenas volutpat blandit aliquam etiam erat velit. Diam donec adipiscing tristique risus nec feugiat in fermentum posuere?</h6>
-                 	</div>
-                 	<div class="questions answer">
-                 		<p>Quis ipsum suspendisse ultrices gravida dictum. Aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices. Ut sem nulla pharetra diam sit amet nisl suscipit. Diam vulputate ut pharetra sit amet aliquam id diam maecenas. Amet mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien.<br><br>
-
-						Suspendisse ultrices gravida dictum fusce ut. Tempor commodo ullamcorper a lacus vestibulum sed. Risus at ultrices mi tempus imperdiet. Proin sagittis nisl rhoncus mattis rhoncus urna neque.</p>
-						<i class="fa-solid fa-a"></i>
-                 	</div>
-                 	<div class="questions">
-                 		<i class="fa-solid fa-q"></i>
-                 		<h6>Question 2. Id neque aliquam vestibulum morbi. Integer vitae justo eget magna fermentum iaculis eu non diam. Nam libero justo laoreet sit amet cursus sit amet. Platea dictumst quisque sagittis purus sit amet volutpat consequat?</h6>
-                 	</div>
-                 	<div class="questions answer">
-                 		<p>Condimentum mattis pellentesque id nibh tortor id aliquet lectus. Massa id neque aliquam vestibulum morbi blandit cursus risus. Elementum sagittis vitae et leo duis ut diam quam. A cras semper auctor neque vitae tempus quam pellentesque. Cursus vitae congue mauris rhoncus aenean vel. Ut aliquam purus sit amet luctus venenatis lectus magna. Fringilla est ullamcorper eget nulla. Tempor id eu nisl nunc mi ipsum faucibus vitae.<br><br>
-                 			<b>
-                 		Massa tincidunt nunc pulvinar sapien et ligula ullamcorper malesuada.</b><br><br>
-						Non curabitur gravida arcu ac tortor dignissim convallis aenean. Odio pellentesque diam volutpat commodo sed egestas egestas. Sed sed risus pretium quam vulputate. Egestas egestas fringilla phasellus faucibus. Sit amet est placerat in egestas erat imperdiet sed. Varius sit amet mattis vulputate enim nulla aliquet.</p>
-						<i class="fa-solid fa-a"></i>
-                 	</div>
-                 	<div class="questions">
-                 		<i class="fa-solid fa-q"></i>
-                 		<h6>Question 3. Mi proin sed libero enim sed faucibus turpis in. Tristique senectus et netus et malesuada fames ac turpis. Congue eu consequat ac felis. Fringilla urna porttitor rhoncus dolor purus non enim?</h6>
-                 	</div>
-                 	<div class="questions answer">
-                 		<p>- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua;
-						- Dis parturient montes nascetur ridiculus mus mauris. Metus vulputate eu scelerisque felis imperdiet. Sit amet massa vitae tortor;
-						- Viverra accumsan in nisl nisi scelerisque eu ultrices vitae auctor. Quam vulputate dignissim suspendisse in est. Augue mauris augue neque gravida in fermentum et;<br><br>
-
-						Feugiat sed lectus vestibulum mattis. Sit amet luctus venenatis lectus magna fringilla. Viverra orci sagittis eu volutpat odio facilisis mauris. Porttitor leo a diam sollicitudin tempor id eu. Lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci. Diam vulputate ut pharetra sit. Odio aenean sed adipiscing diam donec.</p>
-						<i class="fa-solid fa-a"></i>
-                 	</div>
-
-                 	<div class="button-gap">
-						<a href="#" class="button button-2 non">See all questions<i class="fa-solid fa-chevron-down"></i></a>
-					</div>
-              	</div>
-
-              </div>
-
-        	</div>
-
-      	</div>
-
-     	</div>
-     </div>
-  </section>
+							<div class="tab-pane fade" id="v-pills-restaurants" role="tabpanel"
+								aria-labelledby="v-pills-restaurants-tab">
+								{% for faq in restaurant_faqs %}
+								<div class="questions">
+									<i class="fa-solid fa-q"></i>
+									<h6>{{ faq.question }}</h6>
+								</div>
+								<div class="questions answer">
+									<p>{{ faq.answer }}</p>
+									<i class="fa-solid fa-a"></i>
+								</div>
+								{% endfor %}
+								<div class="button-gap">
+									<a href="#" class="button button-2 non">See all questions<i class="fa-solid fa-chevron-down"></i></a>
+								</div>
+							</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
   <!-- form-section -->
   <section class="form-section gap " style="background:#fcfcfc">
-  	<div class="container">
-  		<div class="row">
-  			<div class="col-lg-6">
-  				<div class="form-section-img">
-  					<img alt="form-section-img" src="https://bslthemes.com/html/quickeat/assets/img/form-section-img.png">
-  				</div>
-  			</div>
-  			<div class="col-lg-6">
-					<div class="join-courier">
-						<h3>Didn't find the answer you are looking for?</h3>
-						<p>Magna sit amet purus gravida quis blandit turpis cursus. Venenatis tellus in metus vulputate eu scelerisque felis.</p>
-						<form class="blog-form">
-							<div class="name-form">
-								<i class="fa-regular fa-user"></i>
-								<input type="text" name="name" placeholder="Enter your name">
-							</div>
-							<div class="name-form">
-								<i class="fa-regular fa-envelope"></i>
-								<input type="text" name="email" placeholder="Enter your email">
-							</div>
-							<textarea placeholder="Enter your message"></textarea>
-							<button class="button-price">Submit Application</button>
-						</form>
-
-					</div>
-				</div>
-  		</div>
-  	</div>
-  </section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-section-img">
+                    <img alt="form-section-img" src="https://bslthemes.com/html/quickeat/assets/img/form-section-img.png">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="join-courier">
+                    <h3>Didn't find the answer you are looking for?</h3>
+                    <p>Magna sit amet purus gravida quis blandit turpis cursus. Venenatis tellus in metus vulputate eu scelerisque felis.</p>
+                    <form class="blog-form" action="{% url 'home:faq_message' %}" method="post">
+                        {% csrf_token %}
+                        <div class="name-form">
+                            <i class="fa-regular fa-user"></i>
+                            <input type="text" name="name" placeholder="Enter your name">
+                        </div>
+                        <div class="name-form">
+                            <i class="fa-regular fa-envelope"></i>
+                            <input type="email" name="email" placeholder="Enter your email" style="color: #cfcfcf;
+							border: 1px solid #F2F2F2;
+							width: 100%;
+							height: 60px;
+							padding-left: 46px;
+							border-radius: 10px;
+							margin-top: 20px;
+							outline: none;">
+                        </div>
+                        <textarea name="message" placeholder="Enter your message"></textarea>
+                        <button type="submit" class="button-price">Submit Application</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
   <!-- footer -->
 	<footer class="gap no-bottom" style="background-color: #363636;">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-5 col-md-6 col-sm-12">
 					<div class="footer-description">
-						<a href="/indexThem.html">
+						<a href="/{% url 'home:home-page' %}">
               <svg xmlns="http://www.w3.org/2000/svg" width="163" height="38" viewBox="0 0 163 38">
                 <g id="Logo-w" transform="translate(-260 -51)">
                   <g id="Logo-2-w" data-name="Logo-w" transform="translate(260 51)">
@@ -504,9 +415,9 @@
 					<div class="menu">
 						<h4>Menu</h4>
 						<ul class="footer-menu">
-							<li><a href="indexThem.html">home<i class="fa-solid fa-arrow-right"></i></a></li>
-							<li><a href="about.html">about us<i class="fa-solid fa-arrow-right"></i></a></li>
-							<li><a href="restuarants.html">Restaurants<i class="fa-solid fa-arrow-right"></i></a></li>
+							<li><a href="{% url 'home:home-page' %}">home<i class="fa-solid fa-arrow-right"></i></a></li>
+							<li><a href="{% url 'home:about-page' %}">about us<i class="fa-solid fa-arrow-right"></i></a></li>
+							<li><a href="{%  url  'restaurant:restaurant'  %}">Restaurants<i class="fa-solid fa-arrow-right"></i></a></li>
 							<li><a href="contact.html">Contacts<i class="fa-solid fa-arrow-right"></i></a></li>
 						</ul>
 					</div>
@@ -538,17 +449,6 @@
 			</div>
 		</div>
 	</footer>
-  <!-- bootstrap -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-	<!-- jQuery -->
-	<script src="assets/js/jquery-3.6.0.min.js"></script>
-<!-- aos -->
-<script src="assets/js/fast.js"></script>
-	<!-- custom -->
-	<script src="assets/js/eat.js"></script>
-    <script src="assets/js/aos.js"></script>
-    <script src="assets/js/custom.js"></script>
-    <script src="assets/js/ownchar.js"></script>
 
   <!-- bslthemes.com buttons html begin -->
   <div class="bsl-popup" data-theme="quickeat" data-category="html">
@@ -564,10 +464,6 @@
     </div>
     <div class="bsl-popup__content bsl-popup__content-help"></div>
   </div>
-  <!-- bslthemes.com buttons html end -->
-
-  <!-- bslthemes.com buttons assets begin -->
-  <link rel="stylesheet" href="https://bslthemes.com/bslthms-advanced-btns/assets/style.css">
-  <script src="https://bslthemes.com/bslthms-advanced-btns/assets/script.js"></script>
-  <!-- bslthemes.com buttons assets end -->
-</body>
+  
+</div>
+{% endblock %}

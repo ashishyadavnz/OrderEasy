@@ -1,27 +1,6 @@
-<!DOCTYPE html>
-<html lang="zxx">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quickeat - About</title>
-  <link rel="icon" href="assets/img/fav-icon.png">
-	<!-- CSS only -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-	<!-- owl carousel -->
-  <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
-  <link rel="stylesheet" href="assets/css/owl.theme.default.min.css">
-<link rel="stylesheet" href="assets/css/responsive.css">
-    <link rel="stylesheet" href="assets/css/own.css">
-    <link rel="stylesheet" href="assets/css/own-car.css">
-    <link rel="stylesheet" href="assets/css/nice.css">
-    <link rel="stylesheet" href="assets/css/color.css">
-    <link rel="stylesheet" href="assets/css/aos.css">
-    <link rel="stylesheet" href="assets/css/new.css">
+{% extends "index.html" %} {% load static %} {% block content %}
 
-	<!-- Font Awesome 5 -->
-	<script src="https://kit.fontawesome.com/27a041baf1.js" crossorigin="anonymous"></script>
-</head>
-<body class="menu-layer">
+<div class="menu-layer">
 	<!-- loader start-->
 	<div class="page-loader">
 		<div class="wrapper">
@@ -76,26 +55,26 @@
 					<nav class="navbar">
 				      <ul class="navbar-links">
 				        <li class="navbar-dropdown">
-				          <a href="indexThem.html">Home</a>
+				          <a href="{% url 'home:home-page' %}">Home</a>
 				        </li>
 				        <li class="navbar-dropdown active">
-				          <a href="about.html">About Us</a>
+				          <a href="{% url 'home:about-page' %}">About Us</a>
 				        </li>
 				        <li class="navbar-dropdown">
 				          <a href="#">Restaurants</a>
 				          <div class="dropdown">
-				            <a href="restuarants.html">Restaurants</a>
-				            <a href="restaurants-card.html">Restaurant Card</a>
+				            <a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
+				            <a href="{% url 'restaurant:restaurant-card' %}">Restaurant Card</a>
 				            <a href="checkout.html">Checkout</a>
 				          </div>
 				        </li>
 				        <li class="navbar-dropdown">
 				          <a href="#">Pages</a>
 				          <div class="dropdown">
-				            <a href="blog.html">Blog</a>
-				            <a href="single-blog.html">Single Blog</a>
+				            <a href="{% url 'blog:blog_page' %}">Blog</a>
+				            <a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a>
 				            <a href="service.html">Services</a>
-				            <a href="faq.html">FAQ</a>
+				            <a href="{% url 'home:faq' %}">FAQ</a>
 				            <a href="pricing-table.html">Pricing Table</a>
 				            <a href="become-partner.html">Become A Partner</a>
 				            <a href="404.html">404</a>
@@ -112,7 +91,7 @@
            <a href="javascript:void(0)" id="desktop-menu" class="menu-btn">
 
 							<i class="fa-solid fa-bag-shopping"></i></a>
-						 <a href="restuarants.html" class="button button-2">Order Now</a>
+						 <a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a>
 					</div>
 				</div>
 			 <div class="menu-wrap">
@@ -215,17 +194,17 @@
           	</div>
 			<ul>
 
-				  <li><a href="indexThem.html">Home</a>
+				  <li><a href="{% url 'home:home-page' %}">Home</a>
 				  </li>
 
-				  <li><a href="about.html">About Us</a></li>
+				  <li><a href="{% url 'home:about-page' %}">About Us</a></li>
 
                   <li class="menu-item-has-children"><a href="JavaScript:void(0)">Restaurants</a>
 
 					<ul class="sub-menu">
 
-                      <li><a href="restuarants.html">Restaurants</a></li>
-				      <li><a href="restaurants-card.html">Restaurant Card</a></li>
+                      <li><a href="{% url 'restaurant:restaurant' %}">Restaurants</a></li>
+				      <li><a href="{% url 'restaurant:restaurant-card' %}">Restaurant Card</a></li>
 				      <li><a href="checkout.html">Checkout</a></li>
                     </ul>
 
@@ -234,10 +213,11 @@
 
 					<ul class="sub-menu">
 
-                       <li><a href="blog.html">Blog</a></li>
-				       <li><a href="single-blog.html">Single Blog</a></li>
+                       <li><a href="{% url 'blog:blog_page' %}">Blog</a></li>
+				       <li> <a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a>
+					   </li>
 				       <li><a href="service.html">Services</a></li>
-				       <li><a href="faq.html">FAQ</a></li>
+				       <li><a href="{% url 'home:faq' %}">FAQ</a></li>
 				       <li><a href="pricing-table.html">Pricing Table</a></li>
 				       <li><a href="become-partner.html">Become A Partner</a></li>
 				       <li><a href="404.html">404</a></li>
@@ -261,8 +241,8 @@
 				<div class="col-lg-6 col-md-12 col-sm-12" data-aos="fade-up"  data-aos-delay="300" data-aos-duration="400">
 					<div class="about-text">
 						<ul class="crumbs d-flex">
-							<li><a href="indexThem.html">Home</a></li>
-							<li class="two"><a href="about.html"><i class="fa-solid fa-right-long"></i> About Us</a></li>
+							<li><a href="{% url 'home:home-page' %}">Home</a></li>
+							<li class="two"><a href="{% url 'home:about-page' %}"><i class="fa-solid fa-right-long"></i> About Us</a></li>
 						</ul>
 						<h2>Nothing to worry about with Quickeat</h2>
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
@@ -611,9 +591,9 @@
 					<div class="menu">
 						<h4>Menu</h4>
 						<ul class="footer-menu">
-							<li><a href="indexThem.html">home<i class="fa-solid fa-arrow-right"></i></a></li>
-							<li><a href="about.html">about us<i class="fa-solid fa-arrow-right"></i></a></li>
-							<li><a href="restuarants.html">Restaurants<i class="fa-solid fa-arrow-right"></i></a></li>
+							<li><a href="{% url 'home:home-page' %}">home<i class="fa-solid fa-arrow-right"></i></a></li>
+							<li><a href="{% url 'home:about-page' %}">about us<i class="fa-solid fa-arrow-right"></i></a></li>
+							<li><a href="{% url 'restaurant:restaurant' %}">Restaurants<i class="fa-solid fa-arrow-right"></i></a></li>
 							<li><a href="contact.html">Contacts<i class="fa-solid fa-arrow-right"></i></a></li>
 						</ul>
 					</div>
@@ -645,23 +625,7 @@
 			</div>
 		</div>
 	</footer>
-	<!-- bootstrap -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-	<!-- jQuery -->
-	<script src="assets/js/jquery-3.6.0.min.js"></script>
-	<script src="assets/js/jquery.nice-select.min.js"></script>
-	<!-- owl.carousel -->
-	<script src="assets/js/owl.carousel.min.js"></script>
-	<!-- fancybox -->
-	<script src="assets/js/jquery.fancybox.min.js"></script>
-	<!-- aos -->
-	<script src="assets/js/fast.js"></script>
-	<!-- custom -->
-	<script src="assets/js/eat.js"></script>
-    <script src="assets/js/aos.js"></script>
-    <script src="assets/js/custom.js"></script>
-    <script src="assets/js/ownchar.js"></script>
-  <!-- bslthemes.com buttons html begin -->
+	
   <div class="bsl-popup" data-theme="quickeat" data-category="html">
     <div class="bsl-popup__buttons"></div>
     <div class="bsl-popup__content bsl-popup__content-related">
@@ -677,8 +641,6 @@
   </div>
   <!-- bslthemes.com buttons html end -->
 
-  <!-- bslthemes.com buttons assets begin -->
-  <link rel="stylesheet" href="https://bslthemes.com/bslthms-advanced-btns/assets/style.css">
-  <script src="https://bslthemes.com/bslthms-advanced-btns/assets/script.js"></script>
-  <!-- bslthemes.com buttons assets end -->
-</body>
+  
+</div>
+{% endblock %}

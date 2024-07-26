@@ -213,18 +213,22 @@ class Contact(BaseModel):
 		super(Contact, self).save(*args, **kwargs)
 
 class Faqs(BaseModel):
-	question = models.CharField(max_length=160)
-	answer = models.TextField()
+    CATEGORY_CHOICES = [
+        ('delivery', 'Delivery'),
+        ('technical', 'Technical'),
+        ('restaurants', 'Restaurants'),
+    ]
 
-	class Meta:
-		verbose_name_plural = "07. Faqs"
+    question = models.CharField(max_length=160)
+    answer = models.TextField()
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
 
-	def __str__(self):
-		return str(self.question)
+    class Meta:
+        verbose_name_plural = "07. Faqs"
 
-	def save(self, *args, **kwargs):
-		trackupdate(self)
-		super(Faqs, self).save(*args, **kwargs)
+    def __str__(self):
+        return str(self.question)
+	
 
 class Feedback(BaseModel):
 	user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='feedback_user')
@@ -240,3 +244,15 @@ class Feedback(BaseModel):
 	def save(self, *args, **kwargs):
 		trackupdate(self)
 		super(Feedback, self).save(*args, **kwargs)
+
+class FaqMessage(models.Model):
+	name = models.CharField(max_length=100)
+	email = models.EmailField()
+	message = models.TextField()
+	created_at = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		verbose_name_plural = "09. Faq Query"
+
+	def __str__(self):
+		return self.name

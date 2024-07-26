@@ -60,7 +60,7 @@
 				          <a href="{% url 'home:home-page' %}">Home</a>
 				        </li>
 				        <li class="navbar-dropdown">
-				          <a href="about.html">About Us</a>
+				          <a href="{% url 'home:about-page' %}">About Us</a>
 				        </li>
 				        <li class="navbar-dropdown">
 				          <a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
@@ -76,7 +76,7 @@
 				            <a href="{% url 'blog:blog_page' %}">Blog</a>
 				            <a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a>
 				            <a href="/service.html">Services</a>
-				            <a href="/faq.html">FAQ</a>
+				            <a href="/{% url 'home:faq' %}">FAQ</a>
 				            <a href="/pricing-table.html">Pricing Table</a>
 				            <a href="/become-partner.html">Become A Partner</a>
 				            <a href="/404.html">404</a>
@@ -199,7 +199,7 @@
 				  <li><a href="{% url 'home:home-page' %}">Home</a>
 				  </li>
 
-				  <li><a href="about.html">About Us</a></li>
+				  <li><a href="{% url 'home:about-page' %}">About Us</a></li>
 
                   <li class="menu-item-has-children"><a href="JavaScript:void(0)">Restaurants</a>
 
@@ -218,7 +218,7 @@
                        <li><a href="{% url 'blog:blog_page' %}">Blog</a></li>
 					   <a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a>
 				       <li><a href="service.html">Services</a></li>
-				       <li><a href="faq.html">FAQ</a></li>
+				       <li><a href="{% url 'home:faq' %}">FAQ</a></li>
 				       <li><a href="pricing-table.html">Pricing Table</a></li>
 				       <li><a href="become-partner.html">Become A Partner</a></li>
 				       <li><a href="404.html">404</a></li>
@@ -381,7 +381,7 @@
 									    outline: none;
 									    padding-left: 20px;
 									    margin: 20px 0;
-									">	</div>
+									"></div>
 							</div>
 							<div class="row">
 								<div class="col-lg-12">
@@ -432,7 +432,7 @@
 						<h4>Menu</h4>
 						<ul class="footer-menu">
 							<li><a href="{% url 'home:home-page' %}">home<i class="fa-solid fa-arrow-right"></i></a></li>
-							<li><a href="about.html">about us<i class="fa-solid fa-arrow-right"></i></a></li>
+							<li><a href="{% url 'home:about-page' %}">about us<i class="fa-solid fa-arrow-right"></i></a></li>
 							<li><a href="{% url 'restaurant:restaurant' %}">Restaurants<i class="fa-solid fa-arrow-right"></i></a></li>
 							<li><a href="contact.html">Contacts<i class="fa-solid fa-arrow-right"></i></a></li>
 						</ul>
