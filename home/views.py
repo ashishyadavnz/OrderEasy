@@ -16,6 +16,24 @@ def home(request):
 def about(request):
     return render(request, 'ui/about.html')
 
+
+def pricingTable(request):
+    return render(request, 'ui/pricing-table.html')
+
+
+def contact(request):
+    return render(request, 'ui/contact.html')
+
+
+def becomePartner(request):
+    return render(request, 'ui/become-partner.html')
+
+def checkout(request):
+    return render(request, 'ui/checkout.html')
+
+def notfound(request):
+    return render(request, 'ui/404.html')
+
 def faq(request):
     delivery_faqs = Faqs.objects.filter(category='delivery')
     technical_faqs = Faqs.objects.filter(category='technical')

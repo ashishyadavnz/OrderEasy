@@ -51,3 +51,23 @@ def add_comment(request, slug):
     
     # Handle GET request
     return render(request, 'ui/single-blog.html', {'post': post})
+
+
+def services(request):
+   
+    return render(request, 'ui/service.html',)
+
+def subscribe(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+
+        if not email:
+            messages.error(request, 'Email is required.')
+            return redirect('blog:service')
+
+        Subscribe.objects.create(email=email)
+
+        messages.success(request, 'You have successfully subscribed.')
+        return redirect('blog:service')
+
+    return render(request, 'ui/service.html')
