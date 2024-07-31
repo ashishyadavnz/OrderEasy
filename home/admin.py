@@ -195,5 +195,10 @@ for model in models:
 class MigrationRecorderAdmin(ListAdminMixin, admin.ModelAdmin):
     def __init__(self, model, admin_site):
         super().__init__(model, admin_site)
+class TestimonialAdmin(admin.ModelAdmin):
+    list_display = ('name', 'content',)
+    search_fields = ('name',)
+    readonly_fields = ('track', 'utrack',)
+
 
 admin.site.register(MigrationRecorder.Migration, MigrationRecorderAdmin)

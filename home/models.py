@@ -245,7 +245,7 @@ class Feedback(BaseModel):
 		trackupdate(self)
 		super(Feedback, self).save(*args, **kwargs)
 
-class FaqMessage(models.Model):
+class FaqMessage(BaseModel):
 	name = models.CharField(max_length=100)
 	email = models.EmailField()
 	message = models.TextField()
@@ -253,6 +253,18 @@ class FaqMessage(models.Model):
 
 	class Meta:
 		verbose_name_plural = "09. Faq Query"
+
+	def __str__(self):
+		return self.name
+	
+class Testimonial(BaseModel):
+	name = models.CharField(max_length = 80)
+	image = models.ImageField(upload_to='user/image/', blank=True, null=True, default="default/st-logo.png")
+	content = RichTextUploadingField()
+	rating  = models.FloatField(default=0.0)
+
+	class Meta:
+		verbose_name_plural = "10.Testimonials"
 
 	def __str__(self):
 		return self.name
