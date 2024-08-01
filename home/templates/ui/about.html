@@ -1,4 +1,7 @@
-{% extends "index.html" %} {% load static %} {% block content %}
+{% extends "index.html" %}
+{% load custom_filter %}
+{% load static %}
+{% block content %}
 
 <div class="menu-layer">
 	
@@ -256,7 +259,7 @@
 		</div>
 	</section>
 	<!-- Our partners Section -->
-	<section class="service-shows gap" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
+	<section class="service-shows gap" data-aos="fade-up" data-aos-delay="200" data-aos-duration="300">
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xl-4 col-lg-12">
@@ -267,41 +270,27 @@
 				</div>
 				<div class="col-xl-8 col-lg-12">
 					<div class="comment-data comment-slide owl-carousel owl-theme">
+						{% for testimonial in testimonials %}
 						<div class="author-text item">
-							<p>
-							"Tortor vitae purus faucibus ornare suspendisse. Ut porttitor leo a diam. Massa tincidunt nunc pulvinar sapien et ligula ullamcorper malesuada proin. Ut tortor pretium viverra suspendisse".</p>
+							<p>"{{ testimonial.content|safe }}"</p>
 							<div class="thomas">
-								<img alt="girl" src="https://bslthemes.com/html/quickeat/assets/img/photo-5.jpg">
-
+								<img alt="{{ testimonial.name }}" src="{{ testimonial.image.url }}" style="border-radius: 50%;" height="80px" width="80px">
 								<div>
-									<h6>Thomas Adamson</h6>
-									<i class="fa-solid fa-star"></i>
-									<i class="fa-solid fa-star"></i>
-									<i class="fa-solid fa-star"></i>
-									<i class="fa-solid fa-star"></i>
-									<i class="fa-solid fa-star"></i>
+									<h6>{{ testimonial.name }}</h6>
+									<div>
+										{% for i in testimonial.rating|range_custom %}
+											<i class="fa-solid fa-star"></i>
+										{% endfor %}
+										{% for i in testimonial.rating|range_diff:5 %}
+											<i class="fa-regular fa-star"></i>
+										{% endfor %}
+									</div>
 								</div>
 							</div>
 						</div>
-						<div class="author-text item">
-							<p>
-							"Tortor vitae purus faucibus ornare suspendisse. Ut porttitor leo a diam. Massa tincidunt nunc pulvinar sapien et ligula ullamcorper malesuada proin. Ut tortor pretium viverra suspendisse".</p>
-							<div class="thomas">
-								<img alt="girl" src="https://bslthemes.com/html/quickeat/assets/img/photo-5.jpg">
-
-								<div>
-									<h6>Thomas Adamson</h6>
-									<i class="fa-solid fa-star"></i>
-									<i class="fa-solid fa-star"></i>
-									<i class="fa-solid fa-star"></i>
-									<i class="fa-solid fa-star"></i>
-									<i class="fa-solid fa-star"></i>
-								</div>
-							</div>
-						</div>
+						{% endfor %}
 					</div>
 				</div>
-
 			</div>
 		</div>
 	</section>

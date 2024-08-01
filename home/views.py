@@ -10,11 +10,15 @@ def home(request):
     restaurants = Restaurant.objects.all()
     cat = Category.objects.all()
     posts = Post.objects.all()
-    return render(request, 'ui/indexThem.html',{'restaurants':restaurants,'cat':cat,'posts':posts})
+    testimonials = Testimonial.objects.all()
+
+    return render(request, 'ui/indexThem.html',{'restaurants':restaurants,'cat':cat,'posts':posts,'testimonials':testimonials})
 
 
 def about(request):
-    return render(request, 'ui/about.html')
+    testimonials = Testimonial.objects.all()
+    
+    return render(request, 'ui/about.html',{'testimonials':testimonials})
 
 
 def pricingTable(request):

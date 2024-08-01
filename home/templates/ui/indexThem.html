@@ -187,59 +187,33 @@
 	<section class="reviews-sections gap">
 		<div class="container">
 			<div class="row align-items-center">
-				<div class="col-xl-6 col-lg-12" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
+				<div class="col-md-6" data-aos="fade-up" data-aos-delay="200" data-aos-duration="300">
 					<div class="reviews-content">
 						<h2>What customers say about us</h2>
 						<div class="custome owl-carousel owl-theme">
+							{% for testimonial in testimonials %}
 							<div class="item">
-								<h4>"Dapibus ultrices in iaculis nunc sed augue lacus viverra vitae. Mauris a diam maecenas sed enim. Egestas diam in arcu cursus euismod quis. Quam quisque id diam vel".</h4>
+								<h4>"{{ testimonial.content|safe }}"</h4>
 								<div class="thomas">
-									<img alt="girl" src="https://bslthemes.com/html/quickeat/assets/img/photo-5.jpg">
-
+									<img alt="{{ testimonial.name }}" src="{{ testimonial.image.url }}" style="border-radius: 50%;" height="80px" width="80px">
 									<div>
-										<h6>Thomas Adamson</h6>
-										<i class="fa-solid fa-star"></i>
-										<i class="fa-solid fa-star"></i>
-										<i class="fa-solid fa-star"></i>
-										<i class="fa-solid fa-star"></i>
-										<i class="fa-solid fa-star"></i>
+										<h6>{{ testimonial.name }}</h6>
+										<div>
+											{% for i in testimonial.rating|range_custom %}
+												<i class="fa-solid fa-star"></i>
+											{% endfor %}
+											{% for i in testimonial.rating|range_diff:5 %}
+												<i class="fa-regular fa-star"></i>
+											{% endfor %}
+										</div>
 									</div>
 								</div>
+							</div>
+							{% endfor %}
 						</div>
-						<div class="item">
-								<h4>"Dapibus ultrices in iaculis nunc sed augue lacus viverra vitae. Mauris a diam maecenas sed enim. Egestas diam in arcu cursus euismod quis. Quam quisque id diam vel".</h4>
-								<div class="thomas">
-									<img alt="girl" src="https://bslthemes.com/html/quickeat/assets/img/photo-5.jpg">
-
-									<div>
-										<h6>Thomas Adamson</h6>
-										<i class="fa-solid fa-star"></i>
-										<i class="fa-solid fa-star"></i>
-										<i class="fa-solid fa-star"></i>
-										<i class="fa-solid fa-star"></i>
-										<i class="fa-solid fa-star"></i>
-									</div>
-								</div>
-						</div>
-						<div class="item">
-								<h4>"Dapibus ultrices in iaculis nunc sed augue lacus viverra vitae. Mauris a diam maecenas sed enim. Egestas diam in arcu cursus euismod quis. Quam quisque id diam vel".</h4>
-								<div class="thomas">
-									<img alt="girl" src="https://bslthemes.com/html/quickeat/assets/img/photo-5.jpg">
-
-									<div>
-										<h6>Thomas Adamson</h6>
-										<i class="fa-solid fa-star"></i>
-										<i class="fa-solid fa-star"></i>
-										<i class="fa-solid fa-star"></i>
-										<i class="fa-solid fa-star"></i>
-										<i class="fa-solid fa-star"></i>
-									</div>
-								</div>
-						</div>
-					</div>
 					</div>
 				</div>
-				<div class="col-xl-6 col-lg-12" data-aos="fade-up"  data-aos-delay="300" data-aos-duration="400">
+				<div class="col-md-6" data-aos="fade-up" data-aos-delay="300" data-aos-duration="400">
 					<div class="reviews-img">
 						<img alt="photo" src="https://bslthemes.com/html/quickeat/assets/img/photo-4.png">
 						<i class="fa-regular fa-thumbs-up"></i>
