@@ -104,7 +104,7 @@ def send_sms(number,message):
 
 def custom_mail(subject,email_template_name,user,c):
 	email = loader.render_to_string(email_template_name, c)
-	send_mail(subject, email, f'Security Troops <{settings.DEFAULT_FROM_EMAIL}>' , [user.email], html_message=email, fail_silently=False)
+	send_mail(subject, email, f'Easy Meal <{settings.DEFAULT_FROM_EMAIL}>' , [user.email], html_message=email, fail_silently=False)
 
 def percentage(instance):
 	per = 0

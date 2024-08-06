@@ -16,9 +16,8 @@ from firebase_admin.messaging import Message, Notification
 from fcm_django.models import FCMDevice
 from rest_framework.authtoken.models import Token
 from geolocation.models import *
-from datetime import timedelta, datetime as dt, date
+from datetime import timedelta, date
 from .functions import *
-import random
 
 # Create your models here.
 
@@ -84,7 +83,7 @@ class User(AbstractUser, BaseModel):
 	dob = models.DateField(null=True, blank=True)
 	image = models.ImageField(upload_to='user/image/', blank=True, null=True, default="default/st-logo.png")
 	city = models.CharField(max_length=30, blank=True)
-	zipcode = models.PositiveIntegerField(blank=True, null=True)
+	postcode = models.PositiveIntegerField(blank=True, null=True)
 	address = models.TextField(blank=True)
 	latitude = models.FloatField(blank=True, null=True) 
 	longitude = models.FloatField(blank=True, null=True)

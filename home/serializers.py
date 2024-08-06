@@ -117,7 +117,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
 			c = {
 				'email': is_user.email,
 				'domain': self.context['request'].META.get('HTTP_REFERER'),
-				'site_name': 'Security Troops',
+				'site_name': 'Easy Meal',
 				'uid': urlsafe_base64_encode(force_bytes(is_user.pk)),
 				'user': is_user,
 				'token': default_token_generator.make_token(is_user),
@@ -179,7 +179,7 @@ class UserCreationSerializer(serializers.ModelSerializer):
 			c = {
 				'email': user.email,
 				'domain': self.context['request'].META.get('HTTP_REFERER'),
-				'site_name': 'Security Troops',
+				'site_name': 'Easy Meal',
 				'uid': urlsafe_base64_encode(force_bytes(user.pk)),
 				'user': user,
 				'token': default_token_generator.make_token(user),
@@ -227,7 +227,7 @@ class UserResendActivationSerializer(serializers.ModelSerializer):
 			c = {
 				'email': user.email,
 				'domain': self.context['request'].META.get('HTTP_REFERER'),
-				'site_name': 'Security Troops',
+				'site_name': 'Easy Meal',
 				'uid': urlsafe_base64_encode(force_bytes(user.pk)),
 				'user': user,
 				'token': default_token_generator.make_token(user),
@@ -282,7 +282,7 @@ class OtpSendSerializer(serializers.ModelSerializer):
 			c = {
 				'email': user.email,
 				'domain': self.context['request'].META.get('HTTP_REFERER'),
-				'site_name': 'Security Troops',
+				'site_name': 'Easy Meal',
 				'uid': urlsafe_base64_encode(force_bytes(user.pk)),
 				'user': user,
 				'token': default_token_generator.make_token(user),
