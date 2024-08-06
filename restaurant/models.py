@@ -75,7 +75,7 @@ class Category(BaseModel):
 	
 class Cuisine(BaseModel):
 	"""docstring for Cuisine"""
-	category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="cuisine_category", blank=True,null=True)
+	category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="cuisine_category")
 	title = models.CharField(max_length=160)
 	slug = AutoSlugField(max_length=160, populate_from=['title'], unique=True, editable=True)
 	image = models.ImageField(upload_to='restaurant/cuisine/image', null=True,blank=True)	
