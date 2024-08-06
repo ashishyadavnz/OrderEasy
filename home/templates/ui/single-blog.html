@@ -1,0 +1,189 @@
+{% extends "index.html" %}
+{% load custom_filter %}
+{% load static %}
+{% block content %}
+<div class="menu-layer">
+	<!-- loader start-->
+	
+	
+  <!-- hero-section -->
+  <section class="hero-section about single-blog gap" style="background-image: url(https://bslthemes.com/html/quickeat/assets/img/background-3.png);" data-aos="flip-up"  data-aos-delay="300" data-aos-duration="400">
+			<div class="container">
+				<div class="row align-items-center">
+					<div class="offset-xl-2 col-xl-6 col-lg-12">
+						<div class="about-text">
+							<ul class="crumbs d-flex">
+								<li><a href="{% url 'home:home-page' %}">Home</a></li>
+								<li><a href="{% url 'home:home-page' %}"><i class="fa-solid fa-right-long"></i>blog</a></li>
+								<li class="two"><a href="#"><i class="fa-solid fa-right-long"></i>Blog Details</a></li>
+							</ul>
+							<div class="quickeat">
+								{% for tag in post.tag.all %}
+									<a href="#">{{ tag.title }}</a>
+								{% endfor %}
+							</div>
+							<h2>{{ post.title }}</h2>
+							<ul class="data">
+								<li><h6><i class="fa-regular fa-calendar-days"></i>{{ post.timestamp|date:"d.M.Y" }}</h6></li>
+								<li><h6><i class="fa-solid fa-eye"></i>{{ post.view }}</h6></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-2">
+						<div class="name-dedails">
+							<img alt="{{ post.author.username }}" src="{{post.author.image.url}}" class="img-fluid" style="border-radius: 50%; height: 100px !important;"  >
+							<h6>{{ post.author.username }}</h6>
+							<span>press secretary Quickeat</span>
+						</div>
+					</div>
+					<div class="col-lg-12">
+						<div class="img-blog-full">
+							{% if post.featured %}
+								<img alt="{{ post.title }}" src="{{ post.featured.url }}" class="img-fluid">
+							{% else %}
+								<img alt="{{ post.title }}" src="{% static 'path/to/default_image.jpg' %}" class="img-fluid">
+							{% endif %}
+						</div>
+						<div class="post-content">
+							<!-- {{ post.content|safe }} -->
+						</div>
+					</div>
+				</div>
+			</div>
+  </section>
+  <!-- blog-content -->
+  <section class="blog-content gap no-top">
+  	<div class="container">
+  		<div class="row">
+  			<div class="offset-xl-2 col-xl-8 col-lg-12">
+  				<div class="title-container">
+  					<p><br><br>
+
+						{{ post.content|safe }}</p><br>
+	  				
+	  				<div class="quickeat tags">
+										<a href="/{% url 'restaurant:restaurant' %}">restaurants</a>
+										<a href="#">cooking</a>
+									</div>
+		  			</div>
+					  <div class="author-gap">
+						<div class="row">
+							<div class="col-lg-4">
+								{% if previous_post %}
+								<div class="previous-posts">
+									<img alt="{{ previous_post.title }}" src="{{ previous_post.thumbnail.url }}" class="img-fluid" style="height:80px !important">
+									<div>
+										<h6>{{ previous_post.title |truncatechars:30 }}</h6>
+										<a href="{% url 'blog:blog_detail' previous_post.slug %}">Prev. Posts by this author</a>
+									</div>
+								</div>
+								{% endif %}
+							</div>
+							<div class="col-lg-4 text-center ">
+								<div class="name-details">
+									<img alt="{{ post.author.username }}" src="{{ post.author.image.url }}" class="img-fluid" style="border-radius: 50%; height: 80px; width: 80px;">
+									<h6>{{ post.author.username }}</h6>
+									<ul class="social-media justify-content-center ">
+										<li><a href="{{ post.author.profile.facebook }}"><i class="fa-brands fa-facebook-f"></i></a></li>
+										<li><a href="{{ post.author.profile.instagram }}"><i class="fa-brands fa-instagram"></i></a></li>
+										<li><a href="{{ post.author.profile.twitter }}"><i class="fa-brands fa-twitter"></i></a></li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								{% if next_post %}
+								<div class="previous-posts next">
+									<div>
+										<h6>{{ next_post.title |truncatechars:30 }}</h6>
+										<a href="{% url 'blog:blog_detail' next_post.slug %}" >Next Post by this author</a>
+									</div>
+									<img alt="{{ next_post.title }}" src="{{ next_post.thumbnail.url }}" class="img-fluid" style="height:80px !important">
+								</div>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+					<div class="comment">
+						<h2><span>{{ comments.count }}</span> Comments</h2>
+					</div>
+					<ul class="comment gap no-top">
+						{% for comment in comments %}
+						<li>
+							<div class="comment-text">
+								<p>{{ comment.content }}</p>
+								<a href="#"><span>Reply<i class="fa-solid fa-reply"></i></span></a>
+							</div>
+							<div class="author-name-comment">
+								<div>
+									<h6>{{ comment.name }}</h6>
+									<span>{{ comment.timestamp|date:"d.M.Y" }}</span>
+								</div>
+								<img alt="author" src="{% if comment.user and comment.user.profile_picture %}{{ comment.user.profile_picture.url }}{% else %}https://bslthemes.com/html/quickeat/assets/img/author-img-3.jpg{% endif %}">
+							</div>
+						</li>
+						{% endfor %}
+						
+						{% if comments.count > 4 %}
+						<li class="show-all-button">
+							<h6>{{ comments.count|add:"-4" }} more answers <a href="#"><span>Show All<i class="fa-solid fa-angle-down"></i></span></a></h6>
+						</li>
+						{% endif %}
+						<li>
+							<div class="button-gap">
+								<a href="#" class="button button-2 non">See all comments<i class="fa-solid fa-angle-down"></i></a>
+							</div>
+						</li>
+					</ul>
+					<div class="comment">
+						<h2>Leave your comment</h2>
+						<form class="comment-blog" method="post" action="{% url 'blog:add_comment' post.slug %}">
+							{% csrf_token %}
+							<textarea name="content" placeholder="Enter your comment"></textarea>
+							<div class="row">
+								<div class="col-lg-6">
+									<input type="text" name="name" placeholder="Your Name">
+								</div>
+								<div class="col-lg-6">
+									<input type="email" name="email" placeholder="Email Address" style="width: 100%;
+									    height: 60px;
+									    border-radius: 10px;
+									    border: 1px solid #CFCFCF;
+									    color: #CFCFCF;
+									    outline: none;
+									    padding-left: 20px;
+									    margin: 20px 0;
+									"></div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<input type="text" name="mobile" placeholder="Mobile Number">
+								</div>
+							</div>
+							<button class="button-price">Publish a comment</button>
+						</form>
+					</div>
+  			</div>
+  		</div>
+  	</div>
+  </section>
+  <!-- footer -->
+
+  <!-- bslthemes.com buttons html begin -->
+  <div class="bsl-popup" data-theme="quickeat" data-category="html">
+    <div class="bsl-popup__buttons"></div>
+    <div class="bsl-popup__content bsl-popup__content-related">
+      <div class="bsl-popup__menu"></div>
+      <div class="bsl-popup__tabs">
+        <div class="bsl-popup__tab bsl-popup__tab-demo"></div>
+        <div class="bsl-popup__tab bsl-popup__tab-all"></div>
+        <div class="bsl-popup__tab bsl-popup__tab-related"></div>
+        <div class="bsl-popup__tab bsl-popup__tab-version"></div>
+      </div>
+    </div>
+    <div class="bsl-popup__content bsl-popup__content-help"></div>
+  </div>
+  <!-- bslthemes.com buttons html end -->
+
+</div>
+
+{% endblock %}

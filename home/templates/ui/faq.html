@@ -1,0 +1,169 @@
+{% extends "index.html" %} {% load static %} {% block content %}
+
+<div class="menu-layer">
+	<!-- loader start-->
+	
+  <!-- hero-section -->
+  <section class="hero-section about gap">
+		<div class="container">
+				<div class="row align-items-center">
+					<div class="col-lg-6" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
+						<div class="about-text">
+							<ul class="crumbs d-flex">
+								<li><a href="{% url 'home:home-page' %}">Home</a></li>
+								<li class="two"><a href="/{% url 'home:home-page' %}"><i class="fa-solid fa-right-long"></i>FAQ</a></li>
+							</ul>
+							<h2>Want to join partnership?</h2>
+							<p>Egestas sed tempus urna et pharetra pharetra massa. Fermentum posuere urna nec tincidunt praesent semper.</p>
+						</div>
+					</div>
+					<div class="col-lg-6" data-aos="fade-up"  data-aos-delay="300" data-aos-duration="400"
+						>
+					<div class="join-img-blog">
+						<img alt="join" src="https://bslthemes.com/html/quickeat/assets/img/faq.jpg">
+						<i class="fa-solid fa-question"></i>
+					</div>
+
+				</div>
+				</div>
+		</div>
+  </section>
+  <!-- tabs questions -->
+  <section class="tabs gap no-bottom">
+    <div class="container">
+        <div class="tabs-img-back">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="Provides">
+                        <div class="nav nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <button class="nav-link active" id="v-pills-delivery-tab" data-bs-toggle="pill"
+                                data-bs-target="#v-pills-delivery" type="button" role="tab"
+                                aria-controls="v-pills-delivery" aria-selected="true">Delivery</button>
+                            <button class="nav-link" id="v-pills-technical-tab" data-bs-toggle="pill"
+                                data-bs-target="#v-pills-technical" type="button" role="tab"
+                                aria-controls="v-pills-technical" aria-selected="false">Technical</button>
+                            <button class="nav-link" id="v-pills-restaurants-tab" data-bs-toggle="pill"
+                                data-bs-target="#v-pills-restaurants" type="button" role="tab"
+                                aria-controls="v-pills-restaurants" aria-selected="false">Restaurants</button>
+                        </div>
+                        <form>
+                            <input type="text" placeholder="Enter question keywords">
+                            <button><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 gap">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <div class="tab-pane fade show active" id="v-pills-delivery" role="tabpanel"
+								aria-labelledby="v-pills-delivery-tab">
+								{% for faq in delivery_faqs %}
+								<div class="questions">
+									<i class="fa-solid fa-q"></i>
+									<h6>{{ faq.question }}</h6>
+								</div>
+								<div class="questions answer">
+									<p>{{ faq.answer }}</p>
+									<i class="fa-solid fa-a"></i>
+								</div>
+								{% endfor %}
+								<div class="button-gap">
+									<a href="#" class="button button-2 non">See all questions<i class="fa-solid fa-chevron-down"></i></a>
+								</div>
+							</div>
+
+							<div class="tab-pane fade" id="v-pills-technical" role="tabpanel"
+								aria-labelledby="v-pills-technical-tab">
+								{% for faq in technical_faqs %}
+								<div class="questions">
+									<i class="fa-solid fa-q"></i>
+									<h6>{{ faq.question }}</h6>
+								</div>
+								<div class="questions answer">
+									<p>{{ faq.answer }}</p>
+									<i class="fa-solid fa-a"></i>
+								</div>
+								{% endfor %}
+								<div class="button-gap">
+									<a href="#" class="button button-2 non">See all questions<i class="fa-solid fa-chevron-down"></i></a>
+								</div>
+							</div>
+
+							<div class="tab-pane fade" id="v-pills-restaurants" role="tabpanel"
+								aria-labelledby="v-pills-restaurants-tab">
+								{% for faq in restaurant_faqs %}
+								<div class="questions">
+									<i class="fa-solid fa-q"></i>
+									<h6>{{ faq.question }}</h6>
+								</div>
+								<div class="questions answer">
+									<p>{{ faq.answer }}</p>
+									<i class="fa-solid fa-a"></i>
+								</div>
+								{% endfor %}
+								<div class="button-gap">
+									<a href="#" class="button button-2 non">See all questions<i class="fa-solid fa-chevron-down"></i></a>
+								</div>
+							</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+  <!-- form-section -->
+  <section class="form-section gap " style="background:#fcfcfc">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-section-img">
+                    <img alt="form-section-img" src="https://bslthemes.com/html/quickeat/assets/img/form-section-img.png">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="join-courier">
+                    <h3>Didn't find the answer you are looking for?</h3>
+                    <p>Magna sit amet purus gravida quis blandit turpis cursus. Venenatis tellus in metus vulputate eu scelerisque felis.</p>
+                    <form class="blog-form" action="{% url 'home:faq_message' %}" method="post">
+                        {% csrf_token %}
+                        <div class="name-form">
+                            <i class="fa-regular fa-user"></i>
+                            <input type="text" name="name" placeholder="Enter your name">
+                        </div>
+                        <div class="name-form">
+                            <i class="fa-regular fa-envelope"></i>
+                            <input type="email" name="email" placeholder="Enter your email" style="color: #cfcfcf;
+							border: 1px solid #F2F2F2;
+							width: 100%;
+							height: 60px;
+							padding-left: 46px;
+							border-radius: 10px;
+							margin-top: 20px;
+							outline: none;">
+                        </div>
+                        <textarea name="message" placeholder="Enter your message"></textarea>
+                        <button type="submit" class="button-price">Submit Application</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+  
+  <!-- bslthemes.com buttons html begin -->
+  <div class="bsl-popup" data-theme="quickeat" data-category="html">
+    <div class="bsl-popup__buttons"></div>
+    <div class="bsl-popup__content bsl-popup__content-related">
+      <div class="bsl-popup__menu"></div>
+      <div class="bsl-popup__tabs">
+        <div class="bsl-popup__tab bsl-popup__tab-demo"></div>
+        <div class="bsl-popup__tab bsl-popup__tab-all"></div>
+        <div class="bsl-popup__tab bsl-popup__tab-related"></div>
+        <div class="bsl-popup__tab bsl-popup__tab-version"></div>
+      </div>
+    </div>
+    <div class="bsl-popup__content bsl-popup__content-help"></div>
+  </div>
+  
+</div>
+{% endblock %}

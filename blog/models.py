@@ -216,15 +216,11 @@ class Subscribe(BaseModel):
 		verbose_name_plural = '07. Subscribe'
 
 	def save(self, *args, **kwargs):
-		trackupdate(self)
-		if self.user.notification:
+		super().save(*args, **kwargs)
+		if self.user and self.user.notification:
 			device = FCMDevice.objects.filter(user=self.user)
-			if self.id:
-				data = {'type': "Subscribed_Id",'id':str(self.id)}
-			else:
-				data = {'type': "Subscribed",}
+			data = {'type': "Subscribed_Id", 'id': str(self.id)} if self.id else {'type': "Subscribed"}
 			if device:
 				device.send_message(
-					Message(notification=Notification(title="Subscribed", body="Subscribed Successfully", image=settings.EASYLOGO),data=data)
+					Message(notification=Notification(title="Subscribed", body="Subscribed Successfully", image=settings.EASYLOGO), data=data)
 				)
-		return super().save(*args, **kwargs)
