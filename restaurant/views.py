@@ -14,11 +14,9 @@ def restaurantCard(request):
     restaurants = Restaurant.objects.all()
     cat = Category.objects.all()
     menus = Menu.objects.all()
-    print(menus)
     breakfast_items = menus.filter(cuisine__category__title__contains="Breakfast")
     lunch_items = menus.filter(cuisine__category__title__contains="Lunch")
     dinner_items = menus.filter(cuisine__category__title__contains="Dinner")
-    
     context = {
         'restaurants': restaurants,
         'cat': cat,
