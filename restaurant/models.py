@@ -32,7 +32,7 @@ class Restaurant(BaseModel):
 	twitter = models.URLField(max_length=100, null=True,blank=True)
 	instagram = models.URLField(max_length=100, null=True,blank=True)
 	linkedin = models.URLField(max_length=100, null=True,blank=True)
-	verified = models.BooleanField(default=False,null=True,blank=True)
+	verified = models.BooleanField(default=False,)
 	source = models.CharField(max_length=10, choices=source, default='Website' ,null=True,blank=True)
 
 	class Meta:
