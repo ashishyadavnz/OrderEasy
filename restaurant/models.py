@@ -20,7 +20,7 @@ class Restaurant(BaseModel):
 	email = models.EmailField(null=True,blank=True)
 	city = models.CharField(max_length=50,null=True,blank=True)
 	postcode = models.CharField(max_length=10,null=True,blank=True)
-	address = models.TextField(null=True,blank=True,)
+	address = models.TextField(null=True,blank=True)
 	start = models.TimeField(null=True,blank=True)
 	end = models.TimeField(null=True,blank=True)
 	members = models.PositiveIntegerField(default=0)
@@ -33,7 +33,7 @@ class Restaurant(BaseModel):
 	instagram = models.URLField(max_length=100, null=True,blank=True)
 	linkedin = models.URLField(max_length=100, null=True,blank=True)
 	verified = models.BooleanField(default=False,)
-	source = models.CharField(max_length=10, choices=source, default='Website' ,null=True,blank=True)
+	source = models.CharField(max_length=10, choices=source, default='Website')
 
 	class Meta:
 		verbose_name_plural = "01. Restaurants"
