@@ -105,10 +105,10 @@ class Menu(BaseModel):
 	"""docstring for Menu"""
 	restaurant = models.ForeignKey(Restaurant, on_delete=models.PROTECT, related_name="menu_restaurant")
 	cuisine = models.ForeignKey(Cuisine, on_delete=models.PROTECT, related_name="menu_cuisine")
-	price = models.PositiveIntegerField(default=1,null=True,blank=True)
+	price = models.PositiveIntegerField(default=1)
 	start = models.TimeField(null=True,blank=True)
 	end = models.TimeField(null=True,blank=True)
-	available = models.BooleanField(default=True,null=True,blank=True)
+	available = models.BooleanField(default=True)
 	keyword = models.CharField(max_length=160,null=True,blank=True)
 	meta_title = models.CharField(max_length=160,null=True,blank=True)
 	meta_description = models.TextField(null=True,blank=True)
