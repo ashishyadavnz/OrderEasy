@@ -40,33 +40,33 @@
 			<div class="row">
 				{% for post in posts %}
 				{% if forloop.first %}
-				<div class="col-lg-12" data-aos="fade-up" data-aos-delay="200" data-aos-duration="300">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-12" data-aos="fade-up" data-aos-delay="200" data-aos-duration="300">
 					<div class="news-posts-one full">
 						<div class="blog-post-data-img">
-							<img alt="{{ post.title }}" src="{{ post.thumbnail.url }}" />
+							<img alt="{{ post.title }}" class="img-fluid" src="{{ post.thumbnail.url }}" />
 							<div class="quickeat">
 								{% for tag in post.tag.all %}
-                                    <a href="#">{{ tag.title }}</a>
-                                {% endfor %}
+									<a href="#">{{ tag.title }}</a>
+								{% endfor %}
 							</div>
 						</div>
-						<div class="blog-post-data-img">
+						<div class="blog-post-data">
 							<h3>{{ post.title }}</h3>
 							<p>
-								{{ post.content|truncatechars:240|safe  }}
+								{{ post.content|truncatechars:240|safe }}
 							</p>
 							<a href="#">Read More<i class="fa-solid fa-arrow-right"></i></a>
 							<ul class="data">
 								<li>
-									<h6><i class="fa-solid fa-user"></i>by {{ post.author.username }}</h6>
+									<h6><i class="fa-solid fa-user"></i> by {{ post.author.username }}</h6>
 								</li>
 								<li>
 									<h6>
-										<i class="fa-regular fa-calendar-days"></i>{{ post.timestamp|date:"d.M.Y" }}
+										<i class="fa-regular fa-calendar-days"></i> {{ post.timestamp|date:"d.M.Y" }}
 									</h6>
 								</li>
 								<li>
-									<h6><i class="fa-solid fa-eye"></i>{{ post.view }}</h6>
+									<h6><i class="fa-solid fa-eye"></i> {{ post.view }}</h6>
 								</li>
 							</ul>
 						</div>
