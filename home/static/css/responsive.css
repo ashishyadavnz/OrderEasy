@@ -67,9 +67,7 @@
     .wilmington{
         width: 61%;
     }
-    .best-restaurants .logos-card img {
-        margin-right: 20px;
-    }
+
     .join-img:before {
         width: 91%;
         height: 91%;
@@ -522,14 +520,20 @@
     form.checkout-form {
         margin-top: 60px;
     }
-    .navbar,.extras.bag{
+    /* .navbar,.extras.bag{
         display: none;
-    }
+    } */
     header{
         padding: 30px 0;
     }
     .header-style .extras.bag {
         display: flex;
+    }
+    #web {
+        display: none !important;
+    }
+    #mobile {
+        display: block !important;
     }
     .mobile-nav{
         width: 45%;

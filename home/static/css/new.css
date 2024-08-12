@@ -10,6 +10,7 @@ body{
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
+    overflow-x: hidden !important;
 }
 p{
     font-size: 18px;
@@ -334,6 +335,7 @@ header {
     display: inline-flex;
     border-radius: 10px;
     margin-right: 15px;
+    color: var(--color-theme);
 }
 .bag {
     text-align: end;
@@ -631,7 +633,7 @@ a.button.button-2 i {
     content: "";
     position: absolute;
     height: 410px;
-    width: 643px;
+    width: 100%;
     border: 7px solid #f29f05;
     border-radius: 20px;
     left: 4%;
@@ -640,7 +642,7 @@ a.button.button-2 i {
 /*-------------     news-section      --------------*/
 .news-section  h2 {
     font-weight: bold;
-    width: 33%;
+    /* width: 33%; */
     padding-bottom: 20px;
 }
 .news-posts-one img{
