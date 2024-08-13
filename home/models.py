@@ -78,7 +78,7 @@ class User(AbstractUser, BaseModel):
 	country = models.ForeignKey(Country, on_delete=models.PROTECT, blank=True, null=True)
 	state = models.ForeignKey(State, on_delete=models.PROTECT, blank=True, null=True)
 	identifier = models.CharField(max_length=100,unique=True, null=True, blank=True)
-	mobile = models.BigIntegerField(unique=True)
+	mobile = models.BigIntegerField(unique=True,)
 	gender = models.CharField(max_length=6, choices=gender, default='Male')
 	dob = models.DateField(null=True, blank=True)
 	image = models.ImageField(upload_to='user/image/', blank=True, null=True, default="default/st-logo.png")
