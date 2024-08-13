@@ -176,7 +176,8 @@ REST_FRAMEWORK = {
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'PAGE_SIZE': 50,
     'SEARCH_PARAM': 'search',
@@ -193,9 +194,7 @@ SPECTACULAR_SETTINGS = {
 
 # Cors Headers
 
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https://\w+\.emango\.global$",
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Ckeditor Setup
 

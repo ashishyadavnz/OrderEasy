@@ -24,9 +24,10 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 urlpatterns = [
     path('easymeal/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
-    path('schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('easyapi/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('easyapi/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('easyapi/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('api-auth/', include('rest_framework.urls')),
     path('easyapi/', include('EasyMeal.apiurls')),
     path('blog/', include('blog.urls')),
     path('restaurant/', include('restaurant.urls')),

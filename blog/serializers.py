@@ -6,7 +6,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = User
-		fields = ('id','display','username','first_name','last_name','email','is_active','mobile','gender','image','service','address','latitude','longitude','cover','identifier')
+		fields = ('id','display','username','first_name','last_name','email','is_active','mobile','gender','image','address','latitude','longitude','identifier')
 
 	def showname(self, obj):
 		return obj.display()
