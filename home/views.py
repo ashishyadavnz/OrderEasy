@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from .models import *
 from django.utils import timezone
@@ -11,8 +11,26 @@ def home(request):
     cat = Category.objects.all()
     posts = Post.objects.all()
     testimonials = Testimonial.objects.all()
+    cuisines = Cuisine.objects.filter(menu_cuisine__restaurant__in=restaurants).distinct()
 
-    return render(request, 'ui/indexThem.html',{'restaurants':restaurants,'cat':cat,'posts':posts,'testimonials':testimonials})
+    return render(request, 'ui/indexThem.html', {
+        'restaurants': restaurants,
+        'cat': cat,
+        'posts': posts,
+        'testimonials': testimonials,
+        'cuisines': cuisines 
+    })
+
+def restaurants_by_cuisine(request, cuisine_slug):
+    cuisine = get_object_or_404(Cuisine, slug=cuisine_slug)
+    restaurants = Restaurant.objects.filter(menu_restaurant__cuisine=cuisine).distinct()
+    cat = Category.objects.all()
+
+    return render(request, 'ui/restaurant.html', {
+        'restaurants': restaurants,
+        'cuisine': cuisine,
+        'cat': cat,
+    })
 
 
 def about(request):

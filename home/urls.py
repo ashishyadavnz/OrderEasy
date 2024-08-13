@@ -10,6 +10,8 @@ urlpatterns = [
         path('contact/',views.contact,name='contact'),
         path('checkout/',views.checkout,name='checkout'),
         path('become-partner/',views.becomePartner,name='become-partner'),
-        path('page-not-found/', views.notfound,name='page-not-found')
+        path('page-not-found/', views.notfound,name='page-not-found'),
+        path('restaurants/cuisine/<slug:cuisine_slug>/', views.restaurants_by_cuisine, name='restaurants-by-cuisine'),
+
 
 ]

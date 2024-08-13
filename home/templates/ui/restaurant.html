@@ -72,31 +72,35 @@
 	<!-- best-restaurants -->
 	<section class="best-restaurants gap">
 		<div class="container">
-			<div class="row">
-				{% for restaurant in restaurants %}
-					<div class="col-lg-6" data-aos="flip-up" data-aos-delay="200" data-aos-duration="300">
-						<div class="logos-card restaurant-page ">
-							<img alt="{{ restaurant.title }}" src="{{ restaurant.logo.url }}">
-							<div class="cafa">
-								<h4><a href="#">{{ restaurant.title }}</a></h4>
-								<div>
-									{% for i in restaurant.rating|range_custom %}
-										<i class="fa-solid fa-star"></i>
-									{% endfor %}
-									{% for i in restaurant.rating|range_diff:5 %}
-										<i class="fa-regular fa-star"></i>
-									{% endfor %}
+			<div class="row mx-0">
+				{% if restaurants %}
+					{% for restaurant in restaurants %}
+						<div class="col-lg-6" data-aos="flip-up" data-aos-delay="200" data-aos-duration="300">
+							<div class="logos-card restaurant-page">
+								<img alt="{{ restaurant.title }}" src="{{ restaurant.logo.url }}">
+								<div class="cafa">
+									<h4><a href="{% url 'restaurant:restaurant-card' restaurant.slug %}">{{ restaurant.title }}</a></h4>
+									<div>
+										{% for i in restaurant.rating|range_custom %}
+											<i class="fa-solid fa-star"></i>
+										{% endfor %}
+										{% for i in restaurant.rating|range_diff:5 %}
+											<i class="fa-regular fa-star"></i>
+										{% endfor %}
+									</div>
+									<div class="cafa-button">
+										{% for categorys in cat %}
+										<a class="end" href="#">{{ categorys.title }}</a>
+										{% endfor %}
+									</div>
+									<p>{{ restaurant.content }}</p>
 								</div>
-								<div class="cafa-button">
-									{% for categorys in cat %}
-									<a class="end" href="#">{{categorys.title}}</a>
-									{% endfor %}
-								</div>
-								<p>{{ restaurant.content }}</p>
 							</div>
 						</div>
-					</div>
-				{% endfor %}
+					{% endfor %}
+				{% else %}
+					<p>No restaurants found for this cuisine.</p>
+				{% endif %}
 			</div>
 		</div>
 	</section>

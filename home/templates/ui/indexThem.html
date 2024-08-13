@@ -54,7 +54,32 @@
 			</div>
 		</div>
 	</section>
-	<!-- works-section -->
+    <section>
+		<div id="order_cat">
+			<div class="container">
+				<div class="row mx-0">
+					<h3>Order now your favourite food &amp; drinks</h3>
+					{% for cuisine in cuisines %}
+					<div class="flexwrap col-md-2">
+						<div class="item">
+							<a href="{% url 'home:restaurants-by-cuisine' cuisine.slug %}">
+								<div class="imgwrap">
+									{% if cuisine.image %}
+									<img src="{{ cuisine.image.url }}" alt="{{ cuisine.title }}" style="width: 70px; height: 70px; border-radius: 50%;" >
+									{% else %}
+									<img src="/path/to/default/image.svg" alt="Default Image">
+									{% endif %}
+								</div>
+								<h4>{{ cuisine.title }}</h4>
+							</a>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</section>
+	
 	<section class="works-section gap no-top">
 		<div class="container">
 			<div class="hading" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
