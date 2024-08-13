@@ -149,11 +149,14 @@ class CustomUserAdmin(ListAdminMixin, UserAdmin):
     def __init__(self, model, admin_site):
         super().__init__(model, admin_site)
 
-    fieldsets = [
-        (None, {
+    add_fieldsets = (
+		(None, {
             'classes': ('wide', 'extrapretty'),
-            'fields': ('first_name', 'last_name', 'email', 'username', 'password', ),
+            'fields': ('username', 'password1', 'password2','mobile','email' ),
         }),
+	)
+
+    fieldsets = [
         ('Personal info', {
             'fields': (
                 'referrer', 'country', 'state', 'city', 'mobile', 'gender', 'dob', 'image', 'address', 'postcode', 'identifier', 'otp', 'source', 'status'

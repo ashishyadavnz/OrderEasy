@@ -24,5 +24,4 @@ def restaurantCard(request):
         'lunch_items': lunch_items,
         'dinner_items': dinner_items
     }
-    print(context, "yo!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     return render(request, 'ui/restaurants-card.html', context)
