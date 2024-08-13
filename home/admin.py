@@ -152,15 +152,11 @@ class CustomUserAdmin(ListAdminMixin, UserAdmin):
     add_fieldsets = (
 		(None, {
             'classes': ('wide', 'extrapretty'),
-            'fields': ('username', 'password1', 'password2','mobile' ),
+            'fields': ('username', 'password1', 'password2','mobile','email' ),
         }),
 	)
 
     fieldsets = [
-        (None, {
-            'classes': ('wide', 'extrapretty'),
-            'fields': ('first_name', 'last_name', 'email', 'username', 'password', ),
-        }),
         ('Personal info', {
             'fields': (
                 'referrer', 'country', 'state', 'city', 'mobile', 'gender', 'dob', 'image', 'address', 'postcode', 'identifier', 'otp', 'source', 'status'
