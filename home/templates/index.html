@@ -225,6 +225,27 @@ body.menu-open {
 		display: none !important;
 	}
 }
+/* Hover card effect */
+.hover-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.hover-card:hover {
+    transform: translateY(-10px);
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
+}
+
+/* Optional: Style for the card image */
+.hover-card img {
+    transition: transform 0.3s ease;
+}
+
+.hover-card:hover img {
+    transform: scale(1.05);
+}
+
 
 	</style>
 </head>

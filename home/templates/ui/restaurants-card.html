@@ -80,7 +80,6 @@
 					</div>
 					<div class="col-lg-12">
 						<div class="tab-content" id="v-pills-tabContent">
-							<!-- Breakfast Tab -->
 							<div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
 								aria-labelledby="v-pills-home-tab">
 								<div class="row">
@@ -127,7 +126,6 @@
 									{% endfor %}
 								</div>
 							</div>
-							<!-- Lunch Tab -->
 							<div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
 								<div class="row">
 									{% for menu in lunch_items %}
@@ -225,57 +223,60 @@
 			</div>
 		</div>
 	</section> {% endcomment %}
+
 	<section class="tabs gap">
 		<div class="container">
-			<div class="tabs-img-back">
-				<div class="row">
-					<div class="col-lg-3">
-						<h2><b>Menu</b></h2>
-						<ul class="menu-categories">
-							{% for category, cuisines in category_cuisines.items %}
-								<li>
-									<h3>{{ category }}</h3>
-									<!-- <ul>
-										{% for cuisine in cuisines %}
-											<li>{{ cuisine.cuisine.title }}</li>
-										{% endfor %}
-									</ul> -->
-								</li>
-							{% endfor %}
-						</ul>
+			<div class="">
+				<div class="row mx-0 pt-4">
+					<div class="col-lg-3  aos-init aos-animate px-0 pe-md-2  ">
+						<div class="dish h-100 mt-0">
+							<h2 class="mb-4"><b>Menu</b></h2>
+							<ul class="menu-categories list-unstyled">
+								{% for category, cuisines in category_cuisines.items %}
+									<li class="mb-3">
+										<h4 class=" text-secondary">{{ category }}</h4>
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
 					</div>
-					<div class="col-lg-9">
-						<h3>Cuisines by Category</h3>
-						<div class="row">
-							{% for category, menus in category_cuisines.items %}
-								<div class="col-md-12">
-									<h4>{{ category }}</h4>
-									<div class="row">
-										{% for menu in menus %}
-											<div class="col-md-4">
-												<div class="card mb-4">
-													{% if menu.cuisine.image %}
-														<img src="{{ menu.cuisine.image.url }}" class="card-img-top" alt="{{ menu.cuisine.title }}">
-													{% endif %}
-													<div class="card-body">
-														<h5 class="card-title">{{ menu.cuisine.title }}</h5>
-														<p class="card-text"><strong>Price:</strong> ${{ menu.price }}</p>
-														<p class="card-text"><strong>Available:</strong> {{ menu.available|yesno:"Yes,No" }}</p>
-														<p class="card-text"><strong>Start Time:</strong> {{ menu.start|date:"H:i" }}</p>
-														<p class="card-text"><strong>End Time:</strong> {{ menu.end|date:"H:i" }}</p>
+					<div class="col-lg-9  px-0 ps-md-2 aos-init aos-animate ">
+						<div class="dish mt-0">
+							<h3 class="mb-4">Cuisines by Category</h3>
+							<div class="row">
+								{% for category, menus in category_cuisines.items %}
+									<div class="col-md-12 mb-5">
+										<h4 class="text-secondary mb-4">{{ category }}</h4>
+										<div class="row">
+											{% for menu in menus %}
+												<div class="col-md-4">
+													<div class="card shadow-sm mb-4 h-100 hover-card">
+														{% if menu.cuisine.image %}
+															<img src="{{ menu.cuisine.image.url }}" class="card-img-top" alt="{{ menu.cuisine.title }}">
+														{% endif %}
+														<div class="card-body">
+															<h5 class="card-title">{{ menu.cuisine.title }}</h5>
+															<p class="card-text">
+																<strong>Price:</strong> ${{ menu.price }}<br>
+																<strong>Available:</strong> {{ menu.available|yesno:"Yes,No" }}<br>
+																<strong>Start Time:</strong> {{ menu.start|date:"H:i" }}<br>
+																<strong>End Time:</strong> {{ menu.end|date:"H:i" }}
+															</p>
+														</div>
 													</div>
 												</div>
-											</div>
-										{% endfor %}
+											{% endfor %}
+										</div>
 									</div>
-								</div>
-							{% endfor %}
+								{% endfor %}
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
+	
 	
 	
    <!-- Lunch Section -->
