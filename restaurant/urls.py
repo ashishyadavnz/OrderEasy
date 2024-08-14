@@ -3,6 +3,6 @@ from . import views
 app_name = "restaurant"
 urlpatterns = [
         path('', views.restaurant, name='restaurant'),
-        path('restaurant-card/', views.restaurantCard, name='restaurant-card'),
+        path('restaurant-card/<slug:slug>/', views.restaurantCard, name='restaurant-card'),
 
 ]

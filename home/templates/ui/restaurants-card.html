@@ -4,8 +4,6 @@
 {% block content %}
 
 <div class="menu-layer">
-	<!-- loader start-->
-	<!-- hero-section -->
 	<section class="hero-section about gap" style="background-image: url(https://bslthemes.com/html/quickeat/assets/img/background-1.png);">
 		<div class="container">
 			<div class="row align-items-center">
@@ -16,34 +14,29 @@
 							<li><a href="{%  url  'restaurant:restaurant'  %}"><i class="fa-solid fa-right-long"></i>Restaurants</a></li>
 							<li class="two"><a href="/{ % url 'home:home-page'  %}"><i class="fa-solid fa-right-long"></i>The Wilmington</a></li>
 						</ul>
-						{% for res in restaurants %}
-						{% if forloop.first %}
 						<div class="logo-detail">
-							<img alt="{{res.title}}" src="{{ res.logo.url }}">
-							<h2>{{res.title}}</h2>
+							<img alt="{{restaurant.title}}" src="{{ restaurant.logo.url }}">
+							<h2>{{restaurant.title}}</h2>
 						</div>
 						<div class="rate">
 							<span>Rate:</span>
 							<div class="star">
-								{% for i in res.rating|range_custom %}
+								{% for i in restaurant.rating|range_custom %}
 									<i class="fa-solid fa-star"></i>
 								{% endfor %}
-								{% for i in res.rating|range_diff:5 %}
+								{% for i in restaurant.rating|range_diff:5 %}
 									<i class="fa-regular fa-star"></i>
 								{% endfor %}
 							</div>
-								<span>CUISINES:</span>
-								<div class="cafa-button">
-									{% for categorys in cat %}
-									<a class="end" href="#">{{categorys.title}}</a>
-									{% endfor %}
-								</div>
-								<span>FEATURES:</span>
-								<p>{{ res.content }}</p>
-								
+							<span>CUISINES:</span>
+							<div class="cafa-button">
+								{% for categorys in cat %}
+								<a class="end" href="#">{{categorys.title}}</a>
+								{% endfor %}
+							</div>
+							<span>FEATURES:</span>
+							<p>{{ restaurant.content }}</p>
 						</div>
-						{% endif %}
-                        {% endfor %}
 					</div>
 				</div>
 				<div class="col-lg-6" data-aos="fade-up"  data-aos-delay="400" data-aos-duration="500">
@@ -63,7 +56,7 @@
 		</div>
 	</section>
 	<!-- tabs -->
-	<section class="tabs gap">
+	{% comment %} <section class="tabs gap">
 		<div class="container">
 			<div class="tabs-img-back">
 				<div class="row">
@@ -87,7 +80,6 @@
 					</div>
 					<div class="col-lg-12">
 						<div class="tab-content" id="v-pills-tabContent">
-							<!-- Breakfast Tab -->
 							<div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
 								aria-labelledby="v-pills-home-tab">
 								<div class="row">
@@ -134,7 +126,6 @@
 									{% endfor %}
 								</div>
 							</div>
-							<!-- Lunch Tab -->
 							<div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
 								<div class="row">
 									{% for menu in lunch_items %}
@@ -231,7 +222,62 @@
 				</div>
 			</div>
 		</div>
+	</section> {% endcomment %}
+
+	<section class="tabs gap">
+		<div class="container">
+			<div class="">
+				<div class="row mx-0 pt-4">
+					<div class="col-lg-3  aos-init aos-animate px-0 pe-md-2  ">
+						<div class="dish h-100 mt-0">
+							<h2 class="mb-4"><b>Menu</b></h2>
+							<ul class="menu-categories list-unstyled">
+								{% for category, cuisines in category_cuisines.items %}
+									<li class="mb-3">
+										<h4 class=" text-secondary">{{ category }}</h4>
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-9  px-0 ps-md-2 aos-init aos-animate ">
+						<div class="dish mt-0">
+							<h3 class="mb-4">Cuisines by Category</h3>
+							<div class="row">
+								{% for category, menus in category_cuisines.items %}
+									<div class="col-md-12 mb-5">
+										<h4 class="text-secondary mb-4">{{ category }}</h4>
+										<div class="row">
+											{% for menu in menus %}
+												<div class="col-md-4">
+													<div class="card shadow-sm mb-4 h-100 hover-card">
+														{% if menu.cuisine.image %}
+															<img src="{{ menu.cuisine.image.url }}" class="card-img-top" alt="{{ menu.cuisine.title }}">
+														{% endif %}
+														<div class="card-body">
+															<h5 class="card-title">{{ menu.cuisine.title }}</h5>
+															<p class="card-text">
+																<strong>Price:</strong> ${{ menu.price }}<br>
+																<strong>Available:</strong> {{ menu.available|yesno:"Yes,No" }}<br>
+																<strong>Start Time:</strong> {{ menu.start|date:"H:i" }}<br>
+																<strong>End Time:</strong> {{ menu.end|date:"H:i" }}
+															</p>
+														</div>
+													</div>
+												</div>
+											{% endfor %}
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</section>
+	
+	
 	
    <!-- Lunch Section -->
    <section class="lunch-section gap" style="background:#fcfcfc">
