@@ -32,7 +32,32 @@ def restaurant(request):
 #     }
 #     return render(request, 'ui/restaurants-card.html', context)
 
-def restaurantCard(request, slug=None):
+# def restaurantCard(request, slug=None):
+#     try:
+#         restaurant = Restaurant.objects.get(slug=slug)
+#     except Restaurant.DoesNotExist:
+#         return redirect('restaurant:restaurant-card', slug=Restaurant.objects.first().slug)
+
+#     cat = Category.objects.all()
+#     menus = Menu.objects.select_related('cuisine').filter(cuisine__category__in=cat)
+#     breakfast_items = menus.filter(cuisine__category__title__contains="Breakfast")
+#     lunch_items = menus.filter(cuisine__category__title__contains="Lunch")
+#     dinner_items = menus.filter(cuisine__category__title__contains="Dinner")
+#     category_cuisines = {}
+#     for category in cat:
+#         category_cuisines[category.title] = Menu.objects.filter(cuisine__category=category).select_related('cuisine')
+
+#     context = {
+#         'restaurant': restaurant,
+#         'cat': cat,
+#         'category_cuisines': category_cuisines,
+#         'breakfast_items': breakfast_items,
+#         'lunch_items':lunch_items,
+#         'dinner_items':dinner_items
+#         }
+#     return render(request, 'ui/restaurants-card.html', context)
+
+def restaurantCard(request, slug=None, category_title=None):
     try:
         restaurant = Restaurant.objects.get(slug=slug)
     except Restaurant.DoesNotExist:
@@ -42,7 +67,13 @@ def restaurantCard(request, slug=None):
     menus = Menu.objects.select_related('cuisine').filter(cuisine__category__in=cat)
     breakfast_items = menus.filter(cuisine__category__title__contains="Breakfast")
     lunch_items = menus.filter(cuisine__category__title__contains="Lunch")
-    dinner_items = menus.filter(cuisine__category__title__contains="Dinner")
+    dinner_items = menus.filter(cuisine__category__title__contains="Dinner") 
+    if category_title:
+        selected_category = Category.objects.get(title=category_title)
+        menus = Menu.objects.select_related('cuisine').filter(cuisine__category=selected_category)
+    else:
+        menus = Menu.objects.select_related('cuisine').all()
+
     category_cuisines = {}
     for category in cat:
         category_cuisines[category.title] = Menu.objects.filter(cuisine__category=category).select_related('cuisine')
@@ -51,8 +82,10 @@ def restaurantCard(request, slug=None):
         'restaurant': restaurant,
         'cat': cat,
         'category_cuisines': category_cuisines,
+        'menus': menus,
+        'selected_category': category_title,
         'breakfast_items': breakfast_items,
-        'lunch_items':lunch_items,
-        'dinner_items':dinner_items
-        }
+        'lunch_items': lunch_items,
+        'dinner_items': dinner_items
+    }
     return render(request, 'ui/restaurants-card.html', context)

@@ -228,46 +228,46 @@
 		<div class="container">
 			<div class="">
 				<div class="row mx-0 pt-4">
-					<div class="col-lg-3  aos-init aos-animate px-0 pe-md-2  ">
+					<div class="col-lg-3 px-0 pe-md-2">
 						<div class="dish h-100 mt-0">
 							<h2 class="mb-4"><b>Menu</b></h2>
 							<ul class="menu-categories list-unstyled">
 								{% for category, cuisines in category_cuisines.items %}
 									<li class="mb-3">
-										<h4 class=" text-secondary">{{ category }}</h4>
+										<h4 class="text-secondary">
+											<a href="{% url 'restaurant:restaurant-card-category' slug=restaurant.slug category_title=category %}"
+											   style="{% if selected_category == category %}color: orange;{% endif %}">
+												{{ category }}
+											</a>
+										</h4>
 									</li>
 								{% endfor %}
 							</ul>
 						</div>
 					</div>
-					<div class="col-lg-9  px-0 ps-md-2 aos-init aos-animate ">
+					<div class="col-lg-9 px-0 ps-md-2">
 						<div class="dish mt-0">
-							<h3 class="mb-4">Cuisines by Category</h3>
+							<h3 class="mb-4">Cuisines by Category: {{ selected_category }}</h3>
 							<div class="row">
-								{% for category, menus in category_cuisines.items %}
-									<div class="col-md-12 mb-5">
-										<h4 class="text-secondary mb-4">{{ category }}</h4>
-										<div class="row">
-											{% for menu in menus %}
-												<div class="col-md-4">
-													<div class="card shadow-sm mb-4 h-100 hover-card">
-														{% if menu.cuisine.image %}
-															<img src="{{ menu.cuisine.image.url }}" class="card-img-top" alt="{{ menu.cuisine.title }}">
-														{% endif %}
-														<div class="card-body">
-															<h5 class="card-title">{{ menu.cuisine.title }}</h5>
-															<p class="card-text">
-																<strong>Price:</strong> ${{ menu.price }}<br>
-																<strong>Available:</strong> {{ menu.available|yesno:"Yes,No" }}<br>
-																<strong>Start Time:</strong> {{ menu.start|date:"H:i" }}<br>
-																<strong>End Time:</strong> {{ menu.end|date:"H:i" }}
-															</p>
-														</div>
-													</div>
-												</div>
-											{% endfor %}
+								{% for menu in menus %}
+									<div class="col-md-4">
+										<div class="card shadow-sm mb-4 h-100 hover-card">
+											{% if menu.cuisine.image %}
+												<img src="{{ menu.cuisine.image.url }}" class="card-img-top" alt="{{ menu.cuisine.title }}">
+											{% endif %}
+											<div class="card-body">
+												<h5 class="card-title">{{ menu.cuisine.title }}</h5>
+												<p class="card-text">
+													<strong>Price:</strong> ${{ menu.price }}<br>
+													<strong>Available:</strong> {{ menu.available|yesno:"Yes,No" }}<br>
+													<strong>Start Time:</strong> {{ menu.start|date:"H:i" }}<br>
+													<strong>End Time:</strong> {{ menu.end|date:"H:i" }}
+												</p>
+											</div>
 										</div>
 									</div>
+								{% empty %}
+									<p>No menus available for this category.</p>
 								{% endfor %}
 							</div>
 						</div>
@@ -276,6 +276,7 @@
 			</div>
 		</div>
 	</section>
+	
 	
 	
 	
