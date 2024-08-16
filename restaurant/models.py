@@ -125,6 +125,32 @@ class Menu(BaseModel):
 		trackupdate(self)
 		return super().save(*args, **kwargs)
 
+class FoodItem(BaseModel):
+	"""docstring for Food Item"""
+	restaurant = models.ForeignKey(Restaurant, on_delete=models.PROTECT, related_name="fooditems_restaurant")
+	cuisine = models.ForeignKey(Cuisine, on_delete=models.PROTECT, related_name="fooditems_cuisine", null=True, blank=True)
+	category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="fooditems_category")
+	title = models.CharField(max_length=160)
+	slug = AutoSlugField(max_length=160, populate_from=['title'], unique=True, editable=True)
+	image = models.ImageField(upload_to='restaurant/cuisine/image', null=True,blank=True)
+	start = models.TimeField(null=True,blank=True)
+	end = models.TimeField(null=True,blank=True)
+	price = models.PositiveIntegerField(help_text="IN USD")
+	available = models.BooleanField(default=True)
+	keyword = models.CharField(max_length=160,null=True,blank=True)
+	meta_title = models.CharField(max_length=160,null=True,blank=True)
+	meta_description = models.TextField(null=True,blank=True)
+
+	class Meta:
+		verbose_name_plural = '05. Food Item'
+
+	def __str__(self):
+		return str(self.title)
+
+	def save(self, *args, **kwargs):
+		trackupdate(self)
+		return super().save(*args, **kwargs)
+
 class Voucher(BaseModel):
 	"""docstring for Voucher"""
 	name = models.CharField(max_length=160)
@@ -133,7 +159,7 @@ class Voucher(BaseModel):
 	validity = models.DateTimeField()
 
 	class Meta:
-		verbose_name_plural = '05. Voucher'
+		verbose_name_plural = '06. Voucher'
 	
 	def __str__(self):
 		return str(self.name)
@@ -152,7 +178,7 @@ class Reservation(BaseModel):
 	member = models.PositiveIntegerField(default=1, verbose_name="Number of Members")
 
 	class Meta:
-		verbose_name_plural = '06. Reservation'
+		verbose_name_plural = '07. Reservation'
 	
 	def __str__(self):
 		return str(self.name)
@@ -167,7 +193,7 @@ class Cart(BaseModel):
 	total = models.PositiveIntegerField(default=0)
 
 	class Meta:
-		verbose_name_plural = '07. Cart Items'
+		verbose_name_plural = '08. Cart Items'
 
 	def save(self, *args, **kwargs):
 		trackupdate(self)
@@ -189,7 +215,7 @@ class Order(BaseModel):
 	otype = models.CharField(max_length=20, choices=otype, default='Delivery', verbose_name="Order Type")
 
 	class Meta:
-		verbose_name_plural = '08. Order'
+		verbose_name_plural = '09. Order'
 	
 	def __str__(self):
 		return str(self.name)
