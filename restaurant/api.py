@@ -4,7 +4,7 @@ from .serializers import *
 ## private apis
 
 class RestaurantViewSet(viewsets.ModelViewSet):
-    queryset = Restaurant.objects.exclude(status='Active').order_by("-id")
+    queryset = Restaurant.objects.filter(status='Active').order_by("-id")
     serializer_class = RestaurantSerializer
     # filterset_fields = ['title','status']
     # search_fields=['title','description']
