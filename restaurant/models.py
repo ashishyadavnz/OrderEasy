@@ -3,6 +3,8 @@ from home.models import *
 
 # Create your models here.
 
+otype = (('Delivery', 'Delivery'),('Pickup', 'Pickup'),('Schedule', 'Schedule'))
+
 class Restaurant(BaseModel):
 	"""docstring for Restaurant"""
 	owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name='owner')
@@ -105,7 +107,7 @@ class Menu(BaseModel):
 	"""docstring for Menu"""
 	restaurant = models.ForeignKey(Restaurant, on_delete=models.PROTECT, related_name="menu_restaurant")
 	cuisine = models.ForeignKey(Cuisine, on_delete=models.PROTECT, related_name="menu_cuisine")
-	price = models.PositiveIntegerField(default=1)
+	price = models.PositiveIntegerField(help_text="IN USD")
 	start = models.TimeField(null=True,blank=True)
 	end = models.TimeField(null=True,blank=True)
 	available = models.BooleanField(default=True)
@@ -118,6 +120,79 @@ class Menu(BaseModel):
 	
 	def __str__(self):
 		return str(self.cuisine)
+
+	def save(self, *args, **kwargs):
+		trackupdate(self)
+		return super().save(*args, **kwargs)
+
+class Voucher(BaseModel):
+	"""docstring for Voucher"""
+	name = models.CharField(max_length=160)
+	discount = models.PositiveIntegerField(default=0)
+	payment = models.PositiveIntegerField(default=0, verbose_name="Minimum Payment for voucher")
+	validity = models.DateTimeField()
+
+	class Meta:
+		verbose_name_plural = '05. Voucher'
+	
+	def __str__(self):
+		return str(self.name)
+
+	def save(self, *args, **kwargs):
+		trackupdate(self)
+		return super().save(*args, **kwargs)
+
+class Reservation(BaseModel):
+	"""docstring for Reservation"""
+	name = models.CharField(max_length=160)
+	email = models.EmailField()
+	phone = models.PositiveIntegerField()
+	date = models.DateField()
+	time = models.TimeField()
+	member = models.PositiveIntegerField(default=1, verbose_name="Number of Members")
+
+	class Meta:
+		verbose_name_plural = '06. Reservation'
+	
+	def __str__(self):
+		return str(self.name)
+
+	def save(self, *args, **kwargs):
+		trackupdate(self)
+		return super().save(*args, **kwargs)
+
+class Cart(BaseModel):
+	menu = models.ForeignKey(Menu, on_delete=models.PROTECT, related_name="cart_menu")
+	quantity = models.PositiveIntegerField()
+	total = models.PositiveIntegerField(default=0)
+
+	class Meta:
+		verbose_name_plural = '07. Cart Items'
+
+	def save(self, *args, **kwargs):
+		trackupdate(self)
+		self.total = self.quantity * self.menu.price
+		return super().save(*args, **kwargs)
+
+class Order(BaseModel):
+	"""docstring for Order"""
+	voucher = models.ForeignKey(Voucher, on_delete=models.PROTECT, related_name="order_voucher", null=True, blank=True)
+	cart = models.ManyToManyField(Cart, related_name="order_cart")
+	name = models.CharField(max_length=160)
+	email = models.EmailField()
+	phone = models.PositiveIntegerField()
+	time = models.TimeField(verbose_name="Pickup/Delivery/Schedule Time")
+	address = models.TextField()
+	instruction = models.TextField(verbose_name="Delivery Instructions", null=True, blank=True)
+	total = models.PositiveIntegerField(help_text="IN USD", default=0)
+	charge = models.PositiveIntegerField(default=0, verbose_name="Delivery Charge")
+	otype = models.CharField(max_length=20, choices=otype, default='Delivery', verbose_name="Order Type")
+
+	class Meta:
+		verbose_name_plural = '08. Order'
+	
+	def __str__(self):
+		return str(self.name)
 
 	def save(self, *args, **kwargs):
 		trackupdate(self)
