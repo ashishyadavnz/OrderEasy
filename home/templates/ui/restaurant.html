@@ -20,11 +20,9 @@
 								<div class="restaurant">
 									<div class="nice-select-one">
 										<select class="nice-select Advice">
-										  <option>Choose a Restaurant</option>
-										  <option>Choose a Restaurant 1</option>
-										  <option>Choose a Restaurant 2</option>
-										  <option>Choose a Restaurant 3</option>
-										  <option>Choose a Restaurant 4</option>
+											{% for rest in restaurants  %}
+											<option>{{rest.title}}</option>
+											{% endfor %}
 									</select>
 									</div>
 								</div>
@@ -75,7 +73,12 @@
 			<div class="row mx-0">
 				{% if restaurants %}
 					{% for restaurant in restaurants %}
-						<div class="col-lg-6" data-aos="flip-up" data-aos-delay="200" data-aos-duration="300">
+						<div class="col-lg-6 restaurant-card" 
+							 data-latitude="{{ restaurant.latitude }}" 
+							 data-longitude="{{ restaurant.longitude }}"
+							 data-aos="flip-up" 
+							 data-aos-delay="200" 
+							 data-aos-duration="300">
 							<div class="logos-card restaurant-page">
 								<img alt="{{ restaurant.title }}" src="{{ restaurant.logo.url }}">
 								<div class="cafa">
@@ -94,6 +97,20 @@
 										{% endfor %}
 									</div>
 									<p>{{ restaurant.content }}</p>
+									<p><b>{{ restaurant.start }}</b> To <b>{{ restaurant.end }}</b></p>
+									<span>
+									{% if restaurant.start|is_restaurant_open:restaurant.end %}
+										<span class="text-success">Open</span>
+									{% else %}
+										<span class="text-danger">Closed</span>
+									{% endif %}
+									</span>
+									{% if restaurant.lowest_price %}
+									<p><strong>Delivery starts from:</strong> ${{ restaurant.lowest_price }}</p>
+									{% else %}
+									<p><strong>Delivery starts from:</strong> Not available</p>
+									{% endif %}
+									<p class="distance">Distance: Calculating...</p> 
 								</div>
 							</div>
 						</div>
@@ -104,6 +121,7 @@
 			</div>
 		</div>
 	</section>
+	
 	<!-- subscribe-section -->
 	<section class="subscribe-section gap" style="background:#fcfcfc">
 		<div class="container">
