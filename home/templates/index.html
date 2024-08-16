@@ -242,6 +242,93 @@ body.menu-open {
 .hover-card:hover img {
     transform: scale(1.05);
 }
+/* Sidebar Styles */
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background-color: #ffffff;
+    border-left: 1px solid #ddd;
+    border-radius: 0 8px 8px 0;
+    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.cart-sidebar.show {
+    transform: translateX(0);
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.cart-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+#close-cart {
+    background-color: #f8f9fa;
+    border: none;
+    cursor: pointer;
+}
+
+#cart-content {
+    max-height: calc(100% - 80px);
+    overflow-y: auto;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.cart-item p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+}
+
+.cart-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
 
 	</style>
 </head>
@@ -319,7 +406,21 @@ body.menu-open {
 					<div class="d-flex col-3 " style="justify-content: end; margin: auto;">
 						<div class="extras bag">
 							<a href="javascript:void(0)" id="desktop-menu" class="menu-btn">
-								<i class="fa-solid fa-bag-shopping"></i></a>
+								<i class="fa-solid fa-bag-shopping"></i>
+							</a>							
+							<!-- Cart Section -->
+							<div id="cart-section" class="cart-sidebar">
+								<div class="cart-header">
+									<h2>Your Cart</h2>
+									<button id="close-cart" class="btn btn-info">Close</button>
+								</div>
+								<div id="cart-content">
+									<div id="cart-items"></div>
+									<div class="cart-footer">
+										<button id="checkout" class="btn btn-success">Checkout</button>
+									</div>
+								</div>
+							</div>
 							<a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a>
 						</div>
 					</div>
@@ -715,6 +816,118 @@ body.menu-open {
 		}
 		getUserLocation();		
 	</script>
+	<script>
+	function calculateDistance(lat1, lon1, lat2, lon2) {
+		const R = 6371; 
+		const dLat = (lat2 - lat1) * (Math.PI / 180);
+		const dLon = (lon2 - lon1) * (Math.PI / 180);
+		const a = 
+			Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+			Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * 
+			Math.sin(dLon / 2) * Math.sin(dLon / 2); 
+		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		return R * c; 
+	}
+	
+	function displayDistances() {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function(position) {
+				const userLat = position.coords.latitude;
+				const userLon = position.coords.longitude;
+				document.querySelectorAll('.restaurant-card').forEach(function(card) {
+					const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
+					const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
+	
+					const distance = calculateDistance(userLat, userLon, restaurantLat, restaurantLon);
+					card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
+				});
+			});
+		} else {
+			console.error("Geolocation is not supported by this browser.");
+		}
+	}
+	
+	document.addEventListener('DOMContentLoaded', displayDistances);
+</script>
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		const cart = [];
+	
+		document.querySelectorAll(".add-to-cart").forEach(button => {
+			button.addEventListener("click", function() {
+				console.log("Add to Cart button clicked"); 
+				const menuId = this.getAttribute("data-id");
+				const menuTitle = this.getAttribute("data-title");
+				const menuPrice = parseFloat(this.getAttribute("data-price"));
+	
+				const existingItem = cart.find(item => item.id === menuId);
+				if (existingItem) {
+					existingItem.quantity += 1;
+				} else {
+					cart.push({ id: menuId, title: menuTitle, price: menuPrice, quantity: 1 });
+				}
+	
+				updateCartDisplay();
+			});
+		});
+	
+		function updateCartDisplay() {
+			const cartIcon = document.querySelector("#desktop-menu i");
+			cartIcon.textContent = `(${cart.length})`;  
+	
+			const cartContent = document.querySelector("#cart-content #cart-items");
+			cartContent.innerHTML = "";  
+	
+			cart.forEach(item => {
+				const cartItem = document.createElement("div");
+				cartItem.classList.add("cart-item");
+				cartItem.innerHTML = `
+					<p>${item.title} - $${item.price} x ${item.quantity}</p>
+					<div>
+						<button class="btn btn-sm btn-primary increase-qty" data-id="${item.id}">+</button>
+						<button class="btn btn-sm btn-danger decrease-qty" data-id="${item.id}">-</button>
+					</div>
+				`;
+				cartContent.appendChild(cartItem);
+			});
+     			document.querySelector("#cart-section").classList.add("show");
+				document.querySelectorAll(".increase-qty").forEach(button => {
+				button.addEventListener("click", function() {
+					const itemId = this.getAttribute("data-id");
+					const item = cart.find(cartItem => cartItem.id === itemId);
+					if (item) {
+						item.quantity += 1;
+						updateCartDisplay();
+					}
+				});
+			});
+	
+			document.querySelectorAll(".decrease-qty").forEach(button => {
+				button.addEventListener("click", function() {
+					const itemId = this.getAttribute("data-id");
+					const item = cart.find(cartItem => cartItem.id === itemId);
+					if (item) {
+						if (item.quantity > 1) {
+							item.quantity -= 1;
+						} else {
+							const index = cart.findIndex(cartItem => cartItem.id === itemId);
+							if (index > -1) {
+								cart.splice(index, 1);
+							}
+						}
+						updateCartDisplay();
+					}
+				});
+			});
+		}
+			document.querySelector("#desktop-menu").addEventListener("click", function() {
+			document.querySelector("#cart-section").classList.toggle("show");
+		});
+	
+		document.querySelector("#close-cart").addEventListener("click", function() {
+			document.querySelector("#cart-section").classList.remove("show");
+		});
+	});
+</script>
 </body>
-
 </html>

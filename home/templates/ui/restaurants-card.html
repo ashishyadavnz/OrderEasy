@@ -263,6 +263,7 @@
 													<strong>Start Time:</strong> {{ menu.start|date:"H:i" }}<br>
 													<strong>End Time:</strong> {{ menu.end|date:"H:i" }}
 												</p>
+												<button class="btn btn-warning add-to-cart" data-id="{{ menu.id }}" data-title="{{ menu.cuisine.title }}" data-price="{{ menu.price }}">Add to Cart</button>
 											</div>
 										</div>
 									</div>
@@ -356,4 +357,45 @@
   <script src="https://bslthemes.com/bslthms-advanced-btns/assets/script.js"></script>
   <!-- bslthemes.com buttons assets end -->
 </div>
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		const cart = [];
+		
+		document.querySelectorAll(".add-to-cart").forEach(button => {
+			button.addEventListener("click", function() {
+				console.log("Add to Cart button clicked"); // Debug line
+				const menuId = this.getAttribute("data-id");
+				const menuTitle = this.getAttribute("data-title");
+				const menuPrice = parseFloat(this.getAttribute("data-price"));
+				
+				const existingItem = cart.find(item => item.id === menuId);
+				if (existingItem) {
+					existingItem.quantity += 1;
+				} else {
+					cart.push({ id: menuId, title: menuTitle, price: menuPrice, quantity: 1 });
+				}
+				
+				updateCartDisplay();
+			});
+		});
+	
+		function updateCartDisplay() {
+			const cartIcon = document.querySelector("#desktop-menu i");
+			cartIcon.textContent = `(${cart.length})`;  // Update cart icon to show the number of items
+			
+			const cartContent = document.querySelector("#cart-content #cart-items");
+			cartContent.innerHTML = "";  // Clear existing content
+	
+			cart.forEach(item => {
+				const cartItem = document.createElement("div");
+				cartItem.classList.add("cart-item");
+				cartItem.innerHTML = `
+					<p>${item.title} - $${item.price} x ${item.quantity}</p>
+					<button class="btn btn-sm btn-primary increase-qty" data-id="${item.id}">+</button>
+				`;
+				cartContent.appendChild(cartItem);
+			});
+		}
+	});
+</script>
 {% endblock %}
