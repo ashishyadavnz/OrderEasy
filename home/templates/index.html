@@ -622,9 +622,6 @@ body.menu-open {
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
 		crossorigin="anonymous"></script>
-	{% comment %}
-	<script src="assets/js/jquery.nice-select.min.js"></script> {% endcomment %}
-	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 	<script src="{% static 'js/fast.js' %}"></script>
@@ -632,7 +629,6 @@ body.menu-open {
 	<script src="{% static 'js/aos.js' %}"></script>
 	<script src="{% static 'js/custom.js' %}"></script>
 	<script src="{% static 'js/ownchar.js' %}"></script>
-	<!-- <script src="https://bslthemes.com/bslthms-advanced-btns/assets/script.js"></script>  -->
 	<script type="module">
 		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
 		import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-messaging.js";
@@ -655,7 +651,6 @@ body.menu-open {
 			}
 		}).catch((err) => {
 			console.log('An error occurred while retrieving token. ', err);
-			// ...
 		});
 	</script>
 	<script>
@@ -679,13 +674,46 @@ body.menu-open {
 			var parent = this.parentNode;
 			var dropdownContent = parent.querySelector('.dropdown-content');
 
-			if (window.innerWidth <= 768) { // Mobile view
+			if (window.innerWidth <= 768) {
 				parent.classList.toggle('active');
 				dropdownContent.style.display = parent.classList.contains('active') ? 'block' : 'none';
 			}
 		});
 	});
 
+	</script>
+	<script>
+		function getUserLocation() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(
+					function(position) {
+						const latitude = position.coords.latitude;
+						const longitude = position.coords.longitude;
+		
+						console.log("Latitude:", latitude);
+						console.log("Longitude:", longitude);
+						/*
+						fetch('/save-location/', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+								'X-CSRFToken': getCookie('csrftoken')  // For Django CSRF protection
+							},
+							body: JSON.stringify({ latitude: latitude, longitude: longitude })
+						}).then(response => response.json())
+						  .then(data => console.log(data))
+						  .catch(error => console.error('Error:', error));
+						*/
+					},
+					function(error) {
+						console.error("Error Code = " + error.code + " - " + error.message);
+					}
+				);
+			} else {
+				console.error("Geolocation is not supported by this browser.");
+			}
+		}
+		getUserLocation();		
 	</script>
 </body>
 

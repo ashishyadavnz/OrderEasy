@@ -2,14 +2,17 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import *
 from django.utils import timezone
+from django.db.models import Min
+
 # Create your views here.
 
 def restaurant(request):
     restaurants = Restaurant.objects.all()
     cat = Category.objects.all()
-    return render(request, 'ui/restaurant.html', {'restaurants': restaurants,'cat':cat})
-
-
+    current_time = timezone.now().time()  
+    for restaurant in restaurants:
+        restaurant.lowest_price = Menu.objects.filter(restaurant=restaurant).aggregate(Min('price'))['price__min']
+    return render(request, 'ui/restaurant.html', {'restaurants': restaurants, 'cat': cat, 'current_time': current_time})
 # def restaurantCard(request,  slug=None):
 #     restaurant = Restaurant.objects.get(slug=slug)
 #     cat = Category.objects.all()
@@ -86,6 +89,6 @@ def restaurantCard(request, slug=None, category_title=None):
         'selected_category': category_title,
         'breakfast_items': breakfast_items,
         'lunch_items': lunch_items,
-        'dinner_items': dinner_items
+        'dinner_items': dinner_items,
     }
     return render(request, 'ui/restaurants-card.html', context)

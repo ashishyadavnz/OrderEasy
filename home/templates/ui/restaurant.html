@@ -94,6 +94,19 @@
 										{% endfor %}
 									</div>
 									<p>{{ restaurant.content }}</p>
+									<p><b> {{ restaurant.start }}</b> To <b>{{ restaurant.end }}</b></p>
+									<span>
+									{% if restaurant.start|is_restaurant_open:restaurant.end %}
+										<span class="text-success">Open</span>
+									{% else %}
+										<span class="text-danger">Closed</span>
+									{% endif %}
+                                    </span>
+									{% if restaurant.lowest_price %}
+									<p><strong>Delivery starts from:</strong> ${{ restaurant.lowest_price }}</p>
+								{% else %}
+									<p><strong>Delivery starts from:</strong> Not available</p>
+								{% endif %}
 								</div>
 							</div>
 						</div>
