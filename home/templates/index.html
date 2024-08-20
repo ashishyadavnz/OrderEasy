@@ -328,6 +328,25 @@ body.menu-open {
     justify-content: flex-end;
     margin-top: 10px;
 }
+.cart-item-details {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cart-item-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.cart-item p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
 
 
 	</style>
@@ -859,12 +878,13 @@ body.menu-open {
 				const menuId = this.getAttribute("data-id");
 				const menuTitle = this.getAttribute("data-title");
 				const menuPrice = parseFloat(this.getAttribute("data-price"));
+				const menuImage = this.getAttribute("data-image")
 	
 				const existingItem = cart.find(item => item.id === menuId);
 				if (existingItem) {
 					existingItem.quantity += 1;
 				} else {
-					cart.push({ id: menuId, title: menuTitle, price: menuPrice, quantity: 1 });
+					cart.push({ id: menuId, title: menuTitle, price: menuPrice, image: menuImage ,quantity: 1 });
 				}
 	
 				updateCartDisplay();
@@ -882,7 +902,8 @@ body.menu-open {
 				const cartItem = document.createElement("div");
 				cartItem.classList.add("cart-item");
 				cartItem.innerHTML = `
-					<p>${item.title} - $${item.price} x ${item.quantity}</p>
+					<img src="${item.image}" alt="${item.title}" class="cart-item-image">
+					<p>${item.title} - ${item.price} x ${item.quantity}</p>
 					<div>
 						<button class="btn btn-sm btn-primary increase-qty" data-id="${item.id}">+</button>
 						<button class="btn btn-sm btn-danger decrease-qty" data-id="${item.id}">-</button>

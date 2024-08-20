@@ -36,6 +36,20 @@
 							</div>
 							<span>FEATURES:</span>
 							<p>{{ restaurant.content }}</p>
+							<p><b>{{ restaurant.start }}</b> To <b>{{ restaurant.end }}</b></p>
+									<span>
+									{% if restaurant.start|is_restaurant_open:restaurant.end %}
+										<span class="text-success">Open</span>
+									{% else %}
+										<span class="text-danger">Closed</span>
+									{% endif %}
+									</span>
+									{% if restaurant.lowest_price %}
+									<p><strong>Delivery starts from:</strong> ${{ restaurant.lowest_price }}</p>
+									{% else %}
+									<p><strong>Delivery starts from:</strong> Not available</p>
+									{% endif %}
+									<p class="distance">Distance: Calculating...</p>
 						</div>
 					</div>
 				</div>
@@ -263,7 +277,7 @@
 													<strong>Start Time:</strong> {{ menu.start|date:"H:i" }}<br>
 													<strong>End Time:</strong> {{ menu.end|date:"H:i" }}
 												</p>
-												<button class="btn btn-warning add-to-cart" data-id="{{ menu.id }}" data-title="{{ menu.cuisine.title }}" data-price="{{ menu.price }}">Add to Cart</button>
+												<button class="btn btn-warning add-to-cart" data-id="{{ menu.id }}" data-title="{{ menu.cuisine.title }}" data-price="{{ menu.price }}" data-image="{{ menu.cuisine.image.url }}">Add to Cart</button>
 											</div>
 										</div>
 									</div>
