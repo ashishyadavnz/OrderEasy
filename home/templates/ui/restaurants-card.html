@@ -238,6 +238,63 @@
 		</div>
 	</section> {% endcomment %}
 
+	<section class="container">
+		<button id="bookTableButton" class="book-table-btn ">Book A Table</button>
+		<div id="bookTableModal" class="modal">
+			<div class="modal-content">
+				<span class="close-button">&times;</span>
+				<form method="post" class="booking-form select-date-time-form" novalidate="novalidate">
+					<input type="hidden" name="TimeSlot" id="TimeSlot" value="">
+					<input type="hidden" name="TableId" id="TableId" value="">
+					<h2>Make a table reservation</h2>
+					<div class="form-group">
+						<p>Please select the number of people and the required date and time</p>
+					</div>
+					<div id="BookingTimeError" style="display:none"></div>
+					<div class="form-group">
+						<div class="form-field-wrapper">
+							<span class="svg-icon icon-calendar"></span>
+							<div class="form-input">
+								<input type="text" class="form-control required" id="BookingDate" name="BookingDate" placeholder="Choose date">
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="form-field-wrapper">
+							<span class="svg-icon icon-clock"></span>
+							<div class="form-select">
+								<select class="form-control required" id="BookingTime" name="BookingTime">
+									<option value="">Select time</option>
+									<option value="2030">08:30 pm</option>
+									<option value="2045">08:45 pm</option>
+									<option value="2100">09:00 pm</option>
+								</select>
+							</div>
+						</div>
+						<label id="BookingTime-error" class="error" style="display:none;">Please select booking time</label>
+					</div>
+					<div class="form-group">
+						<div class="form-field-wrapper">
+							<span class="svg-icon icon-person"></span>
+							<div class="form-select">
+								<select name="Persons" id="Persons" class="select">
+									<option value="1">1 person</option>
+									<option selected value="2">2 people</option>
+									<option value="3">3 people</option>
+									<!-- Add more options as needed -->
+								</select>
+							</div>
+						</div>
+					</div>
+					<input type="hidden" name="SeatType" id="SeatType" value="Standard">
+					<div class="form-group">
+						<button class="btn-submit" type="submit">Next</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+	
 	<section class="tabs gap">
 		<div class="container">
 			<div class="">
@@ -261,7 +318,7 @@
 					</div>
 					<div class="col-lg-9 px-0 ps-md-2">
 						<div class="dish mt-0">
-							<h3 class="mb-4">Cuisines by Category: {{ selected_category }}</h3>
+							<h3 class="mb-4">Cuisines by Category: {{ selected_category|default:"All" }}</h3>
 							<div class="row">
 								{% for menu in menus %}
 									<div class="col-md-4">
@@ -291,10 +348,6 @@
 			</div>
 		</div>
 	</section>
-	
-	
-	
-	
    <!-- Lunch Section -->
    <section class="lunch-section gap" style="background:#fcfcfc">
     <div class="container">
