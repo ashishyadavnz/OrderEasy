@@ -15,12 +15,10 @@
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
 						<div class="nice-select-one">
 							<select class="nice-select Advice">
-							  <option>Choose a Restaurant</option>
-							  <option>Choose a Restaurant 1</option>
-							  <option>Choose a Restaurant 2</option>
-							  <option>Choose a Restaurant 3</option>
-							  <option>Choose a Restaurant 4</option>
-						</select>
+								{% for rs in restaurants  %}  
+								<option> {{rs.title}}</option>
+								{% endfor %}
+							</select>
 						<a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a>
 						</div>
 					</div>
