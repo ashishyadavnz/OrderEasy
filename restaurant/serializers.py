@@ -41,3 +41,37 @@ class MenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Menu
         exclude = ('track','utrack')
+
+class FoodItemSerializer(serializers.ModelSerializer):
+    restaurants = CategorySerializer(source='restaurant', read_only = True)
+    cuisines = CategorySerializer(source='cuisine', read_only = True)
+    categories = CategorySerializer(source='category', read_only = True)
+	
+    class Meta:
+        model = FoodItem
+        exclude = ('track','utrack')
+
+class VoucherSerializer(serializers.ModelSerializer):	
+    class Meta:
+        model = Voucher
+        exclude = ('track','utrack')
+
+class ReservationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reservation
+        exclude = ('track','utrack')
+
+class CartSerializer(serializers.ModelSerializer):
+    fooditems = FoodItemSerializer(source='fooditem', read_only = True)
+	
+    class Meta:
+        model = Cart
+        exclude = ('track','utrack')
+
+class OrderSerializer(serializers.ModelSerializer):
+    vouchers = VoucherSerializer(source='voucher', read_only = True)
+    carts = CartSerializer(source='cart', read_only = True)
+	
+    class Meta:
+        model = Order
+        exclude = ('track','utrack')

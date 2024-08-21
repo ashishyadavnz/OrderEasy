@@ -16,17 +16,17 @@ class AddressInline(admin.StackedInline):
     raw_id_fields = ['user']
     classes = ['collapse']
 
-class MenuInline(admin.StackedInline):
-    model = Menu
+class FoodItemInline(admin.StackedInline):
+    model = FoodItem
     extra = 0
-    fields = ('restaurant', 'cuisine', 'price', 'start', 'available', 'keyword', 'meta_title', 'meta_description', 'status')
-    raw_id_fields = ['restaurant', 'cuisine']
+    fields = ('restaurant', 'cuisine','title','category', 'price', 'start', 'available', 'keyword', 'meta_title', 'meta_description', 'status')
+    raw_id_fields = ['restaurant', 'cuisine', 'category']
     classes = ['collapse']
 
 INLINE_CONFIG = {
     User: [AddressInline],
-    Cuisine: [MenuInline],
-    Restaurant: [MenuInline],
+    Cuisine: [FoodItemInline],
+    Restaurant: [FoodItemInline],
 }
 
 class ListAdminMixin(admin.ModelAdmin):
