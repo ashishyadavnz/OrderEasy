@@ -53,30 +53,47 @@
 		</div>
 	</section>
     <section>
-		<div id="order_cat">
+		<div id="order_cat" class="carousel slide" data-bs-ride="carousel">
 			<div class="container">
-				<div class="row mx-0">
-					<h3>Order now your favourite food &amp; drinks</h3>
+				<h3>Order now your favourite food &amp; drinks</h3>
+				<div class="carousel-inner">
 					{% for cuisine in cuisines %}
-					<div class="flexwrap col-md-2">
-						<div class="item">
-							<a href="{% url 'home:restaurants-by-cuisine' cuisine.slug %}">
-								<div class="imgwrap">
-									{% if cuisine.image %}
-									<img src="{{ cuisine.image.url }}" alt="{{ cuisine.title }}" style="width: 70px; height: 70px; border-radius: 50%;" >
-									{% else %}
-									<img src="/path/to/default/image.svg" alt="Default Image">
-									{% endif %}
+					{% if forloop.counter0|divisibleby:5 %}
+					<div class="carousel-item {% if forloop.first %}active{% endif %}">
+						<div class="row mx-0">
+							{% endif %}
+							<div class="col-md-2 m-3">
+								<div class="item">
+									<a href="{% url 'home:restaurants-by-cuisine' cuisine.slug %}">
+										<div class="img-wrap">
+											{% if cuisine.image %}
+											<img src="{{ cuisine.image.url }}" alt="{{ cuisine.title }}" style="width: 70px; height: 70px; border-radius: 50%;">
+											{% else %}
+											<img src="/path/to/default/image.svg" alt="Default Image">
+											{% endif %}
+										</div>
+										<h4>{{ cuisine.title }}</h4>
+									</a>
 								</div>
-								<h4>{{ cuisine.title }}</h4>
-							</a>
+							</div>
+							{% if forloop.counter|divisibleby:5 or forloop.last %}
 						</div>
 					</div>
+					{% endif %}
 					{% endfor %}
 				</div>
+				<a class="carousel-control-prev" href="#order_cat" role="button" data-bs-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Previous</span>
+				</a>
+				<a class="carousel-control-next" href="#order_cat" role="button" data-bs-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Next</span>
+				</a>
 			</div>
 		</div>
 	</section>
+	
 	
 	<section class="works-section gap no-top">
 		<div class="container">
@@ -122,7 +139,7 @@
 				{% for restaurant in restaurants|slice:":3" %}
 				<div class="col-lg-6" data-aos="flip-up" data-aos-delay="300" data-aos-duration="400">
 					<div class="logos-card restaurant-page ">
-						<img alt="{{ restaurant.title }}" src="{{ restaurant.logo.url }}">
+						<img alt="{{ restaurant.title }}" src="{{ restaurant.logo.url }}" class="img-fluid" style="width: 100px; height: 100px; object-fit: cover;">
 						<div class="cafa">
 							<h4><a href="#">{{ restaurant.title }}</a></h4>
 							<div>

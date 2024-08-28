@@ -4,15 +4,15 @@
 {% block content %}
 
 <div class="menu-layer">
-	<section class="hero-section about gap" style="background-image: url(https://bslthemes.com/html/quickeat/assets/img/background-1.png);">
-		<div class="container">
-			<div class="row align-items-center">
+	<!-- <section class="hero-section about gap" style="background-image: url(https://bslthemes.com/html/quickeat/assets/img/background-1.png);">
+		<div class="container mt-5">
+			<div class="row align-items-center mx-0">
 				<div class="col-lg-6" data-aos="fade-up"  data-aos-delay="300" data-aos-duration="400">
 					<div class="about-text">
 						<ul class="crumbs d-flex">
 							<li><a href="{ % url 'home:home-page'  %}">Home</a></li>
 							<li><a href="{%  url  'restaurant:restaurant'  %}"><i class="fa-solid fa-right-long"></i>Restaurants</a></li>
-							<li class="two"><a href="/{ % url 'home:home-page'  %}"><i class="fa-solid fa-right-long"></i>The Wilmington</a></li>
+							<li class="two"><a href="{% url 'home:home-page' %}"><i class="fa-solid fa-right-long"></i>{{ restaurant.title }}</a></li>
 						</ul>
 						<div class="logo-detail">
 							<img alt="{{restaurant.title}}" src="{{ restaurant.logo.url }}">
@@ -31,25 +31,29 @@
 							<span>CUISINES:</span>
 							<div class="cafa-button">
 								{% for categorys in cat %}
-								<a class="end" href="#">{{categorys.title}}</a>
+								<a class="end" href="">{{categorys.title}}</a>
 								{% endfor %}
 							</div>
 							<span>FEATURES:</span>
 							<p>{{ restaurant.content }}</p>
-							<p><b>{{ restaurant.start }}</b> To <b>{{ restaurant.end }}</b></p>
-									<span>
+							<div class="restaurant-card" data-latitude="{{ restaurant.latitude }}" data-longitude="{{ restaurant.longitude }}">
+								{% if restaurant.start and restaurant.end %}
+								<p><b>{{ restaurant.start }}</b> To <b>{{ restaurant.end }}</b></p>
+								{% endif %}								
+								<span>
 									{% if restaurant.start|is_restaurant_open:restaurant.end %}
 										<span class="text-success">Open</span>
 									{% else %}
 										<span class="text-danger">Closed</span>
 									{% endif %}
-									</span>
-									{% if restaurant.lowest_price %}
-									<p><strong>Delivery starts from:</strong> ${{ restaurant.lowest_price }}</p>
-									{% else %}
-									<p><strong>Delivery starts from:</strong> Not available</p>
-									{% endif %}
-									<p class="distance">Distance: Calculating...</p>
+								</span>
+								{% if restaurant.lowest_price %}
+								<p><strong>Delivery starts from:</strong> ${{ restaurant.lowest_price }}</p>
+								{% else %}
+								<p><strong>Delivery starts from:</strong>0$</p>
+								{% endif %}
+								<p class="distance">Distance: Calculating...</p>
+							</div>							
 						</div>
 					</div>
 				</div>
@@ -58,7 +62,9 @@
 						<img alt="man" src="{% static 'images/restaurant-1.jpg' %}">
 						<div class="hours">
 							<i class="fa-regular fa-clock"></i>
-							<h4>9am – 12pm<br><span>Hours</span></h4>
+							<h4>{% if restaurant.start and restaurant.end %}
+								{{ restaurant.start }} To {{ restaurant.end }}
+								{% endif %}	<br><span>Hours</span></h4>
 						</div>
 						<div class="hours two">
 							<i class="fa-solid fa-utensils"></i>
@@ -68,7 +74,121 @@
 				</div>
 			</div>
 		</div>
+	</section> -->
+	<!-- new design -->
+	 <section class="hero-section about gap" style="background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');">
+		<img src="https://ordermeal.blob.core.windows.net/omc/media/restaurant/headers/indian-chilly-masala.png" alt="Restaurant Image" class="img-fluid w-100 mt-4" >
+		<div class="container-fluid mt-5 position-relative">
+			<div class="position-relative">
+				<div class="d-flex flex-column align-items-start justify-content-center" style="position: absolute; bottom: -45px; padding: 30px;">
+					<ul class="breadcrumb p-0 mb-5 d-flex align-items-center" style="background: none;">
+						<li class="breadcrumb-item"><a href="{% url 'home:home-page' %}" class="text-decoration-none" style="color: white !important;">Home</a></li>
+						<li class="breadcrumb-item"><a href="restaurant/" class="text-decoration-none" style="color: white !important;"><i class="fa-solid fa-right-long mx-1"></i>Restaurants</a></li>
+						<li class="two">
+							<a href="{% url 'restaurant:restaurant-card' restaurant.slug %}" style="color: white !important;">
+								<i class="fa-solid fa-right-long"></i> <b>{{ restaurant.title }}</b>
+							</a>
+						</li>					
+					</ul>
+					<div class="d-flex align-items-center container">
+						<div class="d-flex align-items-center container">
+							<div class="row">
+								<div class="col-md-4">
+									<img src="{{ restaurant.logo.url }}" alt="{{restaurant.title}}" class="rounded-circle me-3" style="width: 220px;">
+								</div>
+								<div class="col-md-8">
+									<div>
+										<h4 class="mb-0" style="font-size: 2rem; font-weight: bold; color: white;">{{restaurant.title}}</h4>
+										<div class="d-flex align-items-center mb-3">
+											<span class="me-2 text-light">Rate:</span>
+											<div class="star d-flex">
+												{% for i in restaurant.rating|range_custom %}
+												<i class="fa-solid fa-star text-warning"></i>
+												{% endfor %}
+												{% for i in restaurant.rating|range_diff:5 %}
+												<i class="fa-regular fa-star text-warning"></i>
+												{% endfor %}
+											</div>
+										</div>
+										<div class="d-flex">
+											<butto class="book-table-btn">More Info</butto>
+											<button id="bookTableButton" class="book-table-btn">Book A Table</button>
+											<button class="book-table-btn" >Feedback</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row" hidden>
+								<div class="restaurant-card" data-latitude="{{ restaurant.latitude }}" data-longitude="{{ restaurant.longitude }}">
+									{% if restaurant.start and restaurant.end %}
+									<p><b>{{ restaurant.start }}</b> To <b>{{ restaurant.end }}</b></p>
+									{% endif %}								
+									<span>
+										{% if restaurant.start|is_restaurant_open:restaurant.end %}
+											<span class="text-success">Open</span>
+										{% else %}
+											<span class="text-danger">Closed</span>
+										{% endif %}
+									</span>
+									{% if restaurant.lowest_price %}
+									<p><strong>Delivery starts from:</strong> ${{ restaurant.lowest_price }}</p>
+									{% else %}
+									<p><strong>Delivery starts from:</strong>0$</p>
+									{% endif %}
+									<p class="distance">Distance: Calculating...</p>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Modal for booking table -->
+						<div id="bookTableModal" class="modal">
+							<div class="modal-content">
+								<span class="close-button">&times;</span>
+								<form method="post" class="booking-form select-date-time-form" id="reservationForm" novalidate="novalidate">
+									{% csrf_token %}
+									<h2>Make a table reservation</h2>
+									<div class="form-group">
+										<p>Please select the number of people and the required date and time</p>
+									</div>
+									<div class="form-group">
+										<input type="text" name="name" id="name" placeholder="Your Name" class="form-control required">
+									</div>
+									<div class="form-group">
+										<input type="email" name="email" id="email" placeholder="Your Email" class="form-control required">
+									</div>
+									<div class="form-group">
+										<input type="number" name="phone" id="phone" placeholder="Your Phone" class="form-control required">
+									</div>
+									<div class="form-group">
+										<input type="text" id="BookingDate" class="form-control input datepicker checkin required" name="dateName" placeholder="Choose date">
+									</div>
+									<div class="form-group">
+										<select class="form-control required" id="BookingTime" name="time">
+											<option value="">Select time</option>
+											<option value="20:30">08:30 pm</option>
+											<option value="20:45">08:45 pm</option>
+											<option value="21:00">09:00 pm</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<select name="member" id="Persons" class="form-control">
+											<option value="1">1 person</option>
+											<option selected value="2">2 people</option>
+											<option value="3">3 people</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<button class="btn-submit" type="submit">Next</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</section>
+	 
 	<!-- tabs -->
 	{% comment %} <section class="tabs gap">
 		<div class="container">
@@ -236,72 +356,34 @@
 				</div>
 			</div>
 		</div>
-	</section> {% endcomment %}
+	</section>{% endcomment %}
 
 	<section class="container">
-		<button id="bookTableButton" class="book-table-btn ">Book A Table</button>
-		<div id="bookTableModal" class="modal">
-			<div class="modal-content">
-				<span class="close-button">&times;</span>
-				<form method="post" class="booking-form select-date-time-form" novalidate="novalidate">
-					<input type="hidden" name="TimeSlot" id="TimeSlot" value="">
-					<input type="hidden" name="TableId" id="TableId" value="">
-					<h2>Make a table reservation</h2>
-					<div class="form-group">
-						<p>Please select the number of people and the required date and time</p>
-					</div>
-					<div id="BookingTimeError" style="display:none"></div>
-					<div class="form-group">
-						<div class="form-field-wrapper">
-							<span class="svg-icon icon-calendar"></span>
-							<div class="form-input">
-								<input type="text" class="form-control required" id="BookingDate" name="BookingDate" placeholder="Choose date">
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="form-field-wrapper">
-							<span class="svg-icon icon-clock"></span>
-							<div class="form-select">
-								<select class="form-control required" id="BookingTime" name="BookingTime">
-									<option value="">Select time</option>
-									<option value="2030">08:30 pm</option>
-									<option value="2045">08:45 pm</option>
-									<option value="2100">09:00 pm</option>
-								</select>
-							</div>
-						</div>
-						<label id="BookingTime-error" class="error" style="display:none;">Please select booking time</label>
-					</div>
-					<div class="form-group">
-						<div class="form-field-wrapper">
-							<span class="svg-icon icon-person"></span>
-							<div class="form-select">
-								<select name="Persons" id="Persons" class="select">
-									<option value="1">1 person</option>
-									<option selected value="2">2 people</option>
-									<option value="3">3 people</option>
-									<!-- Add more options as needed -->
-								</select>
-							</div>
-						</div>
-					</div>
-					<input type="hidden" name="SeatType" id="SeatType" value="Standard">
-					<div class="form-group">
-						<button class="btn-submit" type="submit">Next</button>
-					</div>
-				</form>
-			</div>
-		</div>
+		
 	</section>
+	
 	
 	<section class="tabs gap">
 		<div class="container">
 			<div class="">
+				<div class="row">
+					<div class="col-md-12 d-flex justify-content-end">
+						<div class="switch-wrap pick_del">
+							<label class="switch">
+								<span id="delivery-option" class="switch-delivery active switch-ot" data-id="Delivery">
+									Delivery
+								</span>
+								<span id="pickup-option" class="switch-pickup switch-ot" data-id="Pickup">
+									Pickup
+								</span>
+							</label>
+						</div>
+					</div>
+				</div>
 				<div class="row mx-0 pt-4">
 					<div class="col-lg-3 px-0 pe-md-2">
 						<div class="dish h-100 mt-0">
-							<h2 class="mb-4"><b>Menu</b></h2>
+							<h4 class="mb-4"><b>Menu</b></h4>
 							<ul class="menu-categories list-unstyled">
 								{% for category, cuisines in category_cuisines.items %}
 									<li class="mb-3">
@@ -316,29 +398,33 @@
 							</ul>
 						</div>
 					</div>
-					<div class="col-lg-9 px-0 ps-md-2">
+					<div class="col-lg-9 px-0 ps-md-2 ">
 						<div class="dish mt-0">
 							<h3 class="mb-4">Cuisines by Category: {{ selected_category|default:"All" }}</h3>
 							<div class="row">
 								{% for menu in menus %}
-									<div class="col-md-4">
+									<div class="col-md-4 mt-3">
 										<div class="card shadow-sm mb-4 h-100 hover-card">
 											{% if menu.cuisine.image %}
-												<img src="{{ menu.cuisine.image.url }}" class="card-img-top" alt="{{ menu.cuisine.title }}">
+												<img src="{{ menu.cuisine.image.url }}" class="card-img-top img-fluid" alt="{{ menu.cuisine.title }}">
 											{% endif %}
 											<div class="card-body">
 												<h5 class="card-title">{{ menu.cuisine.title }}</h5>
 												<p class="card-text">
 													<strong>Price:</strong> ${{ menu.price }}<br>
 													<strong>Available:</strong> {{ menu.available|yesno:"Yes,No" }}<br>
+													{% if menu.start %}
 													<strong>Start Time:</strong> {{ menu.start|date:"H:i" }}<br>
+													{% endif %}
+													{% if menu.end %}
 													<strong>End Time:</strong> {{ menu.end|date:"H:i" }}
+													{% endif %}
 												</p>
-												<button class="btn btn-warning add-to-cart" data-id="{{ menu.id }}" data-title="{{ menu.cuisine.title }}" data-price="{{ menu.price }}" data-image="{{ menu.cuisine.image.url }}">Add to Cart</button>
+												<button class="btn add-to-cart" style="background-color:#F29F05;" data-id="{{ menu.id }}" data-title="{{ menu.cuisine.title }}" data-price="{{ menu.price }}" data-image="{{ menu.cuisine.image.url }}">Add to Cart</button>
 											</div>
 										</div>
 									</div>
-								{% empty %}
+									{% empty %}
 									<p>No menus available for this category.</p>
 								{% endfor %}
 							</div>
@@ -421,9 +507,11 @@
 
   <!-- bslthemes.com buttons assets begin -->
   <link rel="stylesheet" href="https://bslthemes.com/bslthms-advanced-btns/assets/style.css">
-  <script src="https://bslthemes.com/bslthms-advanced-btns/assets/script.js"></script>
   <!-- bslthemes.com buttons assets end -->
 </div>
+{% endblock %}
+
+{% block script_js %}
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
 		const cart = [];
@@ -465,4 +553,207 @@
 		}
 	});
 </script>
+<script>
+		document.addEventListener("DOMContentLoaded", function() {
+		const modal = document.getElementById("bookTableModal");
+		const btn = document.getElementById("bookTableButton");
+		const span = document.getElementsByClassName("close-button")[0];
+		btn.onclick = function() {
+			modal.style.display = "block";
+		}
+		span.onclick = function() {
+			modal.style.display = "none";
+		}
+		window.onclick = function(event) {
+			if (event.target == modal) {
+				modal.style.display = "none";
+			}
+		}
+	});
+</script>
+<script>
+	function displayDistances() {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function(position) {
+				const userLat = position.coords.latitude;
+				const userLon = position.coords.longitude;
+	
+				document.querySelectorAll('.restaurant-card').forEach(function(card) {
+					const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
+					const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
+	
+					const distance = calculateDistance(userLat, userLon, restaurantLat, restaurantLon);
+					card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
+	
+					// Store the delivery charge based on the distance
+					let deliveryCharge = 0;
+					if (distance > 7) {
+						deliveryCharge = distance * 1; // Charge $1 per km for the entire distance
+					}
+					card.setAttribute('data-delivery-charge', deliveryCharge.toFixed(2));
+				});
+			});
+		} else {
+			console.error("Geolocation is not supported by this browser.");
+		}
+	}
+	
+	document.addEventListener('DOMContentLoaded', displayDistances);
+	
+</script>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+    const deliveryOption = document.getElementById('delivery-option');
+    const pickupOption = document.getElementById('pickup-option');
+	const voucherInput = document.getElementById('voucher-code');
+    const applyVoucherBtn = document.getElementById('apply-voucher');
+    const deliveryCharge = 19;
+    let orderType = 'Delivery'; 
+
+
+    function activateOption(selectedOption) {
+        orderType = selectedOption;
+        if (selectedOption === 'Delivery') {
+            deliveryOption.classList.add('active');
+            pickupOption.classList.remove('active');
+        } else if (selectedOption === 'Pickup') {
+            pickupOption.classList.add('active');
+            deliveryOption.classList.remove('active');
+        }
+        updateCartDisplay();
+        console.log(`Selected option: ${selectedOption}`);
+    }
+
+    deliveryOption.addEventListener('click', function() {
+        activateOption('Delivery');
+    });
+
+    pickupOption.addEventListener('click', function() {
+        activateOption('Pickup');
+    });
+
+    const cart = [];
+    document.querySelectorAll(".add-to-cart").forEach(button => {
+        button.addEventListener("click", function() {
+            console.log("Add to Cart button clicked"); 
+            const menuId = this.getAttribute("data-id");
+            const menuTitle = this.getAttribute("data-title");
+            const menuPrice = parseFloat(this.getAttribute("data-price"));
+            const menuImage = this.getAttribute("data-image");
+
+            const existingItem = cart.find(item => item.id === menuId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ id: menuId, title: menuTitle, price: menuPrice, image: menuImage, quantity: 1 });
+            }
+
+            updateCartDisplay();
+        });
+    });
+	applyVoucherBtn.addEventListener("click", function() {
+        const voucherCode = voucherInput.value.trim();
+        if (voucherCode) {
+            // For demo purposes, we'll just apply a fixed discount
+            // In a real application, you might need to validate the voucher code via an API call
+            voucherDiscount = 10.00; // Example discount
+        } else {
+            voucherDiscount = 0;
+        }
+        updateCartDisplay();
+    });
+
+	function updateCartDisplay() {
+		const cartIcon = document.querySelector("#desktop-menu i");
+		cartIcon.textContent = `(${cart.length})`;  
+	
+		const cartContent = document.querySelector("#cart-content #cart-items");
+		cartContent.innerHTML = "";  
+	
+		let totalAmount = 0;
+		cart.forEach(item => {
+			totalAmount += item.price * item.quantity;
+	
+			const cartItem = document.createElement("div");
+			cartItem.classList.add("cart-item");
+			cartItem.innerHTML = `
+				<img src="${item.image}" alt="${item.title}" class="cart-item-image">
+				<p>${item.title} - $${item.price} x ${item.quantity}</p>
+				<div>
+					<button class="btn btn-sm btn-primary increase-qty" data-id="${item.id}">+</button>
+					<button class="btn btn-sm btn-danger decrease-qty" data-id="${item.id}">-</button>
+				</div>
+			`;
+			cartContent.appendChild(cartItem);
+		});
+	
+		if (orderType === 'Delivery') {
+			// Assuming that the selected restaurant is the first one in the cart for simplicity
+			const selectedRestaurantCard = document.querySelector('.restaurant-card'); 
+			const deliveryCharge = parseFloat(selectedRestaurantCard.getAttribute('data-delivery-charge')) || 0;
+			totalAmount += deliveryCharge;
+	
+			const deliveryChargeItem = document.createElement("div");
+			deliveryChargeItem.classList.add("cart-item");
+			deliveryChargeItem.innerHTML = `<p>Delivery Charge: $${deliveryCharge.toFixed(2)}</p>`;
+			cartContent.appendChild(deliveryChargeItem);
+		}
+	
+		const totalAmountItem = document.createElement("div");
+		totalAmountItem.classList.add("cart-item");
+		totalAmountItem.innerHTML = `<p>Total: $${totalAmount.toFixed(2)}</p>`;
+		cartContent.appendChild(totalAmountItem);
+	
+		document.querySelector("#cart-section").classList.add("show");
+	
+		document.querySelectorAll(".increase-qty").forEach(button => {
+			button.addEventListener("click", function() {
+				const itemId = this.getAttribute("data-id");
+				const item = cart.find(cartItem => cartItem.id === itemId);
+				if (item) {
+					item.quantity += 1;
+					updateCartDisplay();
+				}
+			});
+		});
+	
+		document.querySelectorAll(".decrease-qty").forEach(button => {
+			button.addEventListener("click", function() {
+				const itemId = this.getAttribute("data-id");
+				const item = cart.find(cartItem => cartItem.id === itemId);
+				if (item) {
+					if (item.quantity > 1) {
+						item.quantity -= 1;
+					} else {
+						const index = cart.findIndex(cartItem => cartItem.id === itemId);
+						if (index > -1) {
+							cart.splice(index, 1);
+						}
+					}
+					updateCartDisplay();
+				}
+			});
+		});
+	}
+
+    document.querySelector("#desktop-menu").addEventListener("click", function() {
+        document.querySelector("#cart-section").classList.toggle("show");
+    });
+
+    document.querySelector("#close-cart").addEventListener("click", function() {
+        document.querySelector("#cart-section").classList.remove("show");
+    });
+});
+
+</script>
+<script>
+	
+	document.addEventListener('DOMContentLoaded', function() {
+		flatpickr("#BookingDate", {
+			dateFormat: "Y-m-d",
+			minDate: "today",
+		});
+	});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 {% endblock %}

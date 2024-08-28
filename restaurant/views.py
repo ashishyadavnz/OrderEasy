@@ -80,6 +80,25 @@ def restaurantCard(request, slug=None, category_title=None):
     category_cuisines = {}
     for category in cat:
         category_cuisines[category.title] = Menu.objects.filter(cuisine__category=category).select_related('cuisine')
+    
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        date = request.POST.get('date')
+        time = request.POST.get('time')
+        member = request.POST.get('member')
+        reservation = Reservation(
+            name=name,
+            email=email,
+            phone=phone,
+            date=date,
+            time=time,
+            member=member
+        )
+        reservation.save()
+        messages.success(request, "Your table reservation has been successfully made!")
+        return redirect('restaurant:restaurant-card', slug=slug)
 
     context = {
         'restaurant': restaurant,
