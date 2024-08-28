@@ -34,7 +34,8 @@ class Restaurant(BaseModel):
 	twitter = models.URLField(max_length=100, null=True,blank=True)
 	instagram = models.URLField(max_length=100, null=True,blank=True)
 	linkedin = models.URLField(max_length=100, null=True,blank=True)
-	verified = models.BooleanField(default=False,)
+	verified = models.BooleanField(default=False)
+	vip = models.BooleanField(default=False)
 	source = models.CharField(max_length=10, choices=source, default='Website')
 
 	class Meta:
@@ -170,13 +171,13 @@ class Voucher(BaseModel):
 
 class Reservation(BaseModel):
 	"""docstring for Reservation"""
+	users = models.ForeignKey(User, on_delete=models.PROTECT, related_name='reservation_user')
 	name = models.CharField(max_length=160)
 	email = models.EmailField()
 	phone = models.PositiveIntegerField()
 	date = models.DateField()
 	time = models.TimeField()
 	member = models.PositiveIntegerField(default=1, verbose_name="Number of Members")
-
 	class Meta:
 		verbose_name_plural = '07. Reservation'
 	
@@ -188,7 +189,7 @@ class Reservation(BaseModel):
 		return super().save(*args, **kwargs)
 
 class Cart(BaseModel):
-	fooditem = models.ForeignKey(FoodItem, on_delete=models.PROTECT, related_name="cart_fooditem")
+	menu = models.ForeignKey(Menu, on_delete=models.PROTECT, related_name="cart_menu")
 	quantity = models.PositiveIntegerField()
 	total = models.PositiveIntegerField(default=0)
 
@@ -197,13 +198,15 @@ class Cart(BaseModel):
 
 	def save(self, *args, **kwargs):
 		trackupdate(self)
-		self.total = self.quantity * self.fooditem.price
+		self.total = self.quantity * self.menu.price
 		return super().save(*args, **kwargs)
 
 class Order(BaseModel):
 	"""docstring for Order"""
+	users = models.ForeignKey(User, on_delete=models.PROTECT, related_name='order_user')
 	voucher = models.ForeignKey(Voucher, on_delete=models.PROTECT, related_name="order_voucher", null=True, blank=True)
 	cart = models.ManyToManyField(Cart, related_name="order_cart")
+	orderid = models.CharField(max_length=30)
 	name = models.CharField(max_length=160)
 	email = models.EmailField()
 	phone = models.PositiveIntegerField()
@@ -216,6 +219,23 @@ class Order(BaseModel):
 
 	class Meta:
 		verbose_name_plural = '09. Order'
+	
+	def __str__(self):
+		return str(self.name)
+
+	def save(self, *args, **kwargs):
+		trackupdate(self)
+		return super().save(*args, **kwargs)
+
+class Partner(BaseModel):
+	"""docstring for Partner"""
+	name = models.CharField(max_length=160)
+	email = models.EmailField()
+	phone = models.PositiveIntegerField()
+	content = RichTextUploadingField()
+
+	class Meta:
+		verbose_name_plural = '10. Partner'
 	
 	def __str__(self):
 		return str(self.name)

@@ -66,7 +66,7 @@ a{
     color: black;
 }
 .gap {
-    padding: 100px 0;
+    padding: 19px 0;
 }
 .no-top{
     padding-top: 0;
@@ -3127,7 +3127,6 @@ i#nav-icon4 {
     content: "";
     width: 25px;
     height: 25px;
-    background-image: url('../images/remove.svg');
     background-repeat: no-repeat;
     position: absolute;
     top: -5px;
@@ -3170,7 +3169,6 @@ i#nav-icon4 {
 }
 .mobile-nav > ul > li.menu-item-has-children:before {
     content: "";
-    background-image: url(../img/down-arrow.svg);
     background-repeat: no-repeat;
     position: absolute;
     top: 25px;
@@ -3301,7 +3299,6 @@ li.menu-item-has-children.active {
         content: "";
         width: 35px;
         height: 35px;
-        background-image: url('../img/remove.svg');
         background-repeat: no-repeat;
         position: absolute;
         top: 15px;

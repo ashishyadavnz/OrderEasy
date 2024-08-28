@@ -22,18 +22,10 @@ from .functions import *
 # Create your models here.
 
 gender = (('Male', 'Male'),('Female', 'Female'),('Other', 'Other'),)
-role = (('Employee', 'Employee'),('Manager', 'Manager'),('Admin', 'Admin'),('Owner', 'Owner'),('Client', 'Client'),('Representative', 'Representative'),('Professional', 'Professional'))
-# profession = (('Bodyguard', 'Bodyguard'),('Bouncer', 'Bouncer'),('Gunman', 'Gunman'),('Valet', 'Valet'),('Watchman', 'Watchman'),('Field Officer', 'Field Officer'),('Supervisor', 'Supervisor'),('Housekeeping', 'Housekeeping'))
-ftypes = (('Company', 'Company'),('Client', 'Client'),('Professional', 'Professional'))
-hour = ((6, 6),(8, 8),(12, 12),(24, 24))
-experience = ((1, 1),(2, 2),(3, 3),(4, 4),(5, 5),(6, 6),(7, 7),(8, 8),(9, 9),(10, 10),(11, 11),(12, 12),(13, 13),(14, 14),(15, 15),(16, 16),(17, 17),(18, 18),(19, 19),(20, 20),)
-# shift = (('Day', 'Day'),('Night', 'Night'),('Both', 'Both'))
+role = (('Customer', 'Customer'),('Owner', 'Owner'))
 status = (("Active","Active"),("Inactive","Inactive"),("Delete","Delete"))
 source = (('Website', 'Website'),('Android', 'Android'),('iOS', 'iOS'),('AMP', 'AMP'),('PWA', 'PWA'),('Desktop', 'Desktop'))
-paymode = (('Hour', 'Hour'),('Day', 'Day'),('Week', 'Week'),('Fortnight', 'Fortnight'),('Month', 'Month'),('Year', 'Year'))
-doctype = (('Passport','Passport'), ('Aadhaar','Aadhaar'), ('DrivingLicence','DrivingLicence'), ('VoterID','VoterID'), ('PanCard','PanCard'), ('ArmsLicence','ArmsLicence'), ('Other','Other'))
 PLATFORM = (('Android', 'Android'),('IOS', 'IOS'), ('Web', 'Web'))
-action = (('Open', 'Open'),('Close', 'Close'),('Reopen', 'Reopen'),('Resolve', 'Resolve'),('Transfer', 'Transfer'),('Fake', 'Fake'))
 method = [('GET','GET'),('HEAD','HEAD'),('POST','POST'),('PUT','PUT'),('DELETE','DELETE'),('CONNECT','CONNECT'),('OPTIONS','OPTIONS'),('TRACE','TRACE'),('PATCH','PATCH')]
 ntype = (
     ('Blog', 'Blog'),
@@ -80,6 +72,7 @@ class User(AbstractUser, BaseModel):
 	identifier = models.CharField(max_length=100,unique=True, null=True, blank=True)
 	mobile = models.BigIntegerField(unique=True,)
 	gender = models.CharField(max_length=6, choices=gender, default='Male')
+	role = models.CharField(max_length=10, choices=role, default='Customer')
 	dob = models.DateField(null=True, blank=True)
 	image = models.ImageField(upload_to='user/image/', blank=True, null=True, default="default/st-logo.png")
 	city = models.CharField(max_length=30, blank=True)
@@ -91,6 +84,7 @@ class User(AbstractUser, BaseModel):
 	source = models.CharField(max_length=10, choices=source, default='Website')
 	notification = models.BooleanField(default=True)
 	multilogin = models.BooleanField(default=False)
+	guest = models.BooleanField(default=False)  
 
 	class Meta:
 		verbose_name = 'Users'

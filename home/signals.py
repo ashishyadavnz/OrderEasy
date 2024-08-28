@@ -14,3 +14,9 @@ def user_add(sender, instance=None, created=False, **kwargs):
 	if not instance.identifier:
 		instance.identifier = Signer().sign(str(instance.found)+str(instance.id)+str(instance.postcode)+str(instance.owner)+str(instance.state)).split(":")[1]
 		instance.save()
+
+@receiver(post_save, sender=Order)
+def order_add(sender, instance=None, created=False, **kwargs):
+	if created:
+		instance.orderid = 'ORDER00000' + str(instance.id)
+		instance.save()

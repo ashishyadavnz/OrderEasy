@@ -1,13 +1,13 @@
 {% extends "index.html" %} {% load static %} {% block content %}
 <div class="menu-layer">   <!-- hero-section -->
   <section class="hero-section about gap" style="background-image: url(https://bslthemes.com/html/quickeat/assets/img/background.png);">
-		<div class="container">
-			<div class="row align-items-center">
+		<div class="container mt-5">
+			<div class="row align-items-center mx-0">
 				<div class="col-lg-6 col-md-12" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
 					<div class="about-text">
 						<ul class="crumbs d-flex">
-							<li><a href="indexThem.html">Home</a></li>
-							<li class="two"><a href="indexThem.html"><i class="fa-solid fa-right-long"></i>Service</a></li>
+							<li><a href="{% url 'home:home-page' %}">Home</a></li>
+							<li class="two"><a href="{% url 'blog:service' %}"><i class="fa-solid fa-right-long"></i>Service</a></li>
 						</ul>
 						<h2>Service shows
 							good taste</h2>
