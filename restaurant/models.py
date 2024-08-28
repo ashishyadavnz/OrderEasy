@@ -8,9 +8,9 @@ otype = (('Delivery', 'Delivery'),('Pickup', 'Pickup'),('Schedule', 'Schedule'))
 class Restaurant(BaseModel):
 	"""docstring for Restaurant"""
 	owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name='owner')
-	country = models.ForeignKey(Country, on_delete=models.PROTECT)
-	state = models.ForeignKey(State, on_delete=models.PROTECT)
-	timezone = models.ForeignKey(Timezone, on_delete=models.PROTECT)
+	country = models.ForeignKey(Country, on_delete=models.PROTECT, blank=True, null=True)
+	state = models.ForeignKey(State, on_delete=models.PROTECT, blank=True, null=True)
+	timezone = models.ForeignKey(Timezone, on_delete=models.PROTECT, blank=True, null=True)
 	title = models.CharField(max_length=160)
 	slug = AutoSlugField(populate_from=['title'], unique=True, editable=True)
 	logo = models.ImageField(upload_to='company/logo/', default="default/easymeal.png")
@@ -27,8 +27,8 @@ class Restaurant(BaseModel):
 	end = models.TimeField(null=True,blank=True)
 	members = models.PositiveIntegerField(default=0)
 	rating = models.FloatField(default=0)
-	latitude = models.FloatField(default=26.8513) 
-	longitude = models.FloatField(default=75.8064)
+	latitude = models.FloatField() 
+	longitude = models.FloatField()
 	website = models.URLField(max_length=100,null=True,blank=True)
 	facebook = models.URLField(max_length=100, null=True,blank=True)
 	twitter = models.URLField(max_length=100, null=True,blank=True)
@@ -243,3 +243,5 @@ class Partner(BaseModel):
 	def save(self, *args, **kwargs):
 		trackupdate(self)
 		return super().save(*args, **kwargs)
+
+## Add restaurent owner and customer table
