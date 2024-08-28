@@ -142,8 +142,25 @@ class ListAdminMixin(admin.ModelAdmin):
             writer.writerow(row)
         return response
     export_as_csv.short_description = "Export Selected to CSV"
+
+    def copy_selected_entries(self, request, queryset):
+        """
+        Copies the selected entries and saves the copies with the same field values except for auto-increment fields like primary key.
+        """
+        if self.model._meta.model_name.lower() == 'user':
+            self.message_user(request, "Copying entries is not allowed for the User model.", level='error')
+            return
+
+        for obj in queryset:
+            obj.pk = None
+            obj.identifier = None
+            obj.save()
+
+        self.message_user(request, "Selected entries have been copied successfully.")
     
-    actions = ['export_as_csv']
+    copy_selected_entries.short_description = "Copy selected entries"
+    
+    actions = ['export_as_csv', 'copy_selected_entries']
 
 class CustomUserAdmin(ListAdminMixin, UserAdmin):
     def __init__(self, model, admin_site):
@@ -159,7 +176,7 @@ class CustomUserAdmin(ListAdminMixin, UserAdmin):
     fieldsets = [
         ('Personal info', {
             'fields': (
-                'referrer', 'country', 'state', 'city', 'mobile', 'gender', 'dob', 'image', 'address', 'postcode', 'identifier', 'otp','guest', 'source', 'status'
+                'referrer', 'country', 'state', 'city', 'mobile', 'gender', 'role', 'dob', 'image', 'address', 'postcode', 'identifier', 'otp','guest', 'source', 'status'
             ),
         }),
         ('Permissions', {
