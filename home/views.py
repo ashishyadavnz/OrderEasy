@@ -205,6 +205,8 @@ def submit_feedback(request, slug):
             review=review
         )
         feedback.save()
+        messages.success(request, 'Thank you for your feedback!')
+
         return redirect(reverse('restaurant:restaurant-card', kwargs={'slug': slug}))  
     return render(request, 'ui/restaurant-card.html', {'restaurant': restaurant})
     
