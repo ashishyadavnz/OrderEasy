@@ -76,8 +76,8 @@
 		</div>
 	</section> -->
 	<!-- new design -->
-	 <section class="hero-section about gap" style="background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');">
-		<img src="https://ordermeal.blob.core.windows.net/omc/media/restaurant/headers/indian-chilly-masala.png" alt="Restaurant Image" class="img-fluid w-100 mt-4" >
+	<section class="hero-section about gap" style="background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');">
+		<img src="{{ restaurant.image.url }}" alt="{{restaurant.title}}" class="img-fluid w-100 mt-4" style="height: 400px;">
 		<div class="container-fluid mt-5 position-relative">
 			<div class="position-relative">
 				<div class="d-flex flex-column align-items-start justify-content-center" style="position: absolute; bottom: -45px; padding: 30px;">
@@ -139,7 +139,6 @@
 								</div>
 							</div>
 						</div>
-						
 						<!-- Modal for booking table -->
 						<div id="bookTableModal" class="modal">
 							<div class="modal-content">
@@ -160,14 +159,14 @@
 										<input type="number" name="phone" id="phone" placeholder="Your Phone" class="form-control required">
 									</div>
 									<div class="form-group">
-										<input type="text" id="BookingDate" class="form-control input datepicker checkin required" name="dateName" placeholder="Choose date">
-									</div>
+										<input type="text" id="BookingDate" class="form-control input datepicker checkin required" name="date" placeholder="Choose date">
+									</div>									
 									<div class="form-group">
 										<select class="form-control required" id="BookingTime" name="time">
 											<option value="">Select time</option>
-											<option value="20:30">08:30 pm</option>
-											<option value="20:45">08:45 pm</option>
-											<option value="21:00">09:00 pm</option>
+											{% for slot in time_slots %}
+												<option value="{{ slot }}">{{ slot }}</option>
+											{% endfor %}
 										</select>
 									</div>
 									<div class="form-group">
@@ -188,7 +187,6 @@
 			</div>
 		</div>
 	</section>
-	 
 	<!-- tabs -->
 	{% comment %} <section class="tabs gap">
 		<div class="container">
@@ -208,7 +206,7 @@
 									aria-selected="false">Dinner</button>
 							</div>
 							<div class="like-meal">
-								<a href="#"><i class="fa-solid fa-heart"></i>Like Meals</a>
+								<a href=""><i class="fa-solid fa-heart"></i>Like Meals</a>
 							</div>
 						</div>
 					</div>
@@ -225,12 +223,12 @@
 													<h3>{{ menu.cuisine.title }}</h3>
 													<div class="dish-icon">
 														<div class="cafa-button">
-															<a href="#">{{ menu.keyword }}</a>
+															<a href="">{{ menu.keyword }}</a>
 														</div>
 														<div class="dish-icon end">
 															<i class="info fa-solid fa-circle-info"></i>
 															<div class="star">
-																<a href="#"><i class="fa-solid fa-heart"></i></a>
+																<a href=""><i class="fa-solid fa-heart"></i></a>
 															</div>
 														</div>
 													</div>
@@ -248,7 +246,7 @@
 													<i class="info2 fa-solid fa-xmark"></i>
 													<h5>{{ menu.cuisine.title }}</h5>
 													<div class="cafa-button">
-														<a href="#">{{ menu.keyword }}</a>
+														<a href="">{{ menu.keyword }}</a>
 													</div>
 													<p>{{ menu.meta_description }}</p>
 													<ul class="menu-dish">
@@ -270,12 +268,12 @@
 													<h3>{{ menu.cuisine.title }}</h3>
 													<div class="dish-icon">
 														<div class="cafa-button">
-															<a href="#">{{ menu.keyword }}</a>
+															<a href="">{{ menu.keyword }}</a>
 														</div>
 														<div class="dish-icon end">
 															<i class="info fa-solid fa-circle-info"></i>
 															<div class="star">
-																<a href="#"><i class="fa-solid fa-heart"></i></a>
+																<a href=""><i class="fa-solid fa-heart"></i></a>
 															</div>
 														</div>
 													</div>
@@ -293,7 +291,7 @@
 													<i class="info2 fa-solid fa-xmark"></i>
 													<h5>{{ menu.cuisine.title }}</h5>
 													<div class="cafa-button">
-														<a href="#">{{ menu.keyword }}</a>
+														<a href="">{{ menu.keyword }}</a>
 													</div>
 													<p>{{ menu.meta_description }}</p>
 													<ul class="menu-dish">
@@ -316,12 +314,12 @@
 													<h3>{{ menu.cuisine.title }}</h3>
 													<div class="dish-icon">
 														<div class="cafa-button">
-															<a href="#">{{ menu.keyword }}</a>
+															<a href="">{{ menu.keyword }}</a>
 														</div>
 														<div class="dish-icon end">
 															<i class="info fa-solid fa-circle-info"></i>
 															<div class="star">
-																<a href="#"><i class="fa-solid fa-heart"></i></a>
+																<a href=""><i class="fa-solid fa-heart"></i></a>
 															</div>
 														</div>
 													</div>
@@ -339,7 +337,7 @@
 													<i class="info2 fa-solid fa-xmark"></i>
 													<h5>{{ menu.cuisine.title }}</h5>
 													<div class="cafa-button">
-														<a href="#">{{ menu.keyword }}</a>
+														<a href="">{{ menu.keyword }}</a>
 													</div>
 													<p>{{ menu.meta_description }}</p>
 													<ul class="menu-dish">
@@ -383,7 +381,7 @@
 				<div class="row mx-0 pt-4">
 					<div class="col-lg-3 px-0 pe-md-2">
 						<div class="dish h-100 mt-0">
-							<h4 class="mb-4"><b>Menu</b></h4>
+							<h4 class="mb-4"><b>Categories</b></h4>
 							<ul class="menu-categories list-unstyled">
 								{% for category, cuisines in category_cuisines.items %}
 									<li class="mb-3">
@@ -447,13 +445,13 @@
                         <h3>{{ item.cuisine.title }}</h3>
                         <div class="dish-icon">
                             <div class="cafa-button">
-                                <a href="#">{{ item.cuisine.category.title }}</a>
-                                {% comment %} <a href="#">{{ item.cuisine.title }}</a> {% endcomment %}
+                                <a href="">{{ item.cuisine.category.title }}</a>
+                                {% comment %} <a href="">{{ item.cuisine.title }}</a> {% endcomment %}
                             </div>
                             <div class="dish-icon end">
                                 <i class="info fa-solid fa-circle-info"></i>
                                 <div class="star">
-                                    <a href="#"><i class="fa-solid fa-heart"></i></a>
+                                    <a href=""><i class="fa-solid fa-heart"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -471,8 +469,8 @@
                         <i class="info2 fa-solid fa-xmark"></i>
                         <h5>{{ item.name }}</h5>
                         <div class="cafa-button">
-                            <a href="#">{{ item.cuisine.category.title }}</a>
-                            <a href="#">{{ item.cuisine.name }}</a>
+                            <a href="">{{ item.cuisine.category.title }}</a>
+                            <a href="">{{ item.cuisine.name }}</a>
                         </div>
                         <p>{{ item.description }}</p>
                         <ul class="menu-dish">
