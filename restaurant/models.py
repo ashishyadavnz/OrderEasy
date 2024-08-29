@@ -8,9 +8,9 @@ otype = (('Delivery', 'Delivery'),('Pickup', 'Pickup'),('Schedule', 'Schedule'))
 class Restaurant(BaseModel):
 	"""docstring for Restaurant"""
 	owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name='owner')
-	country = models.ForeignKey(Country, on_delete=models.PROTECT)
-	state = models.ForeignKey(State, on_delete=models.PROTECT)
-	timezone = models.ForeignKey(Timezone, on_delete=models.PROTECT)
+	country = models.ForeignKey(Country, on_delete=models.PROTECT, blank=True, null=True)
+	state = models.ForeignKey(State, on_delete=models.PROTECT, blank=True, null=True)
+	timezone = models.ForeignKey(Timezone, on_delete=models.PROTECT, blank=True, null=True)
 	title = models.CharField(max_length=160)
 	slug = AutoSlugField(populate_from=['title'], unique=True, editable=True)
 	logo = models.ImageField(upload_to='company/logo/', default="default/easymeal.png")
@@ -27,8 +27,8 @@ class Restaurant(BaseModel):
 	end = models.TimeField(null=True,blank=True)
 	members = models.PositiveIntegerField(default=0)
 	rating = models.FloatField(default=0)
-	latitude = models.FloatField(default=26.8513) 
-	longitude = models.FloatField(default=75.8064)
+	latitude = models.FloatField() 
+	longitude = models.FloatField()
 	website = models.URLField(max_length=100,null=True,blank=True)
 	facebook = models.URLField(max_length=100, null=True,blank=True)
 	twitter = models.URLField(max_length=100, null=True,blank=True)
@@ -78,7 +78,7 @@ class Category(BaseModel):
 	
 class Cuisine(BaseModel):
 	"""docstring for Cuisine"""
-	category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="cuisine_category")
+	# category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="cuisine_category")
 	title = models.CharField(max_length=160)
 	slug = AutoSlugField(max_length=160, populate_from=['title'], unique=True, editable=True)
 	image = models.ImageField(upload_to='restaurant/cuisine/image', null=True,blank=True)	
@@ -130,7 +130,7 @@ class FoodItem(BaseModel):
 	"""docstring for Food Item"""
 	restaurant = models.ForeignKey(Restaurant, on_delete=models.PROTECT, related_name="fooditems_restaurant")
 	cuisine = models.ForeignKey(Cuisine, on_delete=models.PROTECT, related_name="fooditems_cuisine", null=True, blank=True)
-	category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="fooditems_category")
+	category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="fooditems_category", null=True, blank=True)
 	title = models.CharField(max_length=160)
 	slug = AutoSlugField(max_length=160, populate_from=['title'], unique=True, editable=True)
 	image = models.ImageField(upload_to='restaurant/cuisine/image', null=True,blank=True)
@@ -178,6 +178,7 @@ class Reservation(BaseModel):
 	date = models.DateField()
 	time = models.TimeField()
 	member = models.PositiveIntegerField(default=1, verbose_name="Number of Members")
+
 	class Meta:
 		verbose_name_plural = '07. Reservation'
 	
@@ -203,6 +204,7 @@ class Cart(BaseModel):
 
 class Order(BaseModel):
 	"""docstring for Order"""
+	restaurant = models.ForeignKey(Restaurant, on_delete=models.PROTECT, related_name="order_restaurant")
 	users = models.ForeignKey(User, on_delete=models.PROTECT, related_name='order_user')
 	voucher = models.ForeignKey(Voucher, on_delete=models.PROTECT, related_name="order_voucher", null=True, blank=True)
 	cart = models.ManyToManyField(Cart, related_name="order_cart")
@@ -239,6 +241,36 @@ class Partner(BaseModel):
 	
 	def __str__(self):
 		return str(self.name)
+
+	def save(self, *args, **kwargs):
+		trackupdate(self)
+		return super().save(*args, **kwargs)
+
+class RestaurantOwner(BaseModel):
+	"""docstring for Restaurant Owner"""
+	restaurant = models.ForeignKey(Restaurant, on_delete=models.PROTECT, related_name="ro_restaurant")
+	owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name="ro_owner")
+
+	class Meta:
+		verbose_name_plural = '11. Restaurant Owner'
+	
+	def __str__(self):
+		return str(self.owner)
+
+	def save(self, *args, **kwargs):
+		trackupdate(self)
+		return super().save(*args, **kwargs)
+
+class RestaurantCustomer(BaseModel):
+	"""docstring for Restaurant Customer"""
+	restaurant = models.ForeignKey(Restaurant, on_delete=models.PROTECT, related_name="rc_restaurant")
+	customer = models.ForeignKey(User, on_delete=models.PROTECT, related_name="rc_customer")
+
+	class Meta:
+		verbose_name_plural = '11. Restaurant Customer'
+	
+	def __str__(self):
+		return str(self.customer)
 
 	def save(self, *args, **kwargs):
 		trackupdate(self)

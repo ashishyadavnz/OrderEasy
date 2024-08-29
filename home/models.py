@@ -131,7 +131,7 @@ class Address(BaseModel):
 	
 	def save(self, *args, **kwargs):
 		trackupdate(self)
-		super(Banner, self).save(*args, **kwargs)
+		super(Address, self).save(*args, **kwargs)
 
 class Banner(BaseModel):
 	title = models.CharField(max_length=160)
