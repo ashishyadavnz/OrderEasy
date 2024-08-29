@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
+from django.urls import reverse
 from .models import *
 from django.utils import timezone
 from restaurant.models import *
@@ -190,3 +191,20 @@ def place_order(request):
         return redirect('home:home-page')
 
     return render(request, 'ui/restaurant-card.html')
+
+
+def submit_feedback(request, slug):
+    restaurant = get_object_or_404(Restaurant, slug=slug)  
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        review = request.POST.get('review')
+        
+        feedback = Feedback(
+            user=request.user,
+            rating=rating,
+            review=review
+        )
+        feedback.save()
+        return redirect(reverse('restaurant:restaurant-card', kwargs={'slug': slug}))  
+    return render(request, 'ui/restaurant-card.html', {'restaurant': restaurant})
+    

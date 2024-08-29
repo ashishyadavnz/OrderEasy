@@ -77,7 +77,7 @@
 	</section> -->
 	<!-- new design -->
 	<section class="hero-section about gap" style="background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');">
-		<img src="{{ restaurant.image.url }}" alt="{{restaurant.title}}" class="img-fluid w-100 mt-4" style="height: 400px;">
+		<img src="{{ restaurant.image.url }}" alt="{{restaurant.title}}" class="img-fluid w-100 mt-4" style="height: 400px; object-fit: cover;">
 		<div class="container-fluid mt-5 position-relative">
 			<div class="position-relative">
 				<div class="d-flex flex-column align-items-start justify-content-center" style="position: absolute; bottom: -45px; padding: 30px;">
@@ -111,32 +111,56 @@
 											</div>
 										</div>
 										<div class="d-flex">
-											<butto class="book-table-btn">More Info</butto>
+											<button class="book-table-btn" id="openModal">More Info</button>
 											<button id="bookTableButton" class="book-table-btn">Book A Table</button>
-											<button class="book-table-btn" >Feedback</button>
+											<button class="feedback-btn book-table-btn" id="openFeedbackModal">Feedback</button>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="row" hidden>
-								<div class="restaurant-card" data-latitude="{{ restaurant.latitude }}" data-longitude="{{ restaurant.longitude }}">
-									{% if restaurant.start and restaurant.end %}
-									<p><b>{{ restaurant.start }}</b> To <b>{{ restaurant.end }}</b></p>
-									{% endif %}								
-									<span>
-										{% if restaurant.start|is_restaurant_open:restaurant.end %}
-											<span class="text-success">Open</span>
-										{% else %}
-											<span class="text-danger">Closed</span>
-										{% endif %}
-									</span>
-									{% if restaurant.lowest_price %}
-									<p><strong>Delivery starts from:</strong> ${{ restaurant.lowest_price }}</p>
-									{% else %}
-									<p><strong>Delivery starts from:</strong>0$</p>
-									{% endif %}
-									<p class="distance">Distance: Calculating...</p>
+						</div>
+						<!-- model popup for feedback -->
+						<div id="feedbackModal" class="modal-feedback">
+							<div class="modal-content-feedback">
+							  <span class="close-feedback-btn" id="closeFeedbackModal">&times;</span>
+							  <h3 class="text-warning">Leave Your Feedback</h3>
+							  <form id="feedbackForm" method="POST" action="{% url 'home:submit_feedback' slug=restaurant.slug %}">
+								{% csrf_token %}
+								<div class="form-group">
+								  <label for="rating">Rating:</label>
+								  <input type="number" name="rating" id="rating" class="form-control" min="0" max="5" step="0.1" required>
 								</div>
+								<div class="form-group">
+								  <label for="review">Review:</label>
+								  <textarea name="review" id="review" class="form-control" rows="4"></textarea>
+								</div>
+								<button type="submit" class="btn-submit-feedback">Submit Feedback</button>
+							  </form>
+							</div>
+						  </div>
+						<!-- The Modal -->
+						<div id="infoModal" class="modal">
+							<div class="modal-content">
+							<span class="close-btn" id="closeModal">&times;</span>
+							<div class="restaurant-card" data-latitude="{{ restaurant.latitude }}" data-longitude="{{ restaurant.longitude }}">
+								<h3 class="text-warning">More Information</h3>
+								{% if restaurant.start and restaurant.end %}
+								<p><b>{{ restaurant.start }}</b> To <b>{{ restaurant.end }}</b></p>
+								{% endif %}								
+								<span>
+									{% if restaurant.start|is_restaurant_open:restaurant.end %}
+										<span class="text-success">Open</span>
+									{% else %}
+										<span class="text-danger">Closed</span>
+									{% endif %}
+								</span>
+								{% if restaurant.lowest_price %}
+								<p><strong>Delivery starts from:</strong> ${{ restaurant.lowest_price }}</p>
+								{% else %}
+								<p><strong>Delivery starts from:</strong>0$</p>
+								{% endif %}
+								<p class="distance">Distance: Calculating...</p>
+							</div>
 							</div>
 						</div>
 						<!-- Modal for booking table -->
@@ -396,38 +420,40 @@
 							</ul>
 						</div>
 					</div>
-					<div class="col-lg-9 px-0 ps-md-2 ">
+					<div class="col-lg-9 px-0 ps-md-2">
 						<div class="dish mt-0">
 							<h3 class="mb-4">Cuisines by Category: {{ selected_category|default:"All" }}</h3>
 							<div class="row">
-								{% for menu in menus %}
-									<div class="col-md-4 mt-3">
-										<div class="card shadow-sm mb-4 h-100 hover-card">
-											{% if menu.cuisine.image %}
-												<img src="{{ menu.cuisine.image.url }}" class="card-img-top img-fluid" alt="{{ menu.cuisine.title }}">
-											{% endif %}
-											<div class="card-body">
-												<h5 class="card-title">{{ menu.cuisine.title }}</h5>
-												<p class="card-text">
-													<strong>Price:</strong> ${{ menu.price }}<br>
-													<strong>Available:</strong> {{ menu.available|yesno:"Yes,No" }}<br>
-													{% if menu.start %}
-													<strong>Start Time:</strong> {{ menu.start|date:"H:i" }}<br>
-													{% endif %}
-													{% if menu.end %}
-													<strong>End Time:</strong> {{ menu.end|date:"H:i" }}
-													{% endif %}
-												</p>
-												<button class="btn add-to-cart" style="background-color:#F29F05;" data-id="{{ menu.id }}" data-title="{{ menu.cuisine.title }}" data-price="{{ menu.price }}" data-image="{{ menu.cuisine.image.url }}">Add to Cart</button>
+								{% if selected_category %}
+									{% for menu in menus %}
+										<div class="col-md-4 mt-3">
+											<div class="card shadow-sm mb-4 h-100 hover-card">
+												{% if menu.cuisine.image %}
+													<img src="{{ menu.cuisine.image.url }}" class="card-img-top img-fluid" alt="{{ menu.cuisine.title }}">
+												{% endif %}
+												<div class="card-body">
+													<h5 class="card-title">{{ menu.cuisine.title }}</h5>
+													<p class="card-text">
+														<strong>Price:</strong> ${{ menu.price }}<br>
+														<strong>Available:</strong> {{ menu.available|yesno:"Yes,No" }}<br>
+														{% if menu.start %}
+															<strong>Start Time:</strong> {{ menu.start|date:"H:i" }}<br>
+														{% endif %}
+														{% if menu.end %}
+															<strong>End Time:</strong> {{ menu.end|date:"H:i" }}
+														{% endif %}
+													</p>
+													<button class="btn add-to-cart" style="background-color:#F29F05;" data-id="{{ menu.id }}" data-title="{{ menu.cuisine.title }}" data-price="{{ menu.price }}" data-image="{{ menu.cuisine.image.url }}">Add to Cart</button>
+												</div>
 											</div>
 										</div>
-									</div>
-									{% empty %}
+									{% endfor %}
+								{% else %}
 									<p>No menus available for this category.</p>
-								{% endfor %}
+								{% endif %}
 							</div>
 						</div>
-					</div>
+					</div>								
 				</div>
 			</div>
 		</div>
@@ -529,6 +555,7 @@
 				}
 				
 				updateCartDisplay();
+				document.querySelector("#cart-section").classList.add("show");
 			});
 		});
 	
@@ -702,7 +729,7 @@
 		totalAmountItem.innerHTML = `<p>Total: $${totalAmount.toFixed(2)}</p>`;
 		cartContent.appendChild(totalAmountItem);
 	
-		document.querySelector("#cart-section").classList.add("show");
+		// document.querySelector("#cart-section").classList.add("show");
 	
 		document.querySelectorAll(".increase-qty").forEach(button => {
 			button.addEventListener("click", function() {
@@ -753,5 +780,40 @@
 		});
 	});
 </script>
+<script>
+var modal = document.getElementById("infoModal");
+var btn = document.getElementById("openModal");
+var span = document.getElementById("closeModal");
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+span.onclick = function() {
+  modal.style.display = "none";
+}
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+</script>
+<script>
+var feedbackModal = document.getElementById("feedbackModal");
+var feedbackBtn = document.getElementById("openFeedbackModal");
+var feedbackClose = document.getElementById("closeFeedbackModal");
+feedbackBtn.onclick = function() {
+  feedbackModal.style.display = "block";
+}
+feedbackClose.onclick = function() {
+  feedbackModal.style.display = "none";
+}
+window.onclick = function(event) {
+  if (event.target == feedbackModal) {
+    feedbackModal.style.display = "none";
+  }
+}
+
+</script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 {% endblock %}
