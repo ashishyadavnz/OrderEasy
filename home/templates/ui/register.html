@@ -12,7 +12,7 @@
     }
 
     .registration-container {
-        background: #fff;
+        /* background: #fff; */
         padding: 30px;
         border-radius: 10px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -27,13 +27,13 @@
     }
 
     .form-group input:focus {
-        border-color: #007bff;
+        border-color: #F29F05;
         box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
     }
 
     .btn-register {
-        padding: 10px 15px;
-        background: #007bff;
+        padding: 10px 187px;
+        background: #F29F05;
         border: none;
         border-radius: 5px;
         color: #fff;
@@ -43,9 +43,10 @@
     }
 
     .btn-register:hover {
-        background: #0056b3;
+        background:white;
+        color:#F29F05;
+        border:2px solid #F29F05;
     }
-
     .form-group img {
         margin-top: 10px;
         max-width: 100px;
@@ -53,49 +54,52 @@
         border-radius: 50%;
     }
 </style>
-<div class="container registration-section">
-    <div class="row mx-0  mt-5 ">
-        <div class="registration-container mt-5 ">
-            <h2>Create an Account</h2>
-            {% if success_message %}
-                <p class="success-message text-success">{{ success_message }}</p>
-            {% endif %}
-            <form method="post" action="{% url 'home:register' %}" enctype="multipart/form-data" class="registration-form">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" class="form-control" required>
+<section class="hero-section about gap" style="background-image: url(https://bslthemes.com/html/quickeat/assets/img/background-1.png);">
+
+    <div class="container registration-section">
+        <div class="row mx-0  mt-5 ">
+            <div class="registration-container mt-5 ">
+                <h2>Create an Account</h2>
+                {% if success_message %}
+                    <p class="success-message text-success">{{ success_message }}</p>
+                {% endif %}
+                <form method="post" action="{% url 'home:register' %}" enctype="multipart/form-data" class="registration-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mobile">Mobile</label>
+                        <input type="text" id="mobile" name="mobile" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password</label>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile_picture">Profile Picture</label>
+                        <input type="file" id="profile_picture" name="profile_picture" class="form-control-file">
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" id="guest" name="guest" class="form-check-input">
+                        <label for="guest" class="form-check-label">Sign up as Guest</label>
+                    </div>
+                    <button type="submit" class="btn btn-block btn-register">Sign Up</button>
+                </form>
+                <div class="login-link">
+                    <p>Already have an account? <a href="{% url 'home:login' %}" style="color: #F29F05;">Login here</a>.</p>
                 </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="mobile">Mobile</label>
-                    <input type="text" id="mobile" name="mobile" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="confirm_password">Confirm Password</label>
-                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="profile_picture">Profile Picture</label>
-                    <input type="file" id="profile_picture" name="profile_picture" class="form-control-file">
-                </div>
-                <div class="form-group form-check">
-                    <input type="checkbox" id="guest" name="guest" class="form-check-input">
-                    <label for="guest" class="form-check-label">Sign up as Guest</label>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block btn-register">Sign Up</button>
-            </form>
-            <div class="login-link">
-                <p>Already have an account? <a href="{% url 'home:login' %}">Login here</a>.</p>
-            </div>
         </div>
     </div>
 </div>
+</section>
 {% endblock %}

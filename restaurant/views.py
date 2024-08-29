@@ -3,6 +3,8 @@ from django.contrib import messages
 from .models import *
 from django.utils import timezone
 from django.db.models import Min
+from datetime import datetime, timedelta
+
 
 # Create your views here.
 
@@ -59,6 +61,13 @@ def restaurant(request):
 #         'dinner_items':dinner_items
 #         }
 #     return render(request, 'ui/restaurants-card.html', context)
+def generate_time_slots(start_time, end_time):
+    slots = []
+    current_time = start_time
+    while current_time <= end_time:
+        slots.append(current_time.strftime('%I:%M %p'))
+        current_time += timedelta(hours=1)
+    return slots
 
 def restaurantCard(request, slug=None, category_title=None):
     try:
@@ -81,6 +90,11 @@ def restaurantCard(request, slug=None, category_title=None):
     for category in cat:
         category_cuisines[category.title] = Menu.objects.filter(cuisine__category=category).select_related('cuisine')
     
+    start_time = datetime.combine(datetime.today(), restaurant.start)
+    end_time = datetime.combine(datetime.today(), restaurant.end)
+    time_slots = generate_time_slots(start_time, end_time)
+
+
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
@@ -88,13 +102,24 @@ def restaurantCard(request, slug=None, category_title=None):
         date = request.POST.get('date')
         time = request.POST.get('time')
         member = request.POST.get('member')
+        user = request.user 
+
+        try:
+            time_obj = datetime.strptime(time, '%I:%M %p')
+            time = time_obj.strftime('%H:%M:%S') 
+        except ValueError:
+            messages.error(request, "Invalid time format.")
+            return redirect('restaurant:restaurant-card', slug=slug)
+
+
         reservation = Reservation(
             name=name,
             email=email,
             phone=phone,
             date=date,
             time=time,
-            member=member
+            member=member,
+            users=user,
         )
         reservation.save()
         messages.success(request, "Your table reservation has been successfully made!")
@@ -109,5 +134,6 @@ def restaurantCard(request, slug=None, category_title=None):
         'breakfast_items': breakfast_items,
         'lunch_items': lunch_items,
         'dinner_items': dinner_items,
+        'time_slots' :time_slots
     }
     return render(request, 'ui/restaurants-card.html', context)

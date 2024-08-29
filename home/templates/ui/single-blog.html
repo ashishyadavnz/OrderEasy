@@ -15,11 +15,11 @@
 							<ul class="crumbs d-flex">
 								<li><a href="{% url 'home:home-page' %}">Home</a></li>
 								<li><a href="{% url 'home:home-page' %}"><i class="fa-solid fa-right-long"></i>blog</a></li>
-								<li class="two"><a href="#"><i class="fa-solid fa-right-long"></i>Blog Details</a></li>
+								<li class="two"><a href=""><i class="fa-solid fa-right-long"></i>Blog Details</a></li>
 							</ul>
 							<div class="quickeat">
 								{% for tag in post.tag.all %}
-									<a href="#">{{ tag.title }}</a>
+									<a href="">{{ tag.title }}</a>
 								{% endfor %}
 							</div>
 							<h2>{{ post.title }}</h2>
@@ -62,8 +62,8 @@
 						{{ post.content|safe }}</p><br>
 	  				
 	  				<div class="quickeat tags">
-										<a href="/{% url 'restaurant:restaurant' %}">restaurants</a>
-										<a href="#">cooking</a>
+										<a href="{% url 'restaurant:restaurant' %}">restaurants</a>
+										<a href="">cooking</a>
 									</div>
 		  			</div>
 					  <div class="author-gap">
@@ -111,7 +111,7 @@
 						<li>
 							<div class="comment-text">
 								<p>{{ comment.content }}</p>
-								<a href="#"><span>Reply<i class="fa-solid fa-reply"></i></span></a>
+								<a href=""><span>Reply<i class="fa-solid fa-reply"></i></span></a>
 							</div>
 							<div class="author-name-comment">
 								<div>
@@ -125,7 +125,7 @@
 						
 						{% if comments.count > 4 %}
 						<li class="show-all-button">
-							<h6>{{ comments.count|add:"-4" }} more answers <a href="#"><span>Show All<i class="fa-solid fa-angle-down"></i></span></a></h6>
+							<h6>{{ comments.count|add:"-4" }} more answers <a href=""><span>Show All<i class="fa-solid fa-angle-down"></i></span></a></h6>
 						</li>
 						{% endif %}
 						<li>
