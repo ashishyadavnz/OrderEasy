@@ -4,7 +4,6 @@
 {% block content %}
 <style>
     .login-section {
-        {% comment %} background: linear-gradient(135deg, #f3f4f6, #e0e0e0); {% endcomment %}
         padding: 50px;
         display: flex;
         justify-content: center;
@@ -13,9 +12,9 @@
     }
 
     .login-container {
-        background: #fff;
+        /* background: #fff; */
         padding: 40px;
-        border-radius: 12px;
+        /* border-radius: 12px; */
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         width: 100%;
         max-width: 400px;
@@ -41,7 +40,6 @@
     }
 
     .login-container::before {
-        {% comment %} content: ''; {% endcomment %}
         position: absolute;
         top: 0;
         left: 0;
@@ -73,13 +71,13 @@
     }
 
     .form-group input:focus {
-        border-color: #007bff;
+        border-color:#F29F05;
         box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
     }
 
     .btn-login {
         padding: 12px;
-        background: #007bff;
+        background: #F29F05;
         border: none;
         border-radius: 6px;
         color: #fff;
@@ -90,7 +88,9 @@
     }
 
     .btn-login:hover {
-        background: #0056b3;
+        background: white;
+        color: #F29F05;
+        border:2px solid #F29F05;
         transform: translateY(-2px);
     }
 
@@ -105,37 +105,39 @@
     }
 
     .login-link a {
-        color: #007bff;
+        color: #F29F05;
         text-decoration: none;
         font-weight: 600;
         transition: color 0.3s ease;
     }
 
     .login-link a:hover {
-        color: #0056b3;
+        color: #F29F05;
     }
 </style>
-<div class="container login-section">
-    <div class="login-container">
-        <h2>Login to Your Account</h2>
-        {% if error_message %}
-            <p class="error-message text-danger">{{ error_message }}</p>
-        {% endif %}
-        <form method="post" action="{% url 'home:login' %}" class="login-form">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" class="form-control" required>
+<section class="hero-section about gap" style="background-image: url(https://bslthemes.com/html/quickeat/assets/img/background-1.png);">
+    <div class="container login-section">
+        <div class="login-container">
+            <h2>Login to Your Account</h2>
+            {% if error_message %}
+                <p class="error-message text-danger">{{ error_message }}</p>
+            {% endif %}
+            <form method="post" action="{% url 'home:login' %}" class="login-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn  btn-login">Login</button>
+            </form>
+            <div class="login-link">
+                <p>Don't have an account? <a href="{% url 'home:register' %}">Sign up here</a>.</p>
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-login">Login</button>
-        </form>
-        <div class="login-link">
-            <p>Don't have an account? <a href="{% url 'home:register' %}">Sign up here</a>.</p>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}

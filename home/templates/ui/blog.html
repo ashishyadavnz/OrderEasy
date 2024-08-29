@@ -46,7 +46,7 @@
 							<img alt="{{ post.title }}" class="img-fluid" src="{{ post.thumbnail.url }}" />
 							<div class="quickeat">
 								{% for tag in post.tag.all %}
-									<a href="#">{{ tag.title }}</a>
+									<a href="">{{ tag.title }}</a>
 								{% endfor %}
 							</div>
 						</div>
@@ -55,7 +55,7 @@
 							<p>
 								{{ post.content|truncatechars:240|safe }}
 							</p>
-							<a href="#">Read More<i class="fa-solid fa-arrow-right"></i></a>
+							<a href="">Read More<i class="fa-solid fa-arrow-right"></i></a>
 							<ul class="data">
 								<li>
 									<h6><i class="fa-solid fa-user"></i> by {{ post.author.username }}</h6>
@@ -79,7 +79,7 @@
                             <img alt="{{ post.title }}" src="{{ post.thumbnail.url }}" style="object-fit: cover;"/>
                             <div class="quickeat">
                                 {% for tag in post.tag.all %}
-                                    <a href="#">{{ tag.title }}</a>
+                                    <a href="">{{ tag.title }}</a>
                                 {% endfor %}
                             </div>
 							<h3>{{ post.title }}</h3>

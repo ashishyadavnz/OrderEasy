@@ -6,8 +6,8 @@
 <div class="menu-layer ">
   <!-- hero-section -->
 	<section class="hero-section gap" style="background-image: url(https://bslthemes.com/html/quickeat/assets/img/background-1.png);">
-		<div class="container mt-5 ">
-			<div class="row align-items-center mx-0">
+		<div class="container mt-5">
+			<div class="row align-items-center mx-0 pt-5">
 				<div class="col-lg-6" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
 					<div class="restaurant">
 						<h1>The Best restaurants
@@ -23,7 +23,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-6" data-aos="fade-up"  data-aos-delay="300" data-aos-duration="400">
+				<div class="col-lg-6 mt-5" data-aos="fade-up"  data-aos-delay="300" data-aos-duration="400">
 					<div class="img-restaurant">
 						<img alt="man" src="{% static 'images/photo-1.png' %}">
 						<div class="wilmington">
@@ -141,7 +141,7 @@
 					<div class="logos-card restaurant-page ">
 						<img alt="{{ restaurant.title }}" src="{{ restaurant.logo.url }}" class="img-fluid" style="width: 100px; height: 100px; object-fit: cover;">
 						<div class="cafa">
-							<h4><a href="#">{{ restaurant.title }}</a></h4>
+							<h4><a href="">{{ restaurant.title }}</a></h4>
 							<div>
 								{% for i in restaurant.rating|range_custom %}
 									<i class="fa-solid fa-star"></i>
@@ -152,7 +152,7 @@
 							</div>
 							<div class="cafa-button">
 								{% for categorys in cat %}
-								<a class="end" href="#">{{categorys.title}}</a>
+									<a class="end" href="#">{{categorys.title}}</a>
 								{% endfor %}
 							</div>
 							<p>{{ restaurant.content }}</p>
@@ -300,7 +300,7 @@
 						<img alt="{{post.title}}"style="height: 280px !important;" src="{{post.thumbnail.url}}" class="w-100"	>
 						<div class="quickeat">
 							{% for tag in post.tag.all %}
-								<a href="#">{{ tag.title }}</a>
+								<a href="">{{ tag.title }}</a>
 							{% endfor %}
 						</div>
 						<h3>{{post.title}}</h3>
@@ -328,7 +328,7 @@
 							<div class="news-post-two-data">
 								<div class="quickeat">
 									{% for tag in post.tag.all %}
-										<a href="#">{{ tag.title }}</a>
+										<a href="">{{ tag.title }}</a>
 									{% endfor %}
 								</div>
 								<h6><a href="single-blog.html">{{post.title }}</a></h6>
