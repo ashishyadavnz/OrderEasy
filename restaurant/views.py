@@ -91,7 +91,11 @@ def restaurantCard(request, slug=None, category_title=None):
         first_category = cat.first()
         category_title = first_category.title if first_category else None
 
-    selected_category = get_object_or_404(Category, title=category_title) if category_title else None
+    selected_category = None
+    if category_title:
+        category_queryset = Category.objects.filter(title=category_title)
+        if category_queryset.exists():
+            selected_category = category_queryset.first()  # Select the first category found
 
     if selected_category:
         food_items = FoodItem.objects.filter(category=selected_category, restaurant=restaurant)
@@ -101,13 +105,14 @@ def restaurantCard(request, slug=None, category_title=None):
 
     category_cuisines = {}
     for category in cat:
-
         category_food_items = FoodItem.objects.filter(category=category, restaurant=restaurant)
         category_cuisine_ids = category_food_items.values_list('cuisine', flat=True)
         category_cuisines[category.title] = Cuisine.objects.filter(id__in=category_cuisine_ids).distinct()
+
     start_time = datetime.combine(datetime.today(), restaurant.start) if restaurant.start else None
     end_time = datetime.combine(datetime.today(), restaurant.end) if restaurant.end else None
     time_slots = generate_time_slots(start_time, end_time) if start_time and end_time else []
+
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
@@ -144,6 +149,5 @@ def restaurantCard(request, slug=None, category_title=None):
         'cuisines': cuisines,
         'selected_category': category_title,
         'time_slots': time_slots,
-
     }
     return render(request, 'ui/restaurants-card.html', context)
