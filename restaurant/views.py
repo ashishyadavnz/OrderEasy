@@ -4,12 +4,23 @@ from .models import *
 from django.utils import timezone
 from django.db.models import Min
 from datetime import datetime, timedelta
-
+from django.db.models import F
+from django.db.models.functions import ACos, Cos, Radians, Sin
 
 # Create your views here.
 
 def restaurant(request):
-    restaurants = Restaurant.objects.all()
+    user_lat = float(request.GET.get('latitude', 0))
+    user_lon = float(request.GET.get('longitude', 0))
+
+    # Calculate the distance using Haversine formula
+    restaurants = Restaurant.objects.annotate(
+        distance=ACos(
+            Sin(Radians(user_lat)) * Sin(Radians(F('latitude'))) +
+            Cos(Radians(user_lat)) * Cos(Radians(F('latitude'))) * Cos(Radians(F('longitude')) - Radians(user_lon))
+        ) * 6371  # Earth radius in kilometers
+    ).order_by('distance')
+
     cat = Category.objects.all()
     current_time = timezone.now().time()  
     for restaurant in restaurants:

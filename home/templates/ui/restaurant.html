@@ -73,7 +73,7 @@
 			<div class="row mx-0">
 				{% if restaurants %}
 					{% for restaurant in restaurants %}
-						<div class="col-lg-6 restaurant-card" 
+						<div class="col-lg-6 restaurant-card mb-3" 
 							 data-latitude="{{ restaurant.latitude }}" 
 							 data-longitude="{{ restaurant.longitude }}"
 							 data-aos="flip-up" 
@@ -96,7 +96,7 @@
 										<a class="end" href="#">{{ categorys.title }}</a>
 										{% endfor %}
 									</div>
-									<p>{{ restaurant.content }}</p>
+									<p>{{ restaurant.content | truncatechars:150  }}</p>
 									{% if restaurant.start and restaurant.end %}
 									<p><b>{{ restaurant.start }}</b> To <b>{{ restaurant.end }}</b></p>
 									{% endif %}

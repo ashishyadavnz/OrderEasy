@@ -3,14 +3,14 @@ from django.contrib import messages
 from django.urls import reverse
 from .models import *
 from django.utils import timezone
-from restaurant.models import *
-from blog.models import *
+from restaurant.models import Restaurant, Category,Cuisine 
+from blog.models import Post
 from django.contrib.auth import authenticate,logout, login as auth_login
 
 
 def home(request):
     restaurants = Restaurant.objects.all()
-    cat = Category.objects.all()
+    categories = Category.objects.all()
     posts = Post.objects.all()
     testimonials = Testimonial.objects.all()
     # cuisines = Cuisine.objects.filter(menu_cuisine__restaurant__in=restaurants).distinct()
@@ -18,7 +18,7 @@ def home(request):
 
     return render(request, 'ui/indexThem.html', {
         'restaurants': restaurants,
-        'cat': cat,
+        'categories': categories,
         'posts': posts,
         'testimonials': testimonials,
         'cuisines': cuisines 

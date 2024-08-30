@@ -55,7 +55,7 @@
 							<p>
 								{{ post.content|truncatechars:240|safe }}
 							</p>
-							<a href="">Read More<i class="fa-solid fa-arrow-right"></i></a>
+							<a href="{% url 'blog:blog_detail' post.slug %}">Read More<i class="fa-solid fa-arrow-right"></i></a>
 							<ul class="data">
 								<li>
 									<h6><i class="fa-solid fa-user"></i> by {{ post.author.username }}</h6>
