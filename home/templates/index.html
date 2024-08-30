@@ -366,7 +366,7 @@ body.menu-open {
     background-color: #ff4500;
 }
 
-/* Modal Styling */
+{% comment %} /* Modal Styling */
 .modal {
     display: none;
     position: fixed;
@@ -389,7 +389,7 @@ body.menu-open {
     width: 80%;
     max-width: 600px;
     animation: slideIn 0.5s ease;
-}
+} {% endcomment %}
 
 /* Animations */
 @keyframes fadeIn {
@@ -528,7 +528,7 @@ body.menu-open {
 	background-color: orange;
 }
 /* model for more information */
-.modal {
+{% comment %} .modal {
 	display: none; 
 	position: fixed;
 	z-index: 1; 
@@ -554,7 +554,7 @@ body.menu-open {
 	font-size: 28px;
 	font-weight: bold;
   }
-  
+   {% endcomment %}
   .close-btn:hover,
   .close-btn:focus {
 	color: black;
@@ -612,7 +612,57 @@ body.menu-open {
   color: #F29F05;
   border: 2px solid #F29F05;
 }
+.carousel-control-prev,
+.carousel-control-next {
+    width: 50px;
+    height: 50px;
+    background-color:#F29F05; 
+    border-radius: 50%; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease; 
+}
 
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    background-color: white;
+    border: 1px solid #F29F05;
+	color: #F29F05;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(100%);
+    width: 20px;
+    height: 20px;
+}
+
+.carousel-control-prev-icon {
+    margin-right: 10px;
+}
+
+.carousel-control-next-icon {
+    margin-left: 10px; 
+}
+.carousel-control-prev .visually-hidden,
+.carousel-control-next .visually-hidden {
+    font-size: 0;
+    color: transparent;
+}
+.carousel-control-prev:focus,
+.carousel-control-next:focus {
+    outline: 2px solid #fff; 
+    outline-offset: 4px;
+}
+.carousel-control-prev {
+    left: 96px;
+    top: 100px;
+}
+.carousel-control-next {
+    right: 96px;
+    top: 110px;
+}
 	</style>
 </head>
 

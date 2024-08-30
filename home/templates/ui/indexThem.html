@@ -95,6 +95,7 @@
 	</section>
 	
 	
+	
 	<section class="works-section gap no-top">
 		<div class="container">
 			<div class="hading" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
@@ -141,7 +142,7 @@
 					<div class="logos-card restaurant-page ">
 						<img alt="{{ restaurant.title }}" src="{{ restaurant.logo.url }}" class="img-fluid" style="width: 100px; height: 100px; object-fit: cover;">
 						<div class="cafa">
-							<h4><a href="">{{ restaurant.title }}</a></h4>
+							<h4><a  href="{% url 'restaurant:restaurant-card' restaurant.slug %}">{{ restaurant.title }}</a></h4>
 							<div>
 								{% for i in restaurant.rating|range_custom %}
 									<i class="fa-solid fa-star"></i>
@@ -152,7 +153,7 @@
 							</div>
 							<div class="cafa-button">
 								{% for categorys in     categories %}
-									<a class="end" href="#">{{categorys.title}}</a>
+									<a class="end" href="">{{categorys.title}}</a>
 								{% endfor %}
 							</div>
 							<p>{{ restaurant.content | truncatechars:150 }}</p>
@@ -173,9 +174,9 @@
 				<div class="col-lg-5" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
 					<div class="food-photo-section">
 						<img alt="img" src="{% static 'images/photo-3.png' %}">
-						<a href="#" class="one"><i class="fa-solid fa-burger"></i>Burgers</a>
-						<a href="#" class="two"><i class="fa-solid fa-cheese"></i>Steaks</a>
-						<a href="#" class="three"><i class="fa-solid fa-pizza-slice"></i>Pizza</a>
+						<a href="" class="one"><i class="fa-solid fa-burger"></i>Burgers</a>
+						<a href="" class="two"><i class="fa-solid fa-cheese"></i>Steaks</a>
+						<a href="" class="three"><i class="fa-solid fa-pizza-slice"></i>Pizza</a>
 					</div>
 				</div>
 				<div class="col-lg-6 offset-lg-1" data-aos="fade-up" data-aos-delay="300" data-aos-duration="400">
