@@ -26,9 +26,9 @@
 				<div class="col-lg-6" data-aos="flip-up" data-aos-delay="300" data-aos-duration="400">
 					<div class="restaurants-girl-img blog food-photo-section">
 						<img alt="man" src="https://bslthemes.com/html/quickeat/assets/img/blog-1.png" />
-						<a href="#" class="one"><i class="fa-brands fa-facebook-f"></i></a>
-						<a href="#" class="two"><i class="fa-brands fa-instagram"></i></a>
-						<a href="#" class="three"><i class="fa-brands fa-twitter"></i></a>
+						<a href="" class="one"><i class="fa-brands fa-facebook-f"></i></a>
+						<a href="" class="two"><i class="fa-brands fa-instagram"></i></a>
+						<a href="" class="three"><i class="fa-brands fa-twitter"></i></a>
 					</div>
 				</div>
 			</div>
@@ -43,7 +43,7 @@
 				<div class="col-lg-12 col-md-12 col-sm-12 col-12" data-aos="fade-up" data-aos-delay="200" data-aos-duration="300">
 					<div class="news-posts-one full">
 						<div class="blog-post-data-img">
-							<img alt="{{ post.title }}" class="img-fluid" src="{{ post.thumbnail.url }}" />
+							<img alt="{{ post.title }}" class="img-fluid" src="{{ post.thumbnail.url }}" style="object-fit: cover; width: 90%;" />
 							<div class="quickeat">
 								{% for tag in post.tag.all %}
 									<a href="">{{ tag.title }}</a>
@@ -76,7 +76,7 @@
                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 aos-init aos-animate" data-aos="flip-up" data-aos-delay="200" data-aos-duration="300">
                     <div class="news-posts-one full">
                         <div class="news-posts-one blog">
-                            <img alt="{{ post.title }}" src="{{ post.thumbnail.url }}" style="object-fit: cover;"/>
+                            <img alt="{{ post.title }}" src="{{ post.thumbnail.url }}" style="object-fit: cover;" class="img-fluid" />
                             <div class="quickeat">
                                 {% for tag in post.tag.all %}
                                     <a href="">{{ tag.title }}</a>
@@ -102,7 +102,7 @@
 				{% endif %}
             {% endfor %}
 				<div class="button-gap" data-aos="fade-up" data-aos-delay="200" data-aos-duration="300">
-					<a href="#" class="button button-2 non">See All<i class="fa-solid fa-arrow-right"></i></a>
+					<a href="" class="button button-2 non">See All<i class="fa-solid fa-arrow-right"></i></a>
 				</div>
 			</div>
 		</div>

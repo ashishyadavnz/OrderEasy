@@ -12,13 +12,11 @@ from django.db.models.functions import ACos, Cos, Radians, Sin
 def restaurant(request):
     user_lat = float(request.GET.get('latitude', 0))
     user_lon = float(request.GET.get('longitude', 0))
-
-    # Calculate the distance using Haversine formula
     restaurants = Restaurant.objects.annotate(
         distance=ACos(
             Sin(Radians(user_lat)) * Sin(Radians(F('latitude'))) +
             Cos(Radians(user_lat)) * Cos(Radians(F('latitude'))) * Cos(Radians(F('longitude')) - Radians(user_lon))
-        ) * 6371  # Earth radius in kilometers
+        ) * 6371
     ).order_by('distance')
 
     cat = Category.objects.all()
@@ -86,23 +84,27 @@ def restaurantCard(request, slug=None, category_title=None):
         restaurant = Restaurant.objects.get(slug=slug)
     except Restaurant.DoesNotExist:
         return redirect('restaurant:restaurant-card', slug=Restaurant.objects.first().slug)
+
     cat = Category.objects.all()
-    if category_title:
-        selected_category = get_object_or_404(Category, title=category_title)
+
+    if not category_title:
+        first_category = cat.first()
+        category_title = first_category.title if first_category else None
+
+    selected_category = get_object_or_404(Category, title=category_title) if category_title else None
+
+    if selected_category:
         food_items = FoodItem.objects.filter(category=selected_category, restaurant=restaurant)
-        cuisines = food_items.values_list('cuisine', flat=True)
+        cuisines = Cuisine.objects.filter(fooditems_cuisine__in=food_items).distinct()
     else:
-        selected_category = None
-        food_items = FoodItem.objects.filter(restaurant=restaurant)
-        cuisines = food_items.values_list('cuisine', flat=True)
-    menus = Menu.objects.filter(cuisine__in=cuisines).select_related('cuisine')
+        cuisines = []
+
     category_cuisines = {}
     for category in cat:
 
         category_food_items = FoodItem.objects.filter(category=category, restaurant=restaurant)
         category_cuisine_ids = category_food_items.values_list('cuisine', flat=True)
-        category_cuisines[category.title] = Menu.objects.filter(cuisine__in=category_cuisine_ids).select_related('cuisine')
-
+        category_cuisines[category.title] = Cuisine.objects.filter(id__in=category_cuisine_ids).distinct()
     start_time = datetime.combine(datetime.today(), restaurant.start) if restaurant.start else None
     end_time = datetime.combine(datetime.today(), restaurant.end) if restaurant.end else None
     time_slots = generate_time_slots(start_time, end_time) if start_time and end_time else []
@@ -139,7 +141,7 @@ def restaurantCard(request, slug=None, category_title=None):
         'restaurant': restaurant,
         'cat': cat,
         'category_cuisines': category_cuisines,
-        'menus': menus,
+        'cuisines': cuisines,
         'selected_category': category_title,
         'time_slots': time_slots,
 

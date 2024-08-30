@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.urls import reverse
 from .models import *
 from django.utils import timezone
-from restaurant.models import Restaurant, Category,Cuisine 
+from restaurant.models import FoodItem, Restaurant, Category,Cuisine 
 from blog.models import Post
 from django.contrib.auth import authenticate,logout, login as auth_login
 
@@ -14,7 +14,7 @@ def home(request):
     posts = Post.objects.all()
     testimonials = Testimonial.objects.all()
     # cuisines = Cuisine.objects.filter(menu_cuisine__restaurant__in=restaurants).distinct()
-    cuisines = Cuisine.objects.filter(status='Active')
+    cuisines = Cuisine.objects.filter(fooditems_cuisine__isnull=False).distinct()
 
     return render(request, 'ui/indexThem.html', {
         'restaurants': restaurants,
@@ -26,15 +26,14 @@ def home(request):
 
 def restaurants_by_cuisine(request, cuisine_slug):
     cuisine = get_object_or_404(Cuisine, slug=cuisine_slug)
-    restaurants = Restaurant.objects.filter(menu_restaurant__cuisine=cuisine).distinct()
+    food_items = FoodItem.objects.filter(cuisine=cuisine)
+    restaurants = Restaurant.objects.filter(fooditems_restaurant__in=food_items).distinct()
     cat = Category.objects.all()
-
     return render(request, 'ui/restaurant.html', {
         'restaurants': restaurants,
         'cuisine': cuisine,
         'cat': cat,
     })
-
 
 def about(request):
     testimonials = Testimonial.objects.all()
