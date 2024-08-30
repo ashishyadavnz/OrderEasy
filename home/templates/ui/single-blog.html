@@ -123,16 +123,20 @@
 						</li>
 						{% endfor %}
 						
-						{% if comments.count > 4 %}
-						<li class="show-all-button">
-							<h6>{{ comments.count|add:"-4" }} more answers <a href=""><span>Show All<i class="fa-solid fa-angle-down"></i></span></a></h6>
-						</li>
-						{% endif %}
-						<li>
-							<div class="button-gap">
-								<a href="" class="button button-2 non">See all comments<i class="fa-solid fa-angle-down"></i></a>
-							</div>
-						</li>
+						
+					{% if comments.count > 4 %}
+					<li class="show-all-button">
+						<h6>{{ comments.count|add:"-4" }} more answers <a href=""><span>Show All<i class="fa-solid fa-angle-down"></i></span></a></h6>
+					</li>
+					{% endif %}
+
+					{% if comments.count > 0 %}  
+					<li>
+						<div class="button-gap">
+							<a href="" class="button button-2 non">See all comments<i class="fa-solid fa-angle-down"></i></a>
+						</div>
+					</li>
+					{% endif %}
 					</ul>
 					<div class="comment">
 						<h2>Leave your comment</h2>
