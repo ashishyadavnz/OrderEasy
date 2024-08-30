@@ -70,6 +70,7 @@ def restaurant(request):
 #         'dinner_items':dinner_items
 #         }
 #     return render(request, 'ui/restaurants-card.html', context)
+
 def generate_time_slots(start_time, end_time, interval=60):
     slots = []
     current_time = start_time
@@ -100,6 +101,7 @@ def restaurantCard(request, slug=None, category_title=None):
 
     category_cuisines = {}
     for category in cat:
+
         category_food_items = FoodItem.objects.filter(category=category, restaurant=restaurant)
         category_cuisine_ids = category_food_items.values_list('cuisine', flat=True)
         category_cuisines[category.title] = Cuisine.objects.filter(id__in=category_cuisine_ids).distinct()
@@ -142,5 +144,6 @@ def restaurantCard(request, slug=None, category_title=None):
         'cuisines': cuisines,
         'selected_category': category_title,
         'time_slots': time_slots,
+
     }
     return render(request, 'ui/restaurants-card.html', context)
