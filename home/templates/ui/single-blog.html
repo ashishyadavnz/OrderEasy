@@ -39,9 +39,9 @@
 					<div class="col-lg-12">
 						<div class="img-blog-full">
 							{% if post.featured %}
-								<img alt="{{ post.title }}" src="{{ post.featured.url }}" class="img-fluid">
+								<img alt="{{ post.title }}" src="{{ post.featured.url }}" class="img-fluid" width="100%">
 							{% else %}
-								<img alt="{{ post.title }}" src="{% static 'path/to/default_image.jpg' %}" class="img-fluid">
+								<img alt="{{ post.title }}" src="{% static 'path/to/default_image.jpg' %}" class="img-fluid object-fit" width="100%"   height:"600px">
 							{% endif %}
 						</div>
 						<div class="post-content">
@@ -97,7 +97,7 @@
 										<h6>{{ next_post.title |truncatechars:30 }}</h6>
 										<a href="{% url 'blog:blog_detail' next_post.slug %}" >Next Post by this author</a>
 									</div>
-									<img alt="{{ next_post.title }}" src="{{ next_post.thumbnail.url }}" class="img-fluid" style="height:80px !important">
+									<img alt="{{ next_post.title }}" src="{{ next_post.thumbnail.url }}" class="img-fluid" style="height:80px !important" >
 								</div>
 								{% endif %}
 							</div>
@@ -156,7 +156,14 @@
 							</div>
 							<div class="row">
 								<div class="col-lg-12">
-									<input type="text" name="mobile" placeholder="Mobile Number">
+									<input type="Number" name="mobile" placeholder="Mobile Number" style="width: 100%;
+									height: 60px;
+									border-radius: 10px;
+									border: 1px solid #CFCFCF;
+									color: #CFCFCF;
+									outline: none;
+									padding-left: 20px;
+									margin: 20px 0;">
 								</div>
 							</div>
 							<button class="button-price">Publish a comment</button>

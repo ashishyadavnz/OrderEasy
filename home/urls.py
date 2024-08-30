@@ -15,7 +15,6 @@ urlpatterns = [
         path('register/',views.register,name='register'),
         path('login/', views.login, name='login'),
         path('logout/', views.user_logout, name='logout'),
-        
-
-
+        path('<slug:slug>/submit-feedback/', views.submit_feedback, name='submit_feedback'),
+   
 ]
