@@ -617,10 +617,9 @@
 	
 		function updateCartDisplay() {
 			const cartIcon = document.querySelector("#desktop-menu i");
-			cartIcon.textContent = `(${cart.length})`;  // Update cart icon to show the number of items
-			
+			cartIcon.textContent = `(${cart.length})`;  
 			const cartContent = document.querySelector("#cart-content #cart-items");
-			cartContent.innerHTML = "";  // Clear existing content
+			cartContent.innerHTML = ""; 
 	
 			cart.forEach(item => {
 				const cartItem = document.createElement("div");
@@ -869,6 +868,12 @@ window.onclick = function(event) {
   }
 }
 
+</script>
+<script>
+    const phoneInput = document.getElementById('phone');
+    phoneInput.addEventListener('input', function (e) {
+        this.value = this.value.replace(/e|\./g, '');
+    });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
