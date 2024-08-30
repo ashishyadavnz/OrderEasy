@@ -72,6 +72,7 @@ def restaurant(request):
 #         'dinner_items':dinner_items
 #         }
 #     return render(request, 'ui/restaurants-card.html', context)
+
 def generate_time_slots(start_time, end_time, interval=60):
     slots = []
     current_time = start_time
@@ -97,6 +98,7 @@ def restaurantCard(request, slug=None, category_title=None):
     menus = Menu.objects.filter(cuisine__in=cuisines).select_related('cuisine')
     category_cuisines = {}
     for category in cat:
+
         category_food_items = FoodItem.objects.filter(category=category, restaurant=restaurant)
         category_cuisine_ids = category_food_items.values_list('cuisine', flat=True)
         category_cuisines[category.title] = Menu.objects.filter(cuisine__in=category_cuisine_ids).select_related('cuisine')
@@ -104,7 +106,6 @@ def restaurantCard(request, slug=None, category_title=None):
     start_time = datetime.combine(datetime.today(), restaurant.start) if restaurant.start else None
     end_time = datetime.combine(datetime.today(), restaurant.end) if restaurant.end else None
     time_slots = generate_time_slots(start_time, end_time) if start_time and end_time else []
-
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
@@ -141,5 +142,6 @@ def restaurantCard(request, slug=None, category_title=None):
         'menus': menus,
         'selected_category': category_title,
         'time_slots': time_slots,
+
     }
     return render(request, 'ui/restaurants-card.html', context)
