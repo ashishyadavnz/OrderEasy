@@ -124,7 +124,7 @@ def register(request):
         )
         
         messages.success(request, "Account created successfully")
-        return redirect('home:login')
+        return redirect('restaurant:restaurant')
 
     return render(request, 'ui/register.html')
 
@@ -142,7 +142,7 @@ def login(request):
             return redirect('home:home-page')
         else:
             messages.error(request, "Invalid username or password")
-            return redirect('home:login')
+            return redirect('restaurant:restaurant')
 
     return render(request, 'ui/login.html')
 

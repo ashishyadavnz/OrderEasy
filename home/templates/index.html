@@ -682,6 +682,56 @@ body.menu-open {
 .btn-close {
 	outline: none; 
 }
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    padding: 10px;
+    list-style: none;
+}
+
+.pagination .page-item {
+    margin: 0 5px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.pagination .page-item .page-link {
+    color: #F29F05;
+    background-color: #fff;
+    border: 1px solid #F29F05;
+    padding: 10px 15px;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.pagination .page-item.active .page-link {
+    color: #fff;
+    background-color: #F29F05;
+    border-color: #F29F05;
+    box-shadow: 0 0 10px rgba(242, 159, 5, 0.5);
+}
+
+.pagination .page-item:hover .page-link,
+.pagination .page-item:focus .page-link {
+    background-color: #F29F05;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(242, 159, 5, 0.5);
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #ddd;
+    background-color: #fff;
+    border-color: #ddd;
+    cursor: not-allowed;
+}
+.pagination .page-item:hover {
+    transform: translateY(-3px);
+}
+
+.pagination .page-item:active {
+    transform: translateY(0);
+}
 	</style>
 </head>
 

@@ -3,12 +3,23 @@ from django.contrib import messages
 from .models import *
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 # Create your views here.
+
 
 def blog(request):
     posts = Post.objects.all() 
-    return render(request, 'ui/blog.html',{'posts':posts})
+    paginator = Paginator(posts, 4)  
+    
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    
+    return render(request, 'ui/blog.html', {'posts': posts})
 
 def blogDetails(request, slug):
     post = get_object_or_404(Post, slug=slug)
