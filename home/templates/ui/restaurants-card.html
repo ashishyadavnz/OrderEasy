@@ -83,7 +83,7 @@
 				<div class="d-flex flex-column align-items-start justify-content-center" style="position: absolute; bottom: -45px; padding: 30px;">
 					<ul class="breadcrumb p-0 mb-5 d-flex align-items-center" style="background: none;">
 						<li class="breadcrumb-item"><a href="{% url 'home:home-page' %}" class="text-decoration-none" style="color: white !important;">Home</a></li>
-						<li class="breadcrumb-item"><a href="restaurant/" class="text-decoration-none" style="color: white !important;"><i class="fa-solid fa-right-long mx-1"></i>Restaurants</a></li>
+						<li class="breadcrumb-item"><a href="{% url 'restaurant:restaurant' %}" class="text-decoration-none" style="color: white !important;"><i class="fa-solid fa-right-long mx-1"></i>Restaurants</a></li>
 						<li class="two">
 							<a href="{% url 'restaurant:restaurant-card' restaurant.slug %}" style="color: white !important;">
 								<i class="fa-solid fa-right-long"></i> <b>{{ restaurant.title }}</b>
@@ -111,9 +111,9 @@
 											</div>
 										</div>
 										<div class="d-flex">
-											<button class="book-table-btn" id="openModal" data-bs-toggle="modal" data-bs-target="#exampleModal2">More Info</button>
-											<button type="button" id="bookTableButton" class="book-table-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Book A Table</button>
-											<button class="feedback-btn book-table-btn" id="openFeedbackModal">Feedback</button>
+											<button class="book-table-btn me-2" id="openModal" data-bs-toggle="modal" data-bs-target="#exampleModal2">More Info</button>
+											<button type="button" id="bookTableButton" class="book-table-btn me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">Book A Table</button>
+											<button class="feedback-btn book-table-btn me-2" id="openFeedbackModal">Feedback</button>
 										</div>
 									</div>
 								</div>
@@ -180,25 +180,25 @@
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 								</div>
 								<div class="modal-body">
-									<form method="post" class="booking-form select-date-time-form" id="reservationForm" novalidate="novalidate">
+									<form method="post" class="booking-form select-date-time-form" id="reservationForm" novalidate>
 										{% csrf_token %}
 										<div class="form-group">
 											<p>Please select the number of people and the required date and time</p>
 										</div>
 										<div class="form-group">
-											<input type="text" name="name" id="name" placeholder="Your Name" class="form-control required">
+											<input type="text" name="name" id="name" placeholder="Your Name" class="form-control required" required>
 										</div>
 										<div class="form-group">
-											<input type="email" name="email" id="email" placeholder="Your Email" class="form-control required">
+											<input type="email" name="email" id="email" placeholder="Your Email" class="form-control required" required>
 										</div>
 										<div class="form-group">
-											<input type="number" name="phone" id="phone" placeholder="Your Phone" class="form-control required">
+											<input type="number" name="phone" id="phone" placeholder="Your Phone" class="form-control required" required>
 										</div>
 										<div class="form-group">
-											<input type="text" id="BookingDate" class="form-control input datepicker checkin required" name="date" placeholder="Choose date">
-										</div>									
+											<input type="text" id="BookingDate" class="form-control input datepicker checkin required" name="date" placeholder="Choose date" required>
+										</div>
 										<div class="form-group">
-											<select class="form-control required" id="BookingTime" name="time">
+											<select class="form-control required" id="BookingTime" name="time" required>
 												<option value="">Select time</option>
 												{% for slot in time_slots %}
 													<option value="{{ slot }}">{{ slot }}</option>
@@ -206,16 +206,17 @@
 											</select>
 										</div>
 										<div class="form-group">
-											<select name="member" id="Persons" class="form-control">
+											<select name="member" id="Persons" class="form-control" required>
+												<option value="">Select number of people</option>
 												<option value="1">1 person</option>
 												<option selected value="2">2 people</option>
 												<option value="3">3 people</option>
 											</select>
 										</div>
 										<div class="form-group">
-											<button class="btn-submit" type="submit">Next</button>
+											<button class="btn-submit" type="submit" disabled>Submit</button>
 										</div>
-									</form>
+									</form>									
 								</div>
 							</div>
 							</div>
@@ -489,16 +490,21 @@
 												{% endif %}
 												<div class="card-body">
 													<h5 class="card-title">{{ cuisine.title }}</h5>
-													<p class="card-text">
-														<strong>Price:</strong> ${{ menu.price }}<br>
-														<strong>Available:</strong> {{ menu.available|yesno:"Yes,No" }}<br>
-														{% if menu.start %}
-															<strong>Start Time:</strong> {{ menu.start|date:"H:i" }}<br>
-														{% endif %}
-														{% if menu.end %}
-															<strong>End Time:</strong> {{ menu.end|date:"H:i" }}
-														{% endif %}
-													</p>
+													<p class="card-title">{{ cuisine.content | truncatechars:200 |safe }}</p>
+				
+													{% for food_item in cuisine.fooditems_cuisine.all %}
+														<p class="card-text">
+															<strong>Price:</strong> ${{ food_item.price }}<br>
+															<strong>Available:</strong> {{ food_item.available|yesno:"Yes,No" }}<br>
+															{% if food_item.start %}
+																<strong>Start Time:</strong> {{ food_item.start|date:"H:i" }}<br>
+															{% endif %}
+															{% if food_item.end %}
+																<strong>End Time:</strong> {{ food_item.end|date:"H:i" }}
+															{% endif %}
+														</p>
+													{% endfor %}
+													
 													<button class="btn add-to-cart" style="background-color:#F29F05;" data-id="{{ cuisine.id }}" data-title="{{ cuisine.title }}" data-image="{{ cuisine.image.url }}">Add to Cart</button>
 												</div>
 											</div>
@@ -510,7 +516,7 @@
 							</div>
 						</div>
 					</div>                              
-				</div>				
+				</div>								
 			</div>
 		</div>
 	</section>
@@ -527,13 +533,13 @@
                         <h3>{{ item.cuisine.title }}</h3>
                         <div class="dish-icon">
                             <div class="cafa-button">
-                                <a href="">{{ item.cuisine.category.title }}</a>
+                                <a href="javascript:void(0)">{{ item.cuisine.category.title }}</a>
                                 {% comment %} <a href="">{{ item.cuisine.title }}</a> {% endcomment %}
                             </div>
                             <div class="dish-icon end">
                                 <i class="info fa-solid fa-circle-info"></i>
                                 <div class="star">
-                                    <a href=""><i class="fa-solid fa-heart"></i></a>
+                                    <a href="javascript:void(0)"><i class="fa-solid fa-heart"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -551,8 +557,8 @@
                         <i class="info2 fa-solid fa-xmark"></i>
                         <h5>{{ item.name }}</h5>
                         <div class="cafa-button">
-                            <a href="">{{ item.cuisine.category.title }}</a>
-                            <a href="">{{ item.cuisine.name }}</a>
+                            <a href="javascript:void(0)">{{ item.cuisine.category.title }}</a>
+                            <a href="javascript:void(0)">{{ item.cuisine.name }}</a>
                         </div>
                         <p>{{ item.description }}</p>
                         <ul class="menu-dish">
@@ -870,11 +876,35 @@ window.onclick = function(event) {
 
 </script>
 <script>
-    const phoneInput = document.getElementById('phone');
-    phoneInput.addEventListener('input', function (e) {
-        this.value = this.value.replace(/e|\./g, '');
-    });
+	document.addEventListener('DOMContentLoaded', function () {
+		const form = document.getElementById('reservationForm');
+		const submitButton = form.querySelector('.btn-submit');
+	
+		const fields = form.querySelectorAll('.form-control.required');
+	
+		fields.forEach(function(field) {
+			field.addEventListener('input', function () {
+				validateForm();
+			});
+		}); 
+	
+		function validateForm() {
+			let allFieldsFilled = true;
+			fields.forEach(function(field) {
+				if (!field.value.trim()) {
+					allFieldsFilled = false;
+				}
+			});
+	
+			submitButton.disabled = !allFieldsFilled;
+		}
+		validateForm();
+		const phoneInput = document.getElementById('phone');
+		phoneInput.addEventListener('input', function (e) {
+			this.value = this.value.replace(/[^0-9]/g, ''); 
+		});
+	});
 </script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></>
 
 {% endblock %}
