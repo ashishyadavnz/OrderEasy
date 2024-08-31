@@ -64,7 +64,7 @@
 							{% endif %}
 							<div class="col-md-2 m-3">
 								<div class="item">
-									<a href="{% url 'home:restaurants-by-cuisine' cuisine.slug %}">
+									<a href="{% url 'restaurant:restaurants-cuisine' cuisine.slug %}">
 										<div class="img-wrap">
 											{% if cuisine.image %}
 											<img src="{{ cuisine.image.url }}" alt="{{ cuisine.title }}" style="width: 70px; height: 70px; border-radius: 50%;">

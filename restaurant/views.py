@@ -10,8 +10,12 @@ from home.forms import *
 
 # Create your views here.
 
-def restaurant(request):
+def restaurant(request, cuisine_slug=None):
     restaurants = Restaurant.objects.filter(status='Active')
+    if cuisine_slug:
+        cuisine = get_object_or_404(Cuisine, slug=cuisine_slug)
+        fooditems = FoodItem.objects.filter(cuisine=cuisine)
+        restaurants = restaurants.filter(fooditems_restaurant__in=fooditems).distinct()
     return render(request, 'ui/restaurant.html', {'restaurants': restaurants})
     # user_lat = float(request.GET.get('latitude', 0))
     # user_lon = float(request.GET.get('longitude', 0))

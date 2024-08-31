@@ -663,7 +663,25 @@ body.menu-open {
     right: 96px;
     top: 110px;
 }
+.messages {
+	position: fixed;  
+	top: 23%;  
+	left: 50%;  
+	transform: translateX(-50%); 
+	width: 40%; 
+	z-index: 1; 
+}
 
+.alert {
+	margin-bottom: 15px;  
+	border-radius: 4px;   
+	font-size: 16px;  
+	box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);  
+}
+
+.btn-close {
+	outline: none; 
+}
 	</style>
 </head>
 
@@ -998,17 +1016,17 @@ body.menu-open {
 				</div>
 			</div>
 		</div>
-	</header>
-	{% if messages %}
-	<div class="messages">
-		{% for message in messages %}
-		<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-			{{ message }}
-			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		{% if messages %}
+		<div class="messages">
+			{% for message in messages %}
+			<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+				{{ message }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+			{% endfor %}
 		</div>
-		{% endfor %}
-	</div>
-	{% endif %}
+		{% endif %}
+	</header>
 	{% block content %}
 
 	{% endblock %}
