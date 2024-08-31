@@ -140,7 +140,7 @@
 				{% for restaurant in restaurants|slice:":3" %}
 				<div class="col-lg-6" data-aos="flip-up" data-aos-delay="300" data-aos-duration="400">
 					<div class="logos-card restaurant-page ">
-						<img alt="{{ restaurant.title }}" src="{{ restaurant.logo.url }}" class="img-fluid" style="width: 100px; height: 100px; object-fit: cover;">
+						<img alt="{{ restaurant.title }}" src="{% if restaurant.logo %}{{ restaurant.logo.url }}{% endif %}" class="img-fluid" style="width: 100px; height: 100px; object-fit: cover;">
 						<div class="cafa ">
 							<h4><a  href="{% url 'restaurant:restaurant-card' restaurant.slug %}">{{ restaurant.title }}</a></h4>
 							<div>
@@ -236,7 +236,7 @@
 							<div class="item">
 								<h4>"{{ testimonial.content|safe }}"</h4>
 								<div class="thomas">
-									<img alt="{{ testimonial.name }}" src="{{ testimonial.image.url }}" style="border-radius: 50%;" height="80px" width="80px">
+									<img alt="{{ testimonial.name }}" src="{% if testimonial.image %}{{ testimonial.image.url }}{% endif %}" style="border-radius: 50%;" height="80px" width="80px">
 									<div>
 										<h6>{{ testimonial.name }}</h6>
 										<div>

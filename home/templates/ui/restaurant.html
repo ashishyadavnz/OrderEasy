@@ -80,7 +80,7 @@
 							 data-aos-delay="200" 
 							 data-aos-duration="300">
 							<div class="logos-card restaurant-page">
-								<img alt="{{ restaurant.title }}" src="{{ restaurant.logo.url }}" style="width: 100px; height: 100px; object-fit: cover;">
+								<img alt="{{ restaurant.title }}" src="{% if restaurant.logo %}{{ restaurant.logo.url }}{% endif %}" style="width: 100px; height: 100px; object-fit: cover;">
 								<div class="cafa">
 									<h4><a href="{% url 'restaurant:restaurant-card' restaurant.slug %}">{{ restaurant.title }}</a></h4>
 									<div>

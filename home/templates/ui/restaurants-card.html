@@ -77,7 +77,7 @@
 	</section> -->
 	<!-- new design -->
 	<section class="hero-section about gap" style="background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');">
-		<img src="{{ restaurant.image.url }}" alt="{{restaurant.title}}" class="img-fluid w-100 mt-4" style="height: 400px; object-fit: cover;">
+		<img src="{% if restaurant.image %}{{ restaurant.image.url }}{% endif %}" alt="{{restaurant.title}}" class="img-fluid w-100 mt-4" style="height: 400px; object-fit: cover;">
 		<div class="container-fluid mt-5 position-relative">
 			<div class="position-relative">
 				<div class="d-flex flex-column align-items-start justify-content-center" style="position: absolute; bottom: -45px; padding: 30px;">
@@ -94,7 +94,7 @@
 						<div class="d-flex align-items-center container">
 							<div class="row">
 								<div class="col-md-4">
-									<img src="{{ restaurant.logo.url }}" alt="{{restaurant.title}}" class="rounded-circle me-3" style="width: 220px;">
+									<img src="{% if restaurant.logo %}{{ restaurant.logo.url }}{% endif %}" alt="{{restaurant.title}}" class="rounded-circle me-3" style="width: 220px;">
 								</div>
 								<div class="col-md-8">
 									<div>
@@ -499,7 +499,7 @@
 															<strong>End Time:</strong> {{ menu.end|date:"H:i" }}
 														{% endif %}
 													</p>
-													<button class="btn add-to-cart" style="background-color:#F29F05;" data-id="{{ cuisine.id }}" data-title="{{ cuisine.title }}" data-image="{{ cuisine.image.url }}">Add to Cart</button>
+													<button class="btn add-to-cart" style="background-color:#F29F05;" data-id="{{ cuisine.id }}" data-title="{{ cuisine.title }}" data-image="{% if cuisine.image %}{{ cuisine.image.url }}{% endif %}">Add to Cart</button>
 												</div>
 											</div>
 										</div>
@@ -522,7 +522,7 @@
             {% for item in lunch_items %}
             <div class="col-xl-4 col-lg-6" data-aos="flip-up" data-aos-delay="200" data-aos-duration="300">
                 <div class="dish">
-                    <img alt="food-dish" src="{{ item.cuisine.image.url }}" class="img-fluid">
+                    <img alt="food-dish" src="{% if item.cuisine %}{{ item.cuisine.image.url }}{% endif %}" class="img-fluid">
                     <div class="dish-foods">
                         <h3>{{ item.cuisine.title }}</h3>
                         <div class="dish-icon">
