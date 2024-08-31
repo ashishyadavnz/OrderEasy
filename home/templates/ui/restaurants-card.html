@@ -111,8 +111,8 @@
 											</div>
 										</div>
 										<div class="d-flex">
-											<button class="book-table-btn" id="openModal" data-bs-toggle="modal" data-bs-target="#exampleModal2">More Info</button>
-											<button type="button" id="bookTableButton" class="book-table-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Book A Table</button>
+											<button class="book-table-btn me-2" id="openModal" data-bs-toggle="modal" data-bs-target="#exampleModal2">More Info</button>
+											<button type="button" id="bookTableButton" class="book-table-btn me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">Book A Table</button>
 											<button class="feedback-btn book-table-btn" id="openFeedbackModal">Feedback</button>
 										</div>
 									</div>
@@ -214,7 +214,7 @@
 											</select>
 										</div>
 										<div class="form-group">
-											<button class="btn-submit" type="submit" disabled>Next</button>
+											<button class="btn-submit" type="submit" disabled>Submit</button>
 										</div>
 									</form>									
 								</div>
@@ -503,9 +503,10 @@
 																<strong>End Time:</strong> {{ food_item.end|date:"H:i" }}
 															{% endif %}
 														</p>
+														{% if forloop.last %}
+														<button class="btn add-to-cart" style="background-color:#F29F05;" data-id="{{ cuisine.id }}" data-title="{{ cuisine.title }}" data-image="{% if cuisine.image %}{{ cuisine.image.url }} {% else %}{% static 'images/dish-7.png' %}{% endif %}" data-price="{{ food_item.price }}">Add to Cart</button>
+														{% endif %}
 													{% endfor %}
-													
-													<button class="btn add-to-cart" style="background-color:#F29F05;" data-id="{{ cuisine.id }}" data-title="{{ cuisine.title }}" data-image="{{ cuisine.image.url }}">Add to Cart</button>
 												</div>
 											</div>
 										</div>
@@ -604,7 +605,7 @@
 		
 		document.querySelectorAll(".add-to-cart").forEach(button => {
 			button.addEventListener("click", function() {
-				console.log("Add to Cart button clicked"); // Debug line
+				console.log("Add to Cart button clicked");
 				const menuId = this.getAttribute("data-id");
 				const menuTitle = this.getAttribute("data-title");
 				const menuPrice = parseFloat(this.getAttribute("data-price"));
@@ -640,24 +641,6 @@
 	});
 </script>
 <script>
-		document.addEventListener("DOMContentLoaded", function() {
-		const modal = document.getElementById("bookTableModal");
-		const btn = document.getElementById("bookTableButton");
-		const span = document.getElementsByClassName("close-button")[0];
-		btn.onclick = function() {
-			modal.style.display = "block";
-		}
-		span.onclick = function() {
-			modal.style.display = "none";
-		}
-		window.onclick = function(event) {
-			if (event.target == modal) {
-				modal.style.display = "none";
-			}
-		}
-	});
-</script>
-<script>
 	function displayDistances() {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function(position) {
@@ -670,11 +653,9 @@
 	
 					const distance = calculateDistance(userLat, userLon, restaurantLat, restaurantLon);
 					card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
-	
-					// Store the delivery charge based on the distance
 					let deliveryCharge = 0;
 					if (distance > 7) {
-						deliveryCharge = distance * 1; // Charge $1 per km for the entire distance
+						deliveryCharge = distance * 1; 
 					}
 					card.setAttribute('data-delivery-charge', deliveryCharge.toFixed(2));
 				});
@@ -740,8 +721,6 @@
 	applyVoucherBtn.addEventListener("click", function() {
         const voucherCode = voucherInput.value.trim();
         if (voucherCode) {
-            // For demo purposes, we'll just apply a fixed discount
-            // In a real application, you might need to validate the voucher code via an API call
             voucherDiscount = 10.00; // Example discount
         } else {
             voucherDiscount = 0;
@@ -774,7 +753,6 @@
 		});
 	
 		if (orderType === 'Delivery') {
-			// Assuming that the selected restaurant is the first one in the cart for simplicity
 			const selectedRestaurantCard = document.querySelector('.restaurant-card'); 
 			const deliveryCharge = parseFloat(selectedRestaurantCard.getAttribute('data-delivery-charge')) || 0;
 			totalAmount += deliveryCharge;
@@ -842,23 +820,6 @@
 	});
 </script>
 <script>
-var modal = document.getElementById("infoModal");
-var btn = document.getElementById("openModal");
-var span = document.getElementById("closeModal");
-btn.onclick = function() {
-  modal.style.display = "block";
-}
-span.onclick = function() {
-  modal.style.display = "none";
-}
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-</script>
-<script>
 var feedbackModal = document.getElementById("feedbackModal");
 var feedbackBtn = document.getElementById("openFeedbackModal");
 var feedbackClose = document.getElementById("closeFeedbackModal");
@@ -875,14 +836,12 @@ window.onclick = function(event) {
 }
 
 </script>
-
 <script>
 	document.addEventListener('DOMContentLoaded', function () {
 		const form = document.getElementById('reservationForm');
 		const submitButton = form.querySelector('.btn-submit');
-	
 		const fields = form.querySelectorAll('.form-control.required');
-	
+
 		fields.forEach(function(field) {
 			field.addEventListener('input', function () {
 				validateForm();
@@ -891,25 +850,20 @@ window.onclick = function(event) {
 	
 		function validateForm() {
 			let allFieldsFilled = true;
+			
 			fields.forEach(function(field) {
 				if (!field.value.trim()) {
 					allFieldsFilled = false;
 				}
 			});
-	
 			submitButton.disabled = !allFieldsFilled;
 		}
-	
-		// Initial validation check on page load
 		validateForm();
-	
-		// Phone input validation to prevent non-numeric characters
 		const phoneInput = document.getElementById('phone');
 		phoneInput.addEventListener('input', function (e) {
-			this.value = this.value.replace(/[^0-9]/g, ''); // Allow only numbers
+			this.value = this.value.replace(/[^0-9]/g, ''); 
 		});
 	});
-	
 </script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
