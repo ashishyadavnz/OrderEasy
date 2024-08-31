@@ -77,26 +77,26 @@
 	</section> -->
 	<!-- new design -->
 	<section class="hero-section about gap" style="background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');">
-		<img src="{{ restaurant.image.url }}" alt="{{restaurant.title}}" class="img-fluid w-100 mt-4" style="height: 400px; object-fit: cover;">
+		<img src="{% if restaurant.image %}{{ restaurant.image.url }}{% endif %}" alt="{{restaurant.title}}" class="img-fluid w-100 mt-4" style="height: 400px; object-fit: cover; filter: brightness(0.8);">
 		<div class="container-fluid mt-5 position-relative">
 			<div class="position-relative">
 				<div class="d-flex flex-column align-items-start justify-content-center" style="position: absolute; bottom: -45px; padding: 30px;">
 					<ul class="breadcrumb p-0 mb-5 d-flex align-items-center" style="background: none;">
 						<li class="breadcrumb-item"><a href="{% url 'home:home-page' %}" class="text-decoration-none" style="color: white !important;">Home</a></li>
-						<li class="breadcrumb-item"><a href="{% url 'restaurant:restaurant' %}" class="text-decoration-none" style="color: white !important;"><i class="fa-solid fa-right-long mx-1"></i>Restaurants</a></li>
+						<li class="breadcrumb-item"><a href="{% url 'restaurant:restaurant' %}" class="text-decoration-none" style="color: white !important;"><i class="fa-solid fa-right-long mx-1"></i> Restaurants </a></li>
 						<li class="two">
 							<a href="{% url 'restaurant:restaurant-card' restaurant.slug %}" style="color: white !important;">
-								<i class="fa-solid fa-right-long"></i> <b>{{ restaurant.title }}</b>
+								<i class="fa-solid fa-right-long mx-1"></i> <b>{{ restaurant.title }}</b>
 							</a>
 						</li>					
 					</ul>
 					<div class="d-flex align-items-center container">
 						<div class="d-flex align-items-center container">
 							<div class="row">
-								<div class="col-md-4">
-									<img src="{{ restaurant.logo.url }}" alt="{{restaurant.title}}" class="rounded-circle me-3" style="width: 220px;">
+								<div class="col-md-2">
+									<img src="{% if restaurant.logo %}{{ restaurant.logo.url }}{% endif %}" alt="{{restaurant.title}}" class="rounded-circle me-3" style="width: 100px; object-fit: cover; height: 100px;">
 								</div>
-								<div class="col-md-8">
+								<div class="col-md-10">
 									<div>
 										<h4 class="mb-0" style="font-size: 2rem; font-weight: bold; color: white;">{{restaurant.title}}</h4>
 										<div class="d-flex align-items-center mb-3">
@@ -111,8 +111,8 @@
 											</div>
 										</div>
 										<div class="d-flex">
-											<button class="book-table-btn me-2" id="openModal" data-bs-toggle="modal" data-bs-target="#exampleModal2">More Info</button>
-											<button type="button" id="bookTableButton" class="book-table-btn me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">Book A Table</button>
+											<button class="book-table-btn" id="openModal" data-bs-toggle="modal" data-bs-target="#exampleModal2">More Info</button>
+											<button type="button" id="bookTableButton" class="book-table-btn mx-1" data-bs-toggle="modal" data-bs-target="#booktable">Book A Table</button>
 											<button class="feedback-btn book-table-btn" id="openFeedbackModal">Feedback</button>
 										</div>
 									</div>
@@ -171,7 +171,7 @@
 							</div>
 							</div>
 						</div>
-					<!-- Modal -->
+					{% comment %} <!-- Modal -->
 						<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog">
 							<div class="modal-content">
@@ -186,17 +186,17 @@
 											<p>Please select the number of people and the required date and time</p>
 										</div>
 										<div class="form-group">
-											<input type="text" name="name" id="name" placeholder="Your Name" class="form-control required" required>
+											<input type="text" name="name" id="name" placeholder="Your Name" class="form-control" required="required">
 										</div>
 										<div class="form-group">
-											<input type="email" name="email" id="email" placeholder="Your Email" class="form-control required" required>
+											<input type="email" name="email" id="email" placeholder="Your Email" class="form-control" required>
 										</div>
 										<div class="form-group">
-											<input type="number" name="phone" id="phone" placeholder="Your Phone" class="form-control required" required>
+											<input type="number" name="phone" id="phone" placeholder="Your Phone" class="form-control" required>
 										</div>
 										<div class="form-group">
-											<input type="text" id="BookingDate" class="form-control input datepicker checkin required" name="date" placeholder="Choose date" required>
-										</div>
+											<input type="text" id="BookingDate" class="form-control input datepicker checkin" name="date" placeholder="Choose date">
+										</div>									
 										<div class="form-group">
 											<select class="form-control required" id="BookingTime" name="time" required>
 												<option value="">Select time</option>
@@ -220,7 +220,7 @@
 								</div>
 							</div>
 							</div>
-						</div>
+						</div> {% endcomment %}
 						{% comment %} <div id="bookTableModal" class="modal">
 							<div class="modal-content">
 								<span class="close-button">&times;</span>
@@ -464,12 +464,11 @@
 						<div class="dish h-100 mt-0">
 							<h4 class="mb-4"><b>Categories</b></h4>
 							<ul class="menu-categories list-unstyled">
-								{% for category, cuisines in category_cuisines.items %}
+								{% for cat in category %}
 									<li class="mb-3">
 										<h4 class="text-secondary">
-											<a href="{% url 'restaurant:restaurant-card-category' slug=restaurant.slug category_title=category %}"
-											   style="{% if selected_category == category %}color: orange;{% endif %}">
-												{{ category }}
+											<a href="{% url 'restaurant:restaurant-card-category' slug=restaurant.slug category=cat.slug %}" class="{% if request.resolver_match.kwargs.category == cat.slug %}highlighted{% endif %}">
+												{{ cat.title }}
 											</a>
 										</h4>
 									</li>
@@ -479,34 +478,31 @@
 					</div>
 					<div class="col-lg-9 px-0 ps-md-2">
 						<div class="dish mt-0">
-							<h3 class="mb-4">Cuisines by Category: {{ selected_category|default:"All" }}</h3>
+							{% comment %} <h3 class="mb-4">Cuisines by Category: {{ selected_category|default:"All" }}</h3> {% endcomment %}
 							<div class="row">
-								{% if cuisines %}
-									{% for cuisine in cuisines %}
+								{% if fooditems %}
+									{% for item in fooditems %}
 										<div class="col-md-4 mt-3">
 											<div class="card shadow-sm mb-4 h-100 hover-card">
-												{% if cuisine.image %}
-													<img src="{{ cuisine.image.url }}" class="card-img-top img-fluid" alt="{{ cuisine.title }}">
+												{% if item.image %}
+													<img src="{{ item.image.url }}" style="height: 300px !important; width: 400px!important" alt="{{ item.title }}">
 												{% endif %}
 												<div class="card-body">
-													<h5 class="card-title">{{ cuisine.title }}</h5>
-													<p class="card-title">{{ cuisine.content | truncatechars:200 |safe }}</p>
-				
-													{% for food_item in cuisine.fooditems_cuisine.all %}
-														<p class="card-text">
-															<strong>Price:</strong> ${{ food_item.price }}<br>
-															<strong>Available:</strong> {{ food_item.available|yesno:"Yes,No" }}<br>
-															{% if food_item.start %}
-																<strong>Start Time:</strong> {{ food_item.start|date:"H:i" }}<br>
-															{% endif %}
-															{% if food_item.end %}
-																<strong>End Time:</strong> {{ food_item.end|date:"H:i" }}
-															{% endif %}
-														</p>
-														{% if forloop.last %}
-														<button class="btn add-to-cart" style="background-color:#F29F05;" data-id="{{ cuisine.id }}" data-title="{{ cuisine.title }}" data-image="{% if cuisine.image %}{{ cuisine.image.url }} {% else %}{% static 'images/dish-7.png' %}{% endif %}" data-price="{{ food_item.price }}">Add to Cart</button>
+													<h5 class="card-title">{{ item.title }}</h5>
+													<p class="card-title">{{ item.content | truncatechars:200 |safe }}</p>
+													<p class="card-text">
+														<strong>Price:</strong> ${{ item.price }}<br>
+														<strong>Available:</strong> {% if item.available %}Yes{% else %}No{% endif %}<br>
+														{% if item.start %}
+															<strong>Start Time:</strong> {{ item.start|date:"H:i" }}<br>
 														{% endif %}
-													{% endfor %}
+														{% if item.end %}
+															<strong>End Time:</strong> {{ item.end|date:"H:i" }}
+														{% endif %}
+													</p>
+													{% if forloop.last %}
+														<button class="btn add-to-cart" style="background-color:#F29F05;" data-id="{{ cuisine.id }}" data-title="{{ cuisine.title }}" data-image="{% if cuisine.image %}{{ cuisine.image.url }} {% else %}{% static 'images/dish-7.png' %}{% endif %}" data-price="{{ food_item.price }}">Add to Cart</button>
+													{% endif %}
 												</div>
 											</div>
 										</div>
@@ -522,14 +518,14 @@
 		</div>
 	</section>
    <!-- Lunch Section -->
-   <section class="lunch-section gap" style="background:#fcfcfc">
+   <!-- <section class="lunch-section gap" style="background:#fcfcfc">
     <div class="container">
         <h2 data-aos="fade-up" data-aos-delay="300" data-aos-duration="400">See also category Lunch</h2>
         <div class="row">
             {% for item in lunch_items %}
             <div class="col-xl-4 col-lg-6" data-aos="flip-up" data-aos-delay="200" data-aos-duration="300">
                 <div class="dish">
-                    <img alt="food-dish" src="{{ item.cuisine.image.url }}" class="img-fluid">
+                    <img alt="food-dish" src="{% if item.cuisine %}{{ item.cuisine.image.url }}{% endif %}" class="img-fluid">
                     <div class="dish-foods">
                         <h3>{{ item.cuisine.title }}</h3>
                         <div class="dish-icon">
@@ -573,7 +569,7 @@
             {% endfor %}
         </div>
     </div>
-</section>
+</section> -->
 <!-- footer -->
 	
   <!-- bslthemes.com buttons html begin -->
@@ -595,6 +591,58 @@
   <!-- bslthemes.com buttons assets begin -->
   <link rel="stylesheet" href="https://bslthemes.com/bslthms-advanced-btns/assets/style.css">
   <!-- bslthemes.com buttons assets end -->
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="booktable" tabindex="-1" role="dialog" aria-labelledby="booktableLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title text-warning" id="booktableLabel">Make a table reservation</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="post">
+					{% csrf_token %}
+					<div class="form-group">
+						<p>Please select the number of people and the required date and time</p>
+					</div>
+					<div class="form-group">
+						<input type="text" name="name" id="name" placeholder="Your Name" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<input type="email" name="email" id="email" placeholder="Your Email" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<input type="number" name="phone" id="phone" placeholder="Your Phone" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<input type="text" id="BookingDate" class="form-control input datepicker checkin" name="date" placeholder="Choose date" required>
+					</div>									
+					<div class="form-group">
+						<select class="form-control required" id="BookingTime" name="time" required>
+							<option value="">Select time</option>
+							{% for slot in time_slots %}
+								<option value="{{ slot }}">{{ slot }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="form-group">
+						<select name="member" id="Persons" class="form-control" required>
+							<option value="1">1 person</option>
+							<option selected value="2">2 people</option>
+							<option value="3">3 people</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<button class="btn-submit" type="submit">Submit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}
 

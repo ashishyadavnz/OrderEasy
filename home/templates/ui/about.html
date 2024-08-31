@@ -274,7 +274,7 @@
 						<div class="author-text item">
 							<div>{{ testimonial.content|safe }}</div>
 							<div class="thomas">
-								<img alt="{{ testimonial.name }}" src="{{ testimonial.image.url }}" style="border-radius: 50%;" height="80px" width="80px">
+								<img alt="{{ testimonial.name }}" src="{% if testimonial.image %}{{ testimonial.image.url }}{% endif %}" style="border-radius: 50%;" height="80px" width="80px">
 								<div>
 									<h6>{{ testimonial.name }}</h6>
 									<div>

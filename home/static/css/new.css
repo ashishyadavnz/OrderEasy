@@ -3410,3 +3410,6 @@ li.menu-item-has-children.active {
 }
 
 
+.highlighted {
+	color: #fc9a36 !important;
+}
