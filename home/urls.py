@@ -11,11 +11,9 @@ urlpatterns = [
         path('checkout/',views.checkout,name='checkout'),
         path('become-partner/',views.becomePartner,name='become-partner'),
         path('page-not-found/', views.notfound,name='page-not-found'),
-        path('restaurants/cuisine/<slug:cuisine_slug>/', views.restaurants_by_cuisine, name='restaurants-by-cuisine'),
         path('register/',views.register,name='register'),
         path('login/', views.login, name='login'),
         path('logout/', views.user_logout, name='logout'),
-        
-
-
+        path('<slug:slug>/submit-feedback/', views.submit_feedback, name='submit_feedback'),
+   
 ]

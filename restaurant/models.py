@@ -171,7 +171,7 @@ class Voucher(BaseModel):
 
 class Reservation(BaseModel):
 	"""docstring for Reservation"""
-	users = models.ForeignKey(User, on_delete=models.PROTECT, related_name='reservation_user')
+	user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='reservation_user')
 	name = models.CharField(max_length=160)
 	email = models.EmailField()
 	phone = models.PositiveIntegerField()
@@ -205,7 +205,7 @@ class Cart(BaseModel):
 class Order(BaseModel):
 	"""docstring for Order"""
 	restaurant = models.ForeignKey(Restaurant, on_delete=models.PROTECT, related_name="order_restaurant")
-	users = models.ForeignKey(User, on_delete=models.PROTECT, related_name='order_user')
+	user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='order_user')
 	voucher = models.ForeignKey(Voucher, on_delete=models.PROTECT, related_name="order_voucher", null=True, blank=True)
 	cart = models.ManyToManyField(Cart, related_name="order_cart")
 	orderid = models.CharField(max_length=30)
