@@ -111,9 +111,9 @@
 											</div>
 										</div>
 										<div class="d-flex">
-											<button class="book-table-btn me-2" id="openModal" data-bs-toggle="modal" data-bs-target="#exampleModal2">More Info</button>
-											<button type="button" id="bookTableButton" class="book-table-btn me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">Book A Table</button>
-											<button class="feedback-btn book-table-btn me-2" id="openFeedbackModal">Feedback</button>
+											<button class="book-table-btn" id="openModal" data-bs-toggle="modal" data-bs-target="#exampleModal2">More Info</button>
+											<button type="button" id="bookTableButton" class="book-table-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Book A Table</button>
+											<button class="feedback-btn book-table-btn" id="openFeedbackModal">Feedback</button>
 										</div>
 									</div>
 								</div>
@@ -214,7 +214,7 @@
 											</select>
 										</div>
 										<div class="form-group">
-											<button class="btn-submit" type="submit" disabled>Submit</button>
+											<button class="btn-submit" type="submit" disabled>Next</button>
 										</div>
 									</form>									
 								</div>
@@ -533,13 +533,13 @@
                         <h3>{{ item.cuisine.title }}</h3>
                         <div class="dish-icon">
                             <div class="cafa-button">
-                                <a href="javascript:void(0)">{{ item.cuisine.category.title }}</a>
+                                <a href="">{{ item.cuisine.category.title }}</a>
                                 {% comment %} <a href="">{{ item.cuisine.title }}</a> {% endcomment %}
                             </div>
                             <div class="dish-icon end">
                                 <i class="info fa-solid fa-circle-info"></i>
                                 <div class="star">
-                                    <a href="javascript:void(0)"><i class="fa-solid fa-heart"></i></a>
+                                    <a href=""><i class="fa-solid fa-heart"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -557,8 +557,8 @@
                         <i class="info2 fa-solid fa-xmark"></i>
                         <h5>{{ item.name }}</h5>
                         <div class="cafa-button">
-                            <a href="javascript:void(0)">{{ item.cuisine.category.title }}</a>
-                            <a href="javascript:void(0)">{{ item.cuisine.name }}</a>
+                            <a href="">{{ item.cuisine.category.title }}</a>
+                            <a href="">{{ item.cuisine.name }}</a>
                         </div>
                         <p>{{ item.description }}</p>
                         <ul class="menu-dish">
@@ -875,6 +875,7 @@ window.onclick = function(event) {
 }
 
 </script>
+
 <script>
 	document.addEventListener('DOMContentLoaded', function () {
 		const form = document.getElementById('reservationForm');
@@ -886,7 +887,7 @@ window.onclick = function(event) {
 			field.addEventListener('input', function () {
 				validateForm();
 			});
-		}); 
+		});
 	
 		function validateForm() {
 			let allFieldsFilled = true;
@@ -898,13 +899,18 @@ window.onclick = function(event) {
 	
 			submitButton.disabled = !allFieldsFilled;
 		}
+	
+		// Initial validation check on page load
 		validateForm();
+	
+		// Phone input validation to prevent non-numeric characters
 		const phoneInput = document.getElementById('phone');
 		phoneInput.addEventListener('input', function (e) {
-			this.value = this.value.replace(/[^0-9]/g, ''); 
+			this.value = this.value.replace(/[^0-9]/g, ''); // Allow only numbers
 		});
 	});
+	
 </script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 {% endblock %}
