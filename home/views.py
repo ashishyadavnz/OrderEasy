@@ -53,7 +53,41 @@ def becomePartner(request):
     return render(request, 'ui/become-partner.html')
 
 def checkout(request):
-    return render(request, 'ui/checkout.html')
+    user_info = None
+    if request.user.is_authenticated:
+        user_info = {
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+            'email': request.user.email,
+            'phone': request.user.mobile,
+        }
+    print(request.user,"user information")
+    if request.method == 'POST':
+        cart_data = request.POST.get('cart_data')
+        try:
+            cart = json.loads(cart_data)
+        except json.JSONDecodeError:
+            cart = []
+        
+        request.session['cart'] = cart
+        total = sum(item['price'] * item['quantity'] for item in cart)
+        
+        context = {
+            'cart': cart,
+            'total': total,
+            'user_info': user_info,
+        }
+        return render(request, 'ui/checkout.html', context)
+
+    cart = request.session.get('cart', [])
+    total = sum(item['price'] * item['quantity'] for item in cart)
+    
+    context = {
+        'cart': cart,
+        'total': total,
+        'user_info': user_info,
+    }
+    return render(request, 'ui/checkout.html', context)
 
 def notfound(request):
     return render(request, 'ui/404.html')
@@ -92,6 +126,8 @@ def faq_message(request):
 
 def register(request):
     if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
         username = request.POST['username']
         email = request.POST['email']
         mobile = request.POST['mobile']
@@ -99,7 +135,6 @@ def register(request):
         confirm_password = request.POST['confirm_password']
         profile_picture = request.FILES.get('profile_picture')
         guest = request.POST.get('guest') == 'on'
-
 
         if password != confirm_password:
             messages.error(request, "Passwords do not match")
@@ -114,7 +149,10 @@ def register(request):
             return redirect('home:register')
 
         # Create the user
+
         user = User.objects.create_user(
+            first_name=first_name,
+            last_name=last_name,
             username=username,
             email=email,
             mobile=mobile,
@@ -122,9 +160,11 @@ def register(request):
             image=profile_picture,
             guest=guest    
         )
-        
+        if user:
+            auth_login(request,user)
+
         messages.success(request, "Account created successfully")
-        return redirect('home:login')
+        return redirect('restaurant:restaurant')
 
     return render(request, 'ui/register.html')
 
@@ -139,12 +179,13 @@ def login(request):
         if user is not None:
             auth_login(request, user)
             messages.success(request, "Login successful")
-            return redirect('home:home-page')
+            return redirect('restaurant:restaurant')
         else:
             messages.error(request, "Invalid username or password")
             return redirect('home:login')
 
     return render(request, 'ui/login.html')
+
 
 def user_logout(request):
     logout(request)

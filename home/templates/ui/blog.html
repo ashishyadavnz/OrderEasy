@@ -13,7 +13,7 @@
 						<ul class="crumbs d-flex">
 							<li><a href="{% url 'home:home-page' %}">Home</a></li>
 							<li class="two">
-								<a href="{% url 'blog:blog_page' %}"><i class="fa-solid fa-right-long"></i>Blog Page</a>
+								<a href="javascript:void(0)"><i class="fa-solid fa-right-long"></i>Blog Page</a>
 							</li>
 						</ul>
 						<h2>Current news about Us</h2>
@@ -26,9 +26,9 @@
 				<div class="col-lg-6" data-aos="flip-up" data-aos-delay="300" data-aos-duration="400">
 					<div class="restaurants-girl-img blog food-photo-section">
 						<img alt="man" src="https://bslthemes.com/html/quickeat/assets/img/blog-1.png" />
-						<a href="" class="one"><i class="fa-brands fa-facebook-f"></i></a>
-						<a href="" class="two"><i class="fa-brands fa-instagram"></i></a>
-						<a href="" class="three"><i class="fa-brands fa-twitter"></i></a>
+						<a href="javascript:void(0)" class="one"><i class="fa-brands fa-facebook-f"></i></a>
+						<a href="javascript:void(0)" class="two"><i class="fa-brands fa-instagram"></i></a>
+						<a href="javascript:void(0)" class="three"><i class="fa-brands fa-twitter"></i></a>
 					</div>
 				</div>
 			</div>
@@ -39,74 +39,101 @@
 		<div class="container">
 			<div class="row">
 				{% for post in posts %}
-				{% if forloop.first %}
-				<div class="col-lg-12 col-md-12 col-sm-12 col-12" data-aos="fade-up" data-aos-delay="200" data-aos-duration="300">
-					<div class="news-posts-one full">
-						<div class="blog-post-data-img">
-							<img alt="{{ post.title }}" class="img-fluid" src="{{ post.thumbnail.url }}" style="object-fit: cover; width: 90%;" />
-							<div class="quickeat">
-								{% for tag in post.tag.all %}
-									<a href="">{{ tag.title }}</a>
-								{% endfor %}
+					{% if forloop.first %}
+					<!-- First post layout -->
+					<div class="col-lg-12 col-md-12 col-sm-12 col-12" data-aos="fade-up" data-aos-delay="200" data-aos-duration="300">
+						<div class="news-posts-one full">
+							<div class="blog-post-data-img">
+								<img alt="{{ post.title }}" class="img-fluid" src="{{ post.thumbnail.url }}" style="object-fit: cover; width: 90%;" />
+								<div class="quickeat">
+									{% for tag in post.tag.all %}
+										<a href="javascript:void(0)">{{ tag.title }}</a>
+									{% endfor %}
+								</div>
+							</div>
+							<div class="blog-post-data">
+								<h3>{{ post.title }}</h3>
+								<p>{{ post.content|truncatechars:240|safe }}</p>
+								<a href="{% url 'blog:blog_detail' post.slug %}">Read More<i class="fa-solid fa-arrow-right"></i></a>
+								<ul class="data">
+									<li><h6><i class="fa-solid fa-user"></i> by {{ post.author.username }}</h6></li>
+									<li><h6><i class="fa-regular fa-calendar-days"></i> {{ post.timestamp|date:"d.M.Y" }}</h6></li>
+									<li><h6><i class="fa-solid fa-eye"></i> {{ post.view }}</h6></li>
+								</ul>
 							</div>
 						</div>
-						<div class="blog-post-data">
-							<h3>{{ post.title }}</h3>
-							<p>
-								{{ post.content|truncatechars:240|safe }}
-							</p>
-							<a href="{% url 'blog:blog_detail' post.slug %}">Read More<i class="fa-solid fa-arrow-right"></i></a>
-							<ul class="data">
-								<li>
-									<h6><i class="fa-solid fa-user"></i> by {{ post.author.username }}</h6>
-								</li>
-								<li>
-									<h6>
-										<i class="fa-regular fa-calendar-days"></i> {{ post.timestamp|date:"d.M.Y" }}
-									</h6>
-								</li>
-								<li>
-									<h6><i class="fa-solid fa-eye"></i> {{ post.view }}</h6>
-								</li>
-							</ul>
+					</div>
+					{% else %}
+					<!-- Other posts layout -->
+					<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 aos-init aos-animate" data-aos="flip-up" data-aos-delay="200" data-aos-duration="300">
+						<div class="news-posts-one full">
+							<div class="news-posts-one blog">
+								<img alt="{{ post.title }}" src="{{ post.thumbnail.url }}" style="object-fit: cover;" class="img-fluid" />
+								<div class="quickeat">
+									{% for tag in post.tag.all %}
+										<a href="javascript:void(0)">{{ tag.title }}</a>
+									{% endfor %}
+								</div>
+								<h3>{{ post.title }}</h3>
+								<p>{{ post.content|truncatechars:240|safe }}</p>
+								<a href="{% url 'blog:blog_detail' post.slug %}">Read More<i class="fa-solid fa-arrow-right"></i></a>
+								<ul class="data">
+									<li><h6><i class="fa-solid fa-user"></i>by {{ post.author.username }}</h6></li>
+									<li><h6><i class="fa-regular fa-calendar-days"></i>{{ post.timestamp|date:"d.M.Y" }}</h6></li>
+									<li><h6><i class="fa-solid fa-eye"></i>{{ post.view }}</h6></li>
+								</ul>
+							</div>
 						</div>
 					</div>
-				</div>
-				{% else %}
-                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 aos-init aos-animate" data-aos="flip-up" data-aos-delay="200" data-aos-duration="300">
-                    <div class="news-posts-one full">
-                        <div class="news-posts-one blog">
-                            <img alt="{{ post.title }}" src="{{ post.thumbnail.url }}" style="object-fit: cover;" class="img-fluid" />
-                            <div class="quickeat">
-                                {% for tag in post.tag.all %}
-                                    <a href="">{{ tag.title }}</a>
-                                {% endfor %}
-                            </div>
-							<h3>{{ post.title }}</h3>
-                            <p>{{ post.content|truncatechars:240|safe  }}</p>
-							<a href="{% url 'blog:blog_detail' post.slug %}">Read More<i class="fa-solid fa-arrow-right"></i></a>
-                            <ul class="data">
-                                <li>
-                                    <h6><i class="fa-solid fa-user"></i>by {{ post.author.username }}</h6>
-                                </li>
-                                <li>
-                                    <h6><i class="fa-regular fa-calendar-days"></i>{{ post.timestamp|date:"d.M.Y" }}</h6>
-                                </li>
-                                <li>
-                                    <h6><i class="fa-solid fa-eye"></i>{{ post.view }}</h6>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-				{% endif %}
-            {% endfor %}
-				<div class="button-gap" data-aos="fade-up" data-aos-delay="200" data-aos-duration="300">
-					<a href="" class="button button-2 non">See All<i class="fa-solid fa-arrow-right"></i></a>
-				</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+			
+			<!-- Pagination controls -->
+			<div class="pagination" data-aos="fade-up" data-aos-delay="200" data-aos-duration="300">
+				<nav>
+					<ul class="pagination justify-content-center">
+						{% if posts.has_previous %}
+						<li class="page-item">
+							<a class="page-link" href="?page={{ posts.previous_page_number }}" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+						{% else %}
+						<li class="page-item disabled">
+							<span class="page-link">&laquo;</span>
+						</li>
+						{% endif %}
+						
+						{% for num in posts.paginator.page_range %}
+						{% if posts.number == num %}
+						<li class="page-item active">
+							<span class="page-link">{{ num }}</span>
+						</li>
+						{% else %}
+						<li class="page-item">
+							<a class="page-link" href="?page={{ num }}">{{ num }}</a>
+						</li>
+						{% endif %}
+						{% endfor %}
+						
+						{% if posts.has_next %}
+						<li class="page-item">
+							<a class="page-link" href="?page={{ posts.next_page_number }}" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+							</a>
+						</li>
+						{% else %}
+						<li class="page-item disabled">
+							<span class="page-link">&raquo;</span>
+						</li>
+						{% endif %}
+					</ul>
+				</nav>
 			</div>
 		</div>
 	</section>
+	
 	<!-- subscribe-section -->
 	<section class="subscribe-section gap" style="background: #fcfcfc">
 		<div class="container">
