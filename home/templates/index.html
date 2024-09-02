@@ -830,17 +830,15 @@ body.menu-open {
 								<li class="navbar-dropdown">
 									<a href="{% url 'home:about-page' %}">About Us</a>
 								</li>
-								<li class="navbar-dropdown">
-									<a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
-									<!-- <div class="dropdown">
+								{% if request.user and request.user.role == 'Owner' %}
+									<li class="navbar-dropdown">
+										<a href="{% url 'restaurant:my_restaurant' %}">My Restaurants</a>
+									</li>
+								{% else %}
+									<li class="navbar-dropdown">
 										<a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
-										{% if restaurants and restaurants.first %}
-										<a href="{% url 'restaurant:restaurant-card' slug=restaurants.first.slug %}">Restaurant Card</a>
-									{% else %}
-										<a href="#">Restaurant Card</a> Disabled if no restaurant exists
-									{% endif %}										<a href="{% url  'home:checkout'  %}">Checkout</a>
-									</div> -->
-								</li>
+									</li>
+								{% endif %}
 								<li class="navbar-dropdown">
 									<a href="">Pages</a>
 									<div class="dropdown">
