@@ -51,92 +51,72 @@
                     <div class="checkout-order">
                         <div class="title-checkout">
                             <h2>Your order:</h2>
-                            <h6>3</h6>
+                            <h6>{{ cart|length }}</h6>
                         </div>
+                        
                         <div class="banner-wilmington">
                             <img alt="logo" src="https://bslthemes.com/html/quickeat/assets/img/logo-s.jpg">
-                            <h6>Kennington Lane Cafe</h6>
+                            <h6>Your Restaurant Name</h6>
                         </div>
+                        
                         <ul>
-                            <li class="price-list">
-                                <i class="closeButton fa-solid fa-xmark"></i>
-                                <div class="counter-container">
-                                    <div class="counter-food">
-                                        <img alt="food"
-                                            src="https://bslthemes.com/html/quickeat/assets/img/order-1.png">
-                                        <h4>Pasta, kiwi and sauce chilli</h4>
-                                    </div>
-                                    <h3>$39</h3>
-                                </div>
-                                <div class="price">
-                                    <div>
-                                        <h2>$39</h2>
-                                        <span>Sum</span>
-                                    </div>
-                                    <div>
-                                        <div class="qty-input">
-                                            <button class="qty-count qty-count--minus" data-action="minus"
-                                                type="button">-</button>
-                                            <input class="product-qty" type="number" name="product-qty" min="0"
-                                                value="1">
-                                            <button class="qty-count qty-count--add" data-action="add"
-                                                type="button">+</button>
+                            {% for item in cart %}
+                                <li class="price-list">
+                                    <i class="closeButton fa-solid fa-xmark"></i>
+                                    <div class="counter-container">
+                                        <div class="counter-food">
+                                            <img alt="food" src="{{ item.image }}" class="img-fluid" width="150px" style="object-fit: cover;">
+                                            <div class="food-details">
+                                                <h5>{{ item.title }}</h5>
+                                                <!-- <h3>${{ item.price }}</h3> -->
+                                            </div>
                                         </div>
-                                        <span>Quantity</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="price-list">
-                                <i class="closeButton fa-solid fa-xmark"></i>
-                                <div class="counter-container">
-                                    <div class="counter-food">
-                                        <img alt="food"
-                                            src="https://bslthemes.com/html/quickeat/assets/img/order-2.png">
-                                        <h4>Rice with shrimps and kiwi</h4>
-                                    </div>
-                                    <h3>$49</h3>
-                                </div>
-                                <div class="price">
-                                    <div>
-                                        <h2>$49</h2>
-                                        <span>Sum</span>
-                                    </div>
-                                    <div>
-                                        <div class="qty-input">
-                                            <button class="qty-count qty-count--minus" data-action="minus"
-                                                type="button">-</button>
-                                            <input class="product-qty" type="number" name="product-qty" min="0"
-                                                value="1">
-                                            <button class="qty-count qty-count--add" data-action="add"
-                                                type="button">+</button>
+                                        <div class="price">
+                                            <h3>${{ item.price }}</h3>
                                         </div>
-                                        <span>Quantity</span>
+                                    </div>                                    
+                                    <div class="price">
+                                        <div>
+                                            <h2>${{ item.price }}</h2>
+                                            <span>Sum</span>
+                                        </div>
+                                        <div>
+                                            <div class="qty-input">
+                                                <button class="qty-count qty-count--minus" data-action="minus" type="button">-</button>
+                                                <input class="product-qty" type="number" name="product-qty" min="0" value="{{ item.quantity }}" readonly>
+                                                <button class="qty-count qty-count--add" data-action="add" type="button">+</button>
+                                            </div>
+                                            <span>Quantity</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
+                            {% endfor %}
                         </ul>
+                        
                         <div class="totel-price">
                             <span>Total order:</span>
-                            <h5>$137</h5>
+                            <h5>${{ total }}</h5>
                         </div>
+                        
                         <div class="totel-price">
                             <span>To pay:</span>
-                            <h2>$137</h2>
+                            <h2>${{ total }}</h2>
                         </div>
-
                     </div>
+                    
+                    
                 </div>
-                <div class="offset-xl-1 col-xl-6 col-lg-12" data-aos="flip-up" data-aos-delay="300"
-                    data-aos-duration="400">
+                <div class="offset-xl-1 col-xl-6 col-lg-12" data-aos="flip-up" data-aos-delay="300" data-aos-duration="400">
                     <form class="checkout-form">
                         <h4>Buyer information</h4>
-                        <input type="text" name="Name" placeholder="Full Name">
+                        <input type="text" name="first_name" placeholder="First Name" value="{{ user_info.first_name }}" {% if not user_info %}required{% endif %}>
+                        <input type="text" name="last_name" placeholder="Last Name" value="{{ user_info.last_name }}" {% if not user_info %}required{% endif %}>
                         <div class="row">
                             <div class="col-lg-6">
-                                <input type="text" name="E-mail" placeholder="E-mail">
+                                <input type="text" name="email" placeholder="E-mail" value="{{ user_info.email }}" {% if not user_info %}required{% endif %}>
                             </div>
                             <div class="col-lg-6">
-                                <input type="text" name="E-mail" placeholder="Phone">
+                                <input type="text" name="phone" placeholder="Phone" value="{{ user_info.phone }}" {% if not user_info %}required{% endif %}>
                             </div>
                         </div>
                         <h4 class="two">Delivery addresses</h4>
@@ -147,13 +127,13 @@
                             <option>California 3</option>
                             <option>California 4</option>
                         </select>
-                        <input type="text" name="Name" placeholder="Street">
+                        <input type="text" name="street" placeholder="Street">
                         <div class="row">
                             <div class="col-lg-6">
-                                <input type="text" name="E-mail" placeholder="House number">
+                                <input type="text" name="house_number" placeholder="House number">
                             </div>
                             <div class="col-lg-6">
-                                <input type="number" name="E-mail" placeholder="Apartment number">
+                                <input type="number" name="apartment_number" placeholder="Apartment number">
                                 <span>*dispensable</span>
                             </div>
                         </div>
