@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect,HttpResponse
 from django.contrib import messages
 from .models import *
@@ -111,3 +112,44 @@ def addRestaurant(request):
         return render(request, 'ui/add-restaurant.html', {'form': form})
     else:
         return HttpResponse('you are not authorized to access this page')
+    
+
+
+def food_items(request ,restro):
+    foodItem = FoodItem.objects.filter(restaurant__slug = restro,status='Active')
+    categories = Category.objects.filter(status='Active')
+    cuisines = Cuisine.objects.filter(status='Active')
+    return render(request, 'ui/my-menu.html', {'food_items': foodItem,'restro':restro,'categories':categories,'cuisines':cuisines})
+
+def orders_items(request ,restro):
+    orderItem = Order.objects.filter(restaurant__slug = restro,status='Active')
+    return render(request, 'ui/orders.html', {'orderItem': orderItem,'restro':restro})
+
+def create_food_item(request ,restro):
+    if request.method == 'POST':
+        restroObj = Restaurant.objects.get(slug = restro)
+        form = FoodItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            cd = form.save(commit=False)
+            cd.restaurant = restroObj
+            cd.save()
+            return JsonResponse({'status': 'success'})
+        else:
+            return JsonResponse({'status': 'error', 'errors': form.errors})
+
+def edit_food_item(request,restro, slug):
+    food_item = get_object_or_404(FoodItem, slug=slug,restaurant__slug = restro)
+    if request.method == 'POST':
+        form = FoodItemForm(request.POST, request.FILES, instance=food_item)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'status': 'success'})
+        else:
+            return JsonResponse({'status': 'error', 'errors': form.errors})
+    return JsonResponse({'status': 'error', 'errors': 'Invalid request'})
+
+def delete_food_item(request,restro, slug):
+    food_item = get_object_or_404(FoodItem, slug=slug,restaurant__slug = restro)
+    food_item.status = 'Delete'
+    food_item.save()
+    return JsonResponse({'status': 'success'})

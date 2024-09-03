@@ -7,6 +7,7 @@ class ReservationForm(ModelForm):
 		model = Reservation
 		fields = ('name', 'email', 'phone', 'date', 'member')
 
+
 class RestaurantForm(ModelForm):
 	class Meta:
 		model = Restaurant
@@ -21,3 +22,9 @@ class RestaurantForm(ModelForm):
 			self.fields['address'].initial = user.address
 			self.fields['latitude'].initial = user.latitude
 			self.fields['longitude'].initial = user.longitude
+
+
+class FoodItemForm(forms.ModelForm):
+    class Meta:
+        model = FoodItem
+        exclude =['restaurant','status']
