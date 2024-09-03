@@ -151,11 +151,11 @@
 									<i class="fa-regular fa-star"></i>
 								{% endfor %}
 							</div>
-							<div class="cafa-button">
+							{% comment %} <div class="cafa-button">
 								{% for categorys in categories %}
 									<a class="end mt-5" href="">{{categorys.title}}</a>
 								{% endfor %}
-							</div>
+							</div> {% endcomment %}
 							<p>{{ restaurant.content | truncatechars:150 }}</p>
 						</div>
 					</div>

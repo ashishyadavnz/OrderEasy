@@ -68,7 +68,7 @@
 					<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 aos-init aos-animate" data-aos="flip-up" data-aos-delay="200" data-aos-duration="300">
 						<div class="news-posts-one full">
 							<div class="news-posts-one blog">
-								<img alt="{{ post.title }}" src="{{ post.thumbnail.url }}" style="object-fit: cover;" class="img-fluid" />
+								<img alt="{{ post.title }}" src="{% if post.thumbnail %}{{ post.thumbnail.url }}{% else %}{% static 'images/order-easy.png' %}{% endif %}" style="object-fit: cover;" class="img-fluid" />
 								<div class="quickeat">
 									{% for tag in post.tag.all %}
 										<a href="javascript:void(0)">{{ tag.title }}</a>
