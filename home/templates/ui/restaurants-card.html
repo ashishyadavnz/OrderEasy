@@ -804,18 +804,23 @@
 			const cartItem = document.createElement("div");
 			cartItem.classList.add("cart-item");
 			cartItem.innerHTML = `
+			<div class="container">
 				<div class="row">
-					<div class="col-4">
+					<div class="col-md-3">
 						<img src="${item.image}" alt="${item.title}" class="cart-item-image" loading="lazy">
 					</div>
-					<div class="col-6" style="text-align: center;">
-						<p>${item.title} - $${item.price} x ${item.quantity}</p>
+					<div class="col-md-5 pt-2" style="text-align: center;">
+						<p style="font-size:20px"><strong>${item.title}</strong></p>
 					</div>
-					<div class="col-2 d-flex">
-						<button class="btn btn-sm btn-primary increase-qty" data-id="${item.id}">+</button>
-						<button class="btn btn-sm btn-danger decrease-qty" data-id="${item.id}">-</button>
+					<div class="col-md-2 pt-2" style="text-align: centerp-2;">
+						<p style="font-size:20px"><strong>$${item.price} x ${item.quantity}</strong></p>
+					</div>
+					<div class="col-md-2 float-right">
+						<button class="btn  btn-primary increase-qty  me-2" data-id="${item.id}">+</button>
+						<button class="btn  btn-danger decrease-qty"  data-id="${item.id}">-</button>
 					</div>
 				</div>
+			</div>
 			`;
 			cartContent.appendChild(cartItem);
 		});
