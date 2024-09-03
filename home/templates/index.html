@@ -786,6 +786,18 @@ body.menu-open {
     font-size: 1.5rem;
     color: #333;
 }
+.d-none {
+	display: none;
+}
+
+.quantity-controls {
+	display: flex;
+	align-items: center;
+}
+
+.item-quantity {
+	margin: 0 10px;
+}
 </style>
 </head>
 
@@ -807,7 +819,7 @@ body.menu-open {
 				<div class="col-3">
 					<div class="header-style">
 						<a href="{% url 'home:home-page' %}">
-							<img src="{% static 'images/order-easy.png' %}" class="img-fluid log-imag" alt=""
+							<img src="{% static 'images/order-easy.png' %}" class="img-fluid log-imag" alt="logo.png"
 								height="150px" width="200px">
 						</a>
 						<div class="extras bag">
@@ -911,7 +923,7 @@ body.menu-open {
 					<nav class="navbar">
 						<ul class="">
 							<a href="{% url 'home:home-page' %}">
-								<img src="{% static 'images/order-easy.png' %}" class="img-fluid log-imag" alt=""
+								<img src="{% static 'images/order-easy.png' %}" class="img-fluid log-imag" alt="logo.png"
 									height="100px" width="150px">
 							</a>
 							<li class="navbar-dropdown active">
@@ -1145,7 +1157,7 @@ body.menu-open {
 				<div class="col-lg-5 col-md-6 col-sm-12">
 					<div class="footer-description" style="word-wrap: break-word;">
 						<a href="{% url 'home:home-page' %}">
-							<img src="{% static 'images/order-easy.png' %}" alt="" class="foot-img" height="150px">
+							<img src="{% static 'images/order-easy.png' %}" alt="logo.png" class="foot-img" height="150px">
 						</a>
 						<h2>The Best Restaurants
 							in Your Home</h2>
