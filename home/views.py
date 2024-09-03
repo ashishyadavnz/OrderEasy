@@ -78,9 +78,10 @@ def checkout(request):
                 order.email = request.user.email
                 order.phone = request.user.mobile
                 order.user = request.user
-                order.save()
+            order.save()
             request.session['order'] = order.id
             request.session['cart_items'] = cart_items
+            request.session['order_type'] = cart_items
             for item in cart_items:
                 try:
                     food_item = FoodItem.objects.get(id=item['id'])
@@ -104,6 +105,13 @@ def checkout(request):
             address = request.POST['address']
             instructions = request.POST.get('instructions')
             odr = Order.objects.get(id=odrid)
+            if not odr.user:
+                user = User.objects.filter(username=phone).last()
+                if not user:
+                    user = User.objects.create_user(username=phone, password=str(first_name)[:3]+"@123", email=email, mobile=int(phone))
+                    user.guest = True
+                    user.save()
+                odr.user = user
             odr.fname = first_name
             odr.lname = last_name
             odr.email = email
@@ -112,13 +120,19 @@ def checkout(request):
             odr.address = address
             odr.instruction = instructions
             odr.save()
+            devices = FCMDevice.objects.filter(user=odr.user)
+            title = f'Order Created'
+            body = f'{first_name} {last_name} has generated order in your restaurent. Order id is {odr.orderid}.'
+            devices.send_message(
+                Message(notification=Notification(title=title, body=body, image=settings.EASYLOGO),data={})
+            )
+            del request.session['order']
+            del request.session['cart_items']
             messages.success(request, "Your order is placed successfully.")
             return redirect('restaurant:restaurant')
-
     oid = request.session.get('order', None)
     order = Order.objects.filter(id=oid).last()
-    cart_items = request.session.get('cart_items', [])
-    order_type = request.session.get('order_type', 'Delivery')  
+    cart_items = request.session.get('cart_items', []) 
     total = 0
     for idx, item in enumerate(cart_items):
         tl = item['price'] * item['quantity']

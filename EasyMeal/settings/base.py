@@ -146,7 +146,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Easy Meal Logo
 
-EASYLOGO = "https://securitytroops.com/assets/images/login/st.png"
+EASYLOGO = "https://testing.ordereasy.co.nz/static/images/order-easy.png"
 
 # Abstract User
 

@@ -114,14 +114,14 @@
                         {% csrf_token %}
                         <h4>Buyer information</h4>
                         <input type="hidden" name="oid" value="{{ order.id }}" required>
-                        <input type="text" name="first_name" placeholder="First Name" value="{{ order.fname }}" required>
-                        <input type="text" name="last_name" placeholder="Last Name" value="{{ order.lname }}" required>
+                        <input type="text" name="first_name" placeholder="First Name" value="{% if order.fname %}{{ order.fname }}{% endif %}" required>
+                        <input type="text" name="last_name" placeholder="Last Name" value="{% if order.lname %}{{ order.lname }}{% endif %}" required>
                         <div class="row">
                             <div class="col-lg-6">
-                                <input type="text" name="email" placeholder="E-mail" value="{{ order.email }}" required>
+                                <input type="text" name="email" placeholder="E-mail" value="{% if order.email %}{{ order.email }}{% endif %}" required>
                             </div>
                             <div class="col-lg-6">
-                                <input type="number" name="phone" placeholder="Phone" value="{{ order.phone }}" required>
+                                <input type="number" name="phone" placeholder="Phone" value="{% if order.phone %}{{ order.phone }}{% endif %}" required>
                             </div>
                         </div>
                         <h4 class="two">Delivery addresses</h4>
