@@ -882,6 +882,9 @@ body.menu-open {
 										{% csrf_token %}
 										<div id="cart-content">
 											<div id="cart-items"></div>
+											<input type="hidden" id="order-type-input" name="order_type" value="Delivery">								
+											<input type="hidden" id="restaurent-input" name="restaurent_id">								
+											<input type="hidden" id="dcharge" name="charge">								
 											<div class="omc-sv">
 												<div class="voucher-code voucher-section mt-4">
 													<input type="text" name="VoucherCode" id="voucher-code"
@@ -889,9 +892,9 @@ body.menu-open {
 													<button class="btn add-voucher" id="apply-voucher">Add</button>
 												</div>
 											</div>
-											<input type="hidden" name="cart_data" id="cart-data">
+											<input type="hidden" name="cart_data" id="cart-data">	
 											<div class="cart-footer">
-												<button type="submit" id="checkout" class="btn btn-success">Checkout</button>
+												<button type="submit" id="checkout" name="cart_checkout" class="btn btn-success">Checkout</button>
 											</div>
 										</div>
 									</form>

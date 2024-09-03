@@ -824,12 +824,12 @@
 			`;
 			cartContent.appendChild(cartItem);
 		});
-	
+		let dcharge = 0;
 		if (orderType === 'Delivery') {
 			const selectedRestaurantCard = document.querySelector('.restaurant-card'); 
 			const deliveryCharge = parseFloat(selectedRestaurantCard.getAttribute('data-delivery-charge')) || 0;
 			totalAmount += deliveryCharge;
-	
+			dcharge = deliveryCharge;
 			const deliveryChargeItem = document.createElement("div");
 			deliveryChargeItem.classList.add("cart-item");
 			deliveryChargeItem.innerHTML = `<p>Delivery Charge: $${deliveryCharge.toFixed(2)}</p>`;
@@ -848,6 +848,8 @@
 		cartDataOrder.value = orderType;
 		const restaurentInput =document.getElementById('restaurent-input')
 		restaurentInput.value = "{{restaurant.id}}"
+		const dchargeInput =document.getElementById('dcharge')
+		dchargeInput.value = dcharge
         console.log(cartDataOrder,"cartsection ")
         document.querySelectorAll(".increase-qty").forEach(button => {
             button.addEventListener("click", function() {

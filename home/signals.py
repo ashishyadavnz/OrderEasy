@@ -20,3 +20,9 @@ def order_add(sender, instance=None, created=False, **kwargs):
 	if created:
 		instance.orderid = 'ORDER00000' + str(instance.id)
 		instance.save()
+
+@receiver(post_save, sender=Cart)
+def order_add(sender, instance=None, created=False, **kwargs):
+	if created:
+		instance.order.total = instance.order.total + instance.total
+		instance.order.save()

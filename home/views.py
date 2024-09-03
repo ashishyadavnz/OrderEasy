@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.urls import reverse
 from .models import *
 from django.utils import timezone
-from restaurant.models import Cart, FoodItem, Restaurant, Category,Cuisine 
+from restaurant.models import *
 from blog.models import Post
 from django.contrib.auth import authenticate,logout, login as auth_login
 
@@ -53,62 +53,82 @@ def becomePartner(request):
     return render(request, 'ui/become-partner.html')
 
 def checkout(request):
-    user_info = None
-    if request.user.is_authenticated:
-        user_info = {
-            'first_name': request.user.first_name,
-            'last_name': request.user.last_name,
-            'email': request.user.email,
-            'phone': request.user.mobile,
-        }
-    
     if request.method == 'POST':
-        cart_data = request.POST.get('cart_data')
-        order_type = request.POST.get('order_type')
-        restaurent = request.POST.get('restaurent_id')
-        print(order_type,"this is order type") 
-        try:
-            cart_items = json.loads(cart_data)
-        except json.JSONDecodeError:
-            cart_items = []
-        request.session['cart'] = cart_items
-        request.session['order_type'] = order_type  
-        request.session['restaurent'] = restaurent  
-        for item in cart_items:
+        if 'cart_checkout' in request.POST:
+            cart_data = request.POST.get('cart_data')
+            order_type = request.POST['order_type']
+            restaurent = request.POST['restaurent_id']
+            voucher_id = request.POST.get('voucher_id')
+            charge = request.POST['charge']
             try:
-                food_item = FoodItem.objects.get(id=item['id'])
-                cart_item = Cart(
-                    fooditem=food_item,
-                    quantity=item['quantity'],
-                    total=item['quantity'] * item['price']
-                )
-                cart_item.save()
-            except FoodItem.DoesNotExist:
-                continue
-        return redirect('home:checkout')
-        
-        # total = sum(item['price'] * item['quantity'] for item in cart_items)
-        
-        # context = {
-        #     'cart': cart_items,
-        #     'total': total,
-        #     'user_info': user_info,
-        #     'order_type': order_type, 
-        # }
-        # return render(request, 'ui/checkout.html', context)
+                cart_items = json.loads(cart_data)
+            except json.JSONDecodeError:
+                cart_items = []
+            rests = Restaurant.objects.get(id=restaurent)
+            voucher = Voucher.objects.filter(id=voucher_id).last()
+            order = Order(
+                restaurant=rests,
+                voucher=voucher,
+                otype = order_type,
+                charge = float(charge),
+            )
+            if request.user.is_authenticated:
+                order.fname = request.user.first_name
+                order.lname = request.user.last_name
+                order.email = request.user.email
+                order.phone = request.user.mobile
+                order.user = request.user
+                order.save()
+            request.session['order'] = order.id
+            request.session['cart_items'] = cart_items
+            for item in cart_items:
+                try:
+                    food_item = FoodItem.objects.get(id=item['id'])
+                    cart_item = Cart(
+                        order=order,
+                        fooditem=food_item,
+                        quantity=item['quantity'],
+                        total=item['quantity'] * item['price']
+                    )
+                    cart_item.save()
+                except FoodItem.DoesNotExist:
+                    continue
+            return redirect('home:checkout')
+        if 'place_order' in request.POST:
+            odrid = request.POST['oid']
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            email = request.POST['email']
+            phone = request.POST['phone']
+            otype = request.POST['otype']
+            address = request.POST['address']
+            instructions = request.POST.get('instructions')
+            odr = Order.objects.get(id=odrid)
+            odr.fname = first_name
+            odr.lname = last_name
+            odr.email = email
+            odr.phone = phone
+            odr.otype = otype
+            odr.address = address
+            odr.instruction = instructions
+            odr.save()
+            messages.success(request, "Your order is placed successfully.")
+            return redirect('restaurant:restaurant')
 
-    cart = request.session.get('cart', [])
-    rid = request.session.get('restaurent', None)
-    restaurent = Restaurant.objects.filter(id=rid).last()
-    total = sum(item['price'] * item['quantity'] for item in cart)
+    oid = request.session.get('order', None)
+    order = Order.objects.filter(id=oid).last()
+    cart_items = request.session.get('cart_items', [])
     order_type = request.session.get('order_type', 'Delivery')  
+    total = 0
+    for idx, item in enumerate(cart_items):
+        tl = item['price'] * item['quantity']
+        cart_items[idx]['total'] = tl
+        total += tl
     
     context = {
-        'cart': cart,
-        'total': total,
-        'user_info': user_info,
-        'order_type': order_type,
-        'restaurent': restaurent,
+        'cart': cart_items,
+        'order': order,
+        'total': total
     }
     return render(request, 'ui/checkout.html', context)
 

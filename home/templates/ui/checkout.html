@@ -55,8 +55,8 @@
                         </div>
                         
                         <div class="banner-wilmington">
-                            <img alt="logo" src="https://bslthemes.com/html/quickeat/assets/img/logo-s.jpg" class="img-fluid">
-                            <h6>Your Restaurant Name: {{restaurent.title}}</h6>
+                            <img alt="logo" src="https://bslthemes.com/html/quickeat/assets/img/logo-s.jpg" class="img-fluid mx-2">
+                            Restaurant: <h6> {{order.restaurant.title}}</h6>
                         </div>
                         
                         <ul>
@@ -65,7 +65,7 @@
                                     {% comment %} <i class="closeButton fa-solid fa-xmark"></i> {% endcomment %}
                                     <div class="counter-container">
                                         <div class="counter-food">
-                                            <img alt="food" src="{{ item.image }}" style="width: 106px; height: 69px; object-fit: cover; border-radius: 4px;">
+                                            <img alt="food"class="mx-2" src="{% if item.image %}{{item.image}}{% else %}{% endif %}" style="width: 106px; height: 69px; object-fit: cover; border-radius: 4px;">
                                             <div class="food-details">
                                                 <h5>{{ item.title }}</h5>
                                                 <!-- <h3>${{ item.price }}</h3> -->
@@ -78,7 +78,7 @@
                                     <div class="price">
                                         <div class="d-flex py-auto my-auto">
                                             <span style="padding-top: 10px; padding-right: 10px;">Sum</span>
-                                            <h2>${{ item.price }}</h2>
+                                            <h2>${{ item.total }}</h2>
                                         </div>
                                         <div class="d-flex">
                                             <div class="qty-input d-flex">
@@ -97,35 +97,43 @@
                             <span>Total order:</span>
                             <h5>${{ total }}</h5>
                         </div>
+
+                        <div class="totel-price">
+                            <span>Dilivery Charge:</span>
+                            <h5>${{ order.charge }}</h5>
+                        </div>
                         
                         <div class="totel-price">
                             <span>To pay:</span>
-                            <h2>${{ total }}</h2>
+                            <h2>${{ order.total }}</h2>
                         </div>
                     </div>
                 </div>
                 <div class="offset-xl-1 col-xl-6 col-lg-12" data-aos="flip-up" data-aos-delay="300" data-aos-duration="400">
-                    <form class="checkout-form">
+                    <form method="POST" class="checkout-form">
+                        {% csrf_token %}
                         <h4>Buyer information</h4>
-                        <input type="text" name="first_name" placeholder="First Name" value="{{ user_info.first_name }}" {% if not user_info %}required{% endif %}>
-                        <input type="text" name="last_name" placeholder="Last Name" value="{{ user_info.last_name }}" {% if not user_info %}required{% endif %}>
+                        <input type="hidden" name="oid" value="{{ order.id }}" required>
+                        <input type="text" name="first_name" placeholder="First Name" value="{{ order.fname }}" required>
+                        <input type="text" name="last_name" placeholder="Last Name" value="{{ order.lname }}" required>
                         <div class="row">
                             <div class="col-lg-6">
-                                <input type="text" name="email" placeholder="E-mail" value="{{ user_info.email }}" {% if not user_info %}required{% endif %}>
+                                <input type="text" name="email" placeholder="E-mail" value="{{ order.email }}" required>
                             </div>
                             <div class="col-lg-6">
-                                <input type="number" name="phone" placeholder="Phone" value="{{ user_info.phone }}" {% if not user_info %}required{% endif %}>
+                                <input type="number" name="phone" placeholder="Phone" value="{{ order.phone }}" required>
                             </div>
                         </div>
                         <h4 class="two">Delivery addresses</h4>
-                        <select class="nice-select Advice">
-                            <option>California</option>
-                            <option>California 1</option>
-                            <option>California 2</option>
-                            <option>California 3</option>
-                            <option>California 4</option>
+                        <textarea name="address" id="daddress" rows="10" cols="12" placeholder="Address" required></textarea>
+                        <textarea name="instructions" id="instructions" rows="10" cols="12" placeholder="Special Instructions"></textarea>
+                        <select class="nice-select Advice" name="otype" required>
+                            <option value="Delivery" {% if order.otype == "Delivery" %}selected{% endif %}>Delivery</option>
+                            <option value="Pickup" {% if order.otype == "Pickup" %}selected{% endif %}>Pickup</option>
+                            <option value="Schedule" {% if order.otype == "Schedule" %}selected{% endif %}>Schedule</option>
                         </select>
-                        <input type="text" name="street" placeholder="Street">
+                        <button type="submit" name="place_order" class="button-price">Place Order</button>
+                        <!-- <input type="text" name="street" placeholder="Street">
                         <div class="row">
                             <div class="col-lg-6">
                                 <input type="text" name="house_number" placeholder="House number">
@@ -135,8 +143,7 @@
                                 <span>*dispensable</span>
                             </div>
                         </div>
-                        <input type="text" id="order-type-input" name="order_type" value="Delivery">
-                        <button class="button-price">Place Order</button>
+                        <input type="text" name="order_type" value="Delivery"> -->
 
                         <!-- <h4 class="two">Payment method</h4>
                         <div class="nav nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
