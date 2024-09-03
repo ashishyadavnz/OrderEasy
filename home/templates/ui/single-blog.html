@@ -31,7 +31,7 @@
 					</div>
 					<div class="col-lg-2">
 						<div class="name-dedails">
-							<img alt="{{ post.author.username }}" src="{% if post.author.image %}{{post.author.image.url}}{% endif %}" class="img-fluid" style="border-radius: 50%; height: 100px !important;"  >
+							<img alt="{{ post.author.username }}" src="{% if post.author.image %}{{post.author.image.url}}{% else %}{% static 'images/order-easy.png' %}{% endif %}" class="img-fluid" style="border-radius: 50%; height: 100px !important;"  >
 							<h6>{{ post.author.username }}</h6>
 							<span>press secretary Quickeat</span>
 						</div>
@@ -71,7 +71,7 @@
 							<div class="col-lg-4">
 								{% if previous_post %}
 								<div class="previous-posts">
-									<img alt="{{ previous_post.title }}" src="{{ previous_post.thumbnail.url }}" class="img-fluid" style="height:80px !important">
+									<img alt="{{ previous_post.title }}" src="{% if previous_post.thumbnail %}{{ previous_post.thumbnail.url }}{% else %}{% static 'images/order-easy.png' %}{% endif %}" class="img-fluid" style="height:80px !important">
 									<div>
 										<h6>{{ previous_post.title |truncatechars:30 }}</h6>
 										<a href="{% url 'blog:blog_detail' previous_post.slug %}">Prev. Posts by this author</a>
@@ -81,7 +81,7 @@
 							</div>
 							<div class="col-lg-4 text-center ">
 								<div class="name-details">
-									<img alt="{{ post.author.username }}" src="{% if post.author.image %}{{ post.author.image.url }}{% endif %}" class="img-fluid" style="border-radius: 50%; height: 80px; width: 80px;">
+									<img alt="{{ post.author.username }}" src="{% if post.author.image %}{{ post.author.image.url }}{% else %}{% static 'images/order-easy.png' %}{% endif %}" class="img-fluid" style="border-radius: 50%; height: 80px; width: 80px;">
 									<h6>{{ post.author.username }}</h6>
 									<ul class="social-media justify-content-center ">
 										<li><a href="{{ post.author.profile.facebook }}"><i class="fa-brands fa-facebook-f"></i></a></li>
@@ -97,7 +97,7 @@
 										<h6>{{ next_post.title |truncatechars:30 }}</h6>
 										<a href="{% url 'blog:blog_detail' next_post.slug %}" >Next Post by this author</a>
 									</div>
-									<img alt="{{ next_post.title }}" src="{{ next_post.thumbnail.url }}" class="img-fluid" style="height:80px !important" >
+									<img alt="{{ next_post.title }}" src="{% if next_post.thumbnail %}{{ next_post.thumbnail.url }}{% else %}{% static 'images/order-easy.png' %}{% endif %}" class="img-fluid" style="height:80px !important" >
 								</div>
 								{% endif %}
 							</div>
@@ -118,7 +118,7 @@
 									<h6>{{ comment.name }}</h6>
 									<span>{{ comment.timestamp|date:"d.M.Y" }}</span>
 								</div>
-								<img alt="author" src="{% if comment.user and comment.user.profile_picture %}{{ comment.user.profile_picture.url }}{% else %}https://bslthemes.com/html/quickeat/assets/img/author-img-3.jpg{% endif %}">
+								<img alt="author" src="{% if comment.user and comment.user.profile_picture %}{{ comment.user.profile_picture.url }}{% else %}{% static 'images/order-easy.png' %}{% endif %}">
 							</div>
 						</li>
 						{% endfor %}

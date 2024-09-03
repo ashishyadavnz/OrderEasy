@@ -48,7 +48,7 @@ def restaurantCard(request, slug, category=None):
             else:
                 user = User.objects.filter(username=cd.phone).last()
                 if not user:
-                    user = User.objects.create_user(username=cd.phone, password=str(cd.name)[:3]+"@123")
+                    user = User.objects.create_user(username=cd.phone, password=str(cd.name)[:3]+"@123", email=cd.email, mobile=cd.phone)
                     user.guest = True
                     user.save()
             try:
