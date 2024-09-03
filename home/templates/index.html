@@ -1220,6 +1220,7 @@ body.menu-open {
 		const messaging = getMessaging();
 		getToken(messaging, { vapidKey: 'BHzwzJsxsIu-lTCvdZQfK1eqfCJd1tqDzGySY9DEjX6CwlZA1LB42062q2bv9uH3B2R18H_TVxbGVZl9X0yZjwI' }).then((currentToken) => {
 			if (currentToken) {
+				sendTokenToServer(currentToken)
 				console.log("Token is : ", currentToken);
 			} else {
 				console.log('No registration token available. Request permission to generate one.');
@@ -1332,76 +1333,98 @@ body.menu-open {
 
 {% comment %} food items {% endcomment %}
 <script>
-	let currentEditId = null;
-	
-	function openCreateForm() {
-		currentEditId = null;
-		$('#foodItemForm')[0].reset();
-		$('#foodItemModal').modal('show');
-	}
-	
-	function openEditForm(slug,) {
-		currentEditId = slug;
-		var $row = $(`#foodItem-${slug}`);
-		var title = $row.find('.food-title').text();
-        var category = $row.find('.food-category').data('category');
-        var cuisine = $row.find('.food-cuisine').data('cuisine');
-        var start = $row.find('.food-start').data('start');
-        var end = $row.find('.food-end').data('end');
-        var price = $row.find('.food-price').text();
-		console.log(title,category,cuisine,start,end,price)
-		var available = $row.find('.food-available').data('available').trim() === 'True';
-		$('#id_title').val(title);
-        $('#id_category').val(category); 
-        $('#id_cuisine').val(cuisine); 
-        $('#id_start').val(start);
-        $('#id_end').val(end);
-        $('#id_price').val(price);
-        $('#id_available').prop('checked', available);
-		$('#foodItemModal').modal('show');
-	}
-	
-	
-	function saveFoodItem(restro) {
-		let url = currentEditId ? `/restaurant/my-restaurant/${restro}/food-items/${currentEditId}/edit/` : `/restaurant/my-restaurant/${restro}/food-items/create/`;
-		let method = currentEditId ? 'POST' : 'POST';
-	
-		$.ajax({
-			url: url,
-			method: method,
-			data: new FormData($('#foodItemForm')[0]),
-			processData: false,
-			contentType: false,
-			success: function(response) {
-				if (response.status === 'success') {
-					$('#foodItemModal').modal('hide');
-					location.reload(); // Refresh the page to see the updated table
-				} else {
-					// Handle validation errors
+		let currentEditId = null;
+		
+		function openCreateForm() {
+			currentEditId = null;
+			$('#foodItemForm')[0].reset();
+			$('#foodItemModal').modal('show');
+		}
+		
+		$('.EditFoodItem').on("click", function() {
+			currentEditId =  $(this).data('slug')
+			var $row = $(`#foodItem-${currentEditId}`);
+			var title = $row.find('.food-title').text();
+			var category = $row.find('.food-category').data('category');
+			var cuisine = $row.find('.food-cuisine').data('cuisine');
+			var start = $row.find('.food-start').data('start');
+			var end = $row.find('.food-end').data('end');
+			var price = $row.find('.food-price').text();
+			console.log(title,category,cuisine,start,end,price)
+			var available = $row.find('.food-available').data('available').trim() === 'True';
+			$('#id_title').val(title);
+			$('#id_category').val(category); 
+			$('#id_cuisine').val(cuisine); 
+			$('#id_start').val(start);
+			$('#id_end').val(end);
+			$('#id_price').val(price);
+			$('#id_available').prop('checked', available);
+			$('#foodItemModal').modal('show');
+		});
+		
+		
+		$('.saveFoodItem').on("click", function() {
+			let restro = $(this).data('restaurant')
+			let url = '{% url "restaurant:create_food_item" restro=0 %}'.replace('0',restro)
+			if(currentEditId){
+				url = '{% url "restaurant:edit_food_item" restro=0 slug=1 %}'.replace('0',restro).replace('1',currentEditId)
+			}
+			$.ajax({
+				url: url,
+				method: 'POST',
+				data: new FormData($('#foodItemForm')[0]),
+				processData: false,
+				contentType: false,
+				success: function(response) {
+					if (response.status === 'success') {
+						$('#foodItemModal').modal('hide');
+						location.reload(); // Refresh the page to see the updated table
+					} else {
+						// Handle validation errors
+					}
 				}
+			});
+		});
+		$('.deleteFoodItem').on("click", function() {
+			let restro = $(this).data('restaurant')
+			let slug = $(this).data('slug')
+			if (confirm('Are you sure you want to delete this item?')) {
+				$.ajax({
+					url: '{% url "restaurant:delete_food_item" restro=0 slug=1 %}'.replace('0',restro).replace('1',slug) ,
+					//`/restaurant/my-restaurant/${restro}/food-items/${slug}/delete/`,
+					type: 'POST',
+					headers: {
+						'X-CSRFToken': '{{ csrf_token }}'
+					},
+					success: function(response) {
+						if (response.status === 'success') {
+							$(`#foodItem-${slug}`).remove();
+						}
+					},
+					error: function(xhr, status, error) {
+						console.error('Error deleting item:', status, error);
+					}
+				});
 			}
 		});
-	}
-	
-	function deleteFoodItem(slug, restro) {
-        if (confirm('Are you sure you want to delete this item?')) {
-            $.ajax({
-                url: `/restaurant/my-restaurant/${restro}/food-items/${slug}/delete/`,
-                type: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                success: function(response) {
-                    if (response.status === 'success') {
-                        $(`#foodItem-${slug}`).remove();
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error deleting item:', status, error);
-                }
-            });
-        }
-    }
+	</script>
+	<script>
+		function sendTokenToServer(currentToken) {
+			$.ajax({
+				type: 'POST',
+				url: '{% url "home:fcm_token" %}',  
+				data: {
+					'token': currentToken,
+					'csrfmiddlewaretoken': '{{ csrf_token }}' 
+				},
+				success: function(response) {
+					console.log('Token saved or retrieved:', response);
+				},
+				error: function(error) {
+					console.error('Error saving token:', error);
+				}
+			});
+		}
 	</script>
 </body>
 </html>

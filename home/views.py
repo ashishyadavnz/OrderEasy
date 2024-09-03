@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.urls import reverse
@@ -273,3 +274,20 @@ def submit_feedback(request, slug):
         return redirect(reverse('restaurant:restaurant-card', kwargs={'slug': slug}))  
     return render(request, 'ui/restaurant-card.html', {'restaurant': restaurant})
     
+def fcm_token(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        user = request.user
+        token = request.POST.get('token')
+        if not token:
+            return JsonResponse({'error': 'Token is required'}, status=400)
+
+        device, created = FCMDevice.objects.get_or_create(registration_id=token)
+        if device:
+            device.user=user
+            device.name=f'{user.first_name} {user.last_name}'
+            device.type='web'
+            device.save()
+
+        return JsonResponse({'token': device.registration_id, 'created': created})
+    
+    return JsonResponse({'error': 'Invalid request'}, status=400)

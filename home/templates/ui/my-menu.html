@@ -7,7 +7,7 @@
 <div class="container mt-3">
     <div class="d-md-flex justify-content-between align-items-center">
         <h1 class="">Food Items</h1>
-        <div >
+        <div>
             <a class="button button-2 me-2 " href="{% url 'restaurant:orders_items' restro %}">Orders</a>
             <button class="btn button button-2" data-bs-toggle="modal" data-bs-target="#foodItemModal" onclick="openCreateForm()">Add New Food Item</button>
         </div>
@@ -36,7 +36,7 @@
                 <td class="food-start" data-start="{{ item.start }}">{{ item.start }}</td>
                 <td class="food-end" data-end="{{ item.end }}">{{ item.end }}</td>
                 <td class="food-available" data-available="{{item.available}}">
-                    {% if item.available  %}
+                    {% if item.available %}
                     <div class="fs-1 text-success text-center">
                         ✓
                     </div>
@@ -47,8 +47,8 @@
                     <img class="img-fluid" width="100" src="{{item.image.url}}" alt="food item"> {% endif %}
                 </td>
                 <td>
-                    <button class="btn btn-info" onclick="openEditForm('{{ item.slug }}')">Edit</button>
-                    <button class="btn btn-danger" onclick="deleteFoodItem('{{ item.slug }}','{{item.restaurant.slug}}')">Delete</button>
+                    <button class="btn btn-info EditFoodItem" data-slug="{{item.slug}}">Edit</button>
+                    <button class="btn btn-danger deleteFoodItem" data-slug="{{item.slug}}" data-restaurant="{{item.restaurant.slug}}">Delete</button>
                 </td>
             </tr>
             {% endfor %}
@@ -69,61 +69,49 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="id_title" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="id_title" name="title">
+                        <input type="text" class="form-control" id="id_title" name="title" required>
                     </div>
-
-
-                    <!-- Cuisine -->
                     <div class="mb-3">
                         <label for="id_cuisine" class="form-label">Cuisine</label>
                         <select class="form-control" id="id_cuisine" name="cuisine">
+                            <option selected disabled>Select Cuisine </option>
                             {% for cuisine in  cuisines %}
                                 <option value="{{cuisine.id}}">{{cuisine.title}}</option>
                             {% endfor %}
                         </select>
                     </div>
-
-                    <!-- Category -->
                     <div class="mb-3">
                         <label for="id_category" class="form-label">Category</label>
                         <select class="form-control" id="id_category" name="category">
+                            <option selected disabled>Select Category </option>
                             {% for category in  categories %}
                                 <option value="{{category.id}}">{{category.title}}</option>
                             {% endfor %}
                         </select>
                     </div>
-
-                    <!-- Image -->
                     <div class="mb-3">
                         <label for="id_image" class="form-label">Image</label>
                         <input type="file" class="form-control" id="id_image" name="image">
                     </div>
-
-                    <!-- Start Time -->
                     <div class="mb-3">
                         <label for="id_start" class="form-label">Start Time</label>
                         <input type="time" class="form-control" id="id_start" name="start">
                     </div>
-
-                    <!-- End Time -->
                     <div class="mb-3">
                         <label for="id_end" class="form-label">End Time</label>
                         <input type="time" class="form-control" id="id_end" name="end">
                     </div>
-
-                    <!-- Price -->
                     <div class="mb-3">
                         <label for="id_price" class="form-label">Price (USD)</label>
-                        <input type="number" class="form-control" id="id_price" name="price">
+                        <input type="number" class="form-control" id="id_price" name="price" required>
                     </div>
-
-                    <!-- Available -->
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="id_available" name="available" checked>
                         <label class="form-check-label" for="id_available">Available</label>
                     </div>
-
-                    <button type="button" class="btn btn-primary" id="saveButton" onclick="saveFoodItem('{{restro}}')">Save</button>
+                    <div class="text-center">
+                        <button type="button" class="btn  button button-2 saveFoodItem" data-restaurant="{{restro}}" id="saveButton">Save</button>
+                    </div>
                 </form>
             </div>
         </div>
