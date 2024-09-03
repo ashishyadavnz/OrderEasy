@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.urls import reverse
 from .models import *
 from django.utils import timezone
-from restaurant.models import FoodItem, Restaurant, Category,Cuisine 
+from restaurant.models import Cart, FoodItem, Restaurant, Category,Cuisine 
 from blog.models import Post
 from django.contrib.auth import authenticate,logout, login as auth_login
 
@@ -61,31 +61,48 @@ def checkout(request):
             'email': request.user.email,
             'phone': request.user.mobile,
         }
-    print(request.user,"user information")
+    
     if request.method == 'POST':
         cart_data = request.POST.get('cart_data')
+        order_type = request.POST.get('order_type')
+        print(order_type,"this is order type") 
         try:
-            cart = json.loads(cart_data)
+            cart_items = json.loads(cart_data)
         except json.JSONDecodeError:
-            cart = []
+            cart_items = []
+        request.session['cart'] = cart_items
+        request.session['order_type'] = order_type  
+        for item in cart_items:
+            try:
+                food_item = FoodItem.objects.get(id=item['id'])
+                cart_item = Cart(
+                    fooditem=food_item,
+                    quantity=item['quantity'],
+                    total=item['quantity'] * item['price']
+                )
+                cart_item.save()
+            except FoodItem.DoesNotExist:
+                continue
         
-        request.session['cart'] = cart
-        total = sum(item['price'] * item['quantity'] for item in cart)
+        total = sum(item['price'] * item['quantity'] for item in cart_items)
         
         context = {
-            'cart': cart,
+            'cart': cart_items,
             'total': total,
             'user_info': user_info,
+            'order_type': order_type, 
         }
         return render(request, 'ui/checkout.html', context)
 
     cart = request.session.get('cart', [])
     total = sum(item['price'] * item['quantity'] for item in cart)
+    order_type = request.session.get('order_type', 'Delivery')  
     
     context = {
         'cart': cart,
         'total': total,
         'user_info': user_info,
+        'order_type': order_type,
     }
     return render(request, 'ui/checkout.html', context)
 

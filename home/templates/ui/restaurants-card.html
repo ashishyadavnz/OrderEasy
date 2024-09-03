@@ -490,7 +490,7 @@
 										<div class="col-md-4 mt-3">
 											<div class="card shadow-sm mb-4 h-100 hover-card">
 												{% if item.image %}
-													<img src="{{ item.image.url }}"  alt="{{ item.title }}" class="w-100" style="object-fit: contain;" loading="lazy"  >
+													<img src="{{ item.image.url }}" style="height: 300px !important; width: 100%!important; object-fit: fill;" alt="{{ item.title }}">
 												{% endif %}
 												<div class="card-body">
 													<h5 class="card-title">{{ item.title }}</h5>
@@ -804,11 +804,17 @@
 			const cartItem = document.createElement("div");
 			cartItem.classList.add("cart-item");
 			cartItem.innerHTML = `
-				<img src="${item.image}" alt="${item.title}" class="cart-item-image" loading="lazy">
-				<p>${item.title} - $${item.price} x ${item.quantity}</p>
-				<div>
-					<button class="btn btn-sm btn-primary increase-qty" data-id="${item.id}">+</button>
-					<button class="btn btn-sm btn-danger decrease-qty" data-id="${item.id}">-</button>
+				<div class="row">
+					<div class="col-4">
+						<img src="${item.image}" alt="${item.title}" class="cart-item-image" loading="lazy">
+					</div>
+					<div class="col-6" style="text-align: center;">
+						<p>${item.title} - $${item.price} x ${item.quantity}</p>
+					</div>
+					<div class="col-2 d-flex">
+						<button class="btn btn-sm btn-primary increase-qty" data-id="${item.id}">+</button>
+						<button class="btn btn-sm btn-danger decrease-qty" data-id="${item.id}">-</button>
+					</div>
 				</div>
 			`;
 			cartContent.appendChild(cartItem);
@@ -833,7 +839,9 @@
 		// document.querySelector("#cart-section").classList.add("show");
 	    const cartDataInput = document.getElementById('cart-data');
         cartDataInput.value = JSON.stringify(cart);
-        console.log(cartDataInput,"cartsection ")
+		const cartDataOrder =document.getElementById('order-type-input')
+		cartDataOrder.value = orderType;
+        console.log(cartDataOrder,"cartsection ")
         document.querySelectorAll(".increase-qty").forEach(button => {
             button.addEventListener("click", function() {
                 const itemId = this.getAttribute("data-id");
