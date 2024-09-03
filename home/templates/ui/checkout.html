@@ -114,7 +114,7 @@
                                 <input type="text" name="email" placeholder="E-mail" value="{{ user_info.email }}" {% if not user_info %}required{% endif %}>
                             </div>
                             <div class="col-lg-6">
-                                <input type="text" name="phone" placeholder="Phone" value="{{ user_info.phone }}" {% if not user_info %}required{% endif %}>
+                                <input type="number" name="phone" placeholder="Phone" value="{{ user_info.phone }}" {% if not user_info %}required{% endif %}>
                             </div>
                         </div>
                         <h4 class="two">Delivery addresses</h4>
@@ -135,6 +135,7 @@
                                 <span>*dispensable</span>
                             </div>
                         </div>
+                        <input type="text" id="order-type-input" name="order_type" value="Delivery">
                         <button class="button-price">Place Order</button>
 
                         <!-- <h4 class="two">Payment method</h4>

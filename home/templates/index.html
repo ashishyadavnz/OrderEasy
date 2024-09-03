@@ -882,6 +882,7 @@ body.menu-open {
 									{% csrf_token %}
 									<div id="cart-content">
 										<div id="cart-items"></div>
+										<input type="hidden" id="order-type-input" name="order_type" value="Delivery">								
 										<div class="omc-sv">
 											<div class="voucher-code voucher-section mt-4">
 												<input type="text" name="VoucherCode" id="voucher-code"
@@ -1327,7 +1328,6 @@ body.menu-open {
 </script>
 <script>
 	document.getElementById('checkout').addEventListener('click', function() {
-    // Assuming the form for the cart is submitted via POST
     document.getElementById('cart-form').submit();
 });
 </script>

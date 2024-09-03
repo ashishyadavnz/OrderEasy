@@ -64,11 +64,14 @@ def checkout(request):
     
     if request.method == 'POST':
         cart_data = request.POST.get('cart_data')
+        order_type = request.POST.get('order_type')
+        print(order_type,"this is order type") 
         try:
             cart_items = json.loads(cart_data)
         except json.JSONDecodeError:
             cart_items = []
         request.session['cart'] = cart_items
+        request.session['order_type'] = order_type  
         for item in cart_items:
             try:
                 food_item = FoodItem.objects.get(id=item['id'])
@@ -80,22 +83,26 @@ def checkout(request):
                 cart_item.save()
             except FoodItem.DoesNotExist:
                 continue
+        
         total = sum(item['price'] * item['quantity'] for item in cart_items)
         
         context = {
             'cart': cart_items,
             'total': total,
             'user_info': user_info,
+            'order_type': order_type, 
         }
         return render(request, 'ui/checkout.html', context)
 
     cart = request.session.get('cart', [])
     total = sum(item['price'] * item['quantity'] for item in cart)
+    order_type = request.session.get('order_type', 'Delivery')  
     
     context = {
         'cart': cart,
         'total': total,
         'user_info': user_info,
+        'order_type': order_type,
     }
     return render(request, 'ui/checkout.html', context)
 
