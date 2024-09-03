@@ -249,7 +249,7 @@ body.menu-open {
     position: fixed;
     top: 0;
     right: 0;
-    width: 400px;
+    width: 35%;
     height: 100%;
     background-color: #ffffff;
     border-left: 1px solid #ddd;
@@ -866,40 +866,39 @@ body.menu-open {
 						</nav>
 					</div>
 					<div class="d-flex col-3 " style="justify-content: end; margin: auto;">
-						<div class="extras bag">
-							<a href="javascript:void(0)" id="desktop-menu" class="menu-btn">
-								<i class="fa-solid fa-bag-shopping"></i>
-							</a>							
-							<!-- Cart Section -->
-							<div id="cart-section" class="cart-sidebar">
-								<div class="cart-header">
-									<h2>My Cart</h2>
-									<button id="close-cart" class="btn btn-info">Close</button>
-								</div>
-								<form id="cart-form" method="POST" action="{% url 'home:checkout' %}">
-									{% csrf_token %}
-									<div id="cart-content">
-										<div id="cart-items"></div>
-										<input type="hidden" id="order-type-input" name="order_type" value="Delivery">								
-										<input type="hidden" id="restaurent-input" name="restaurent_id">								
-										<div class="omc-sv">
-											<div class="voucher-code voucher-section mt-4">
-												<input type="text" name="VoucherCode" id="voucher-code"
-													class="form-control om-voucher-code" placeholder="Enter voucher code" data-sid="1166">
-												<button class="btn add-voucher" id="apply-voucher">Add</button>
+						{% if request.user and request.user.role == 'Owner' %}
+						{% else %}
+							<div class="extras bag">
+								<a href="javascript:void(0)" id="desktop-menu" class="menu-btn">
+									<i class="fa-solid fa-bag-shopping"></i>
+								</a>							
+								<!-- Cart Section -->
+								<div id="cart-section" class="cart-sidebar">
+									<div class="cart-header">
+										<h2>My Cart</h2>
+										<button id="close-cart" class="btn btn-info">Close</button>
+									</div>
+									<form id="cart-form" method="POST" action="{% url 'home:checkout' %}">
+										{% csrf_token %}
+										<div id="cart-content">
+											<div id="cart-items"></div>
+											<div class="omc-sv">
+												<div class="voucher-code voucher-section mt-4">
+													<input type="text" name="VoucherCode" id="voucher-code"
+														class="form-control om-voucher-code" placeholder="Enter voucher code" data-sid="1166">
+													<button class="btn add-voucher" id="apply-voucher">Add</button>
+												</div>
+											</div>
+											<input type="hidden" name="cart_data" id="cart-data">
+											<div class="cart-footer">
+												<button type="submit" id="checkout" class="btn btn-success">Checkout</button>
 											</div>
 										</div>
-										<input type="hidden" name="cart_data" id="cart-data">	
-										<div class="cart-footer">
-											<button type="submit" id="checkout" name="checkout" class="btn btn-success">Checkout</button>
-										</div>
-									</div>
-								</form>
+									</form>
+								</div>
+								<a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a>
 							</div>
-							
-							
-							<a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a>
-						</div>
+						{% endif %}
 					</div>
 				</div>
 				<div class="side-menu" id="content" style="display: none;">
@@ -1330,5 +1329,79 @@ body.menu-open {
     document.getElementById('cart-form').submit();
 });
 </script>
+
+{% comment %} food items {% endcomment %}
+<script>
+	let currentEditId = null;
+	
+	function openCreateForm() {
+		currentEditId = null;
+		$('#foodItemForm')[0].reset();
+		$('#foodItemModal').modal('show');
+	}
+	
+	function openEditForm(slug,) {
+		currentEditId = slug;
+		var $row = $(`#foodItem-${slug}`);
+		var title = $row.find('.food-title').text();
+        var category = $row.find('.food-category').data('category');
+        var cuisine = $row.find('.food-cuisine').data('cuisine');
+        var start = $row.find('.food-start').data('start');
+        var end = $row.find('.food-end').data('end');
+        var price = $row.find('.food-price').text();
+		console.log(title,category,cuisine,start,end,price)
+		var available = $row.find('.food-available').data('available').trim() === 'True';
+		$('#id_title').val(title);
+        $('#id_category').val(category); 
+        $('#id_cuisine').val(cuisine); 
+        $('#id_start').val(start);
+        $('#id_end').val(end);
+        $('#id_price').val(price);
+        $('#id_available').prop('checked', available);
+		$('#foodItemModal').modal('show');
+	}
+	
+	
+	function saveFoodItem(restro) {
+		let url = currentEditId ? `/restaurant/my-restaurant/${restro}/food-items/${currentEditId}/edit/` : `/restaurant/my-restaurant/${restro}/food-items/create/`;
+		let method = currentEditId ? 'POST' : 'POST';
+	
+		$.ajax({
+			url: url,
+			method: method,
+			data: new FormData($('#foodItemForm')[0]),
+			processData: false,
+			contentType: false,
+			success: function(response) {
+				if (response.status === 'success') {
+					$('#foodItemModal').modal('hide');
+					location.reload(); // Refresh the page to see the updated table
+				} else {
+					// Handle validation errors
+				}
+			}
+		});
+	}
+	
+	function deleteFoodItem(slug, restro) {
+        if (confirm('Are you sure you want to delete this item?')) {
+            $.ajax({
+                url: `/restaurant/my-restaurant/${restro}/food-items/${slug}/delete/`,
+                type: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        $(`#foodItem-${slug}`).remove();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error deleting item:', status, error);
+                }
+            });
+        }
+    }
+	</script>
 </body>
 </html>
