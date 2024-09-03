@@ -189,13 +189,41 @@ class Reservation(BaseModel):
 		trackupdate(self)
 		return super().save(*args, **kwargs)
 
+class Order(BaseModel):
+	"""docstring for Order"""
+	restaurant = models.ForeignKey(Restaurant, on_delete=models.PROTECT, related_name="order_restaurant")
+	user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='order_user', null=True, blank=True)
+	voucher = models.ForeignKey(Voucher, on_delete=models.PROTECT, related_name="order_voucher", null=True, blank=True)
+	orderid = models.CharField(max_length=30, null=True, blank=True)
+	fname = models.CharField(max_length=160, null=True, blank=True, verbose_name="First Name")
+	lname = models.CharField(max_length=160, null=True, blank=True, verbose_name="Last Name")
+	email = models.EmailField(null=True, blank=True)
+	phone = models.PositiveIntegerField(null=True, blank=True)
+	time = models.TimeField(verbose_name="Pickup/Delivery/Schedule Time", null=True, blank=True)
+	address = models.TextField(null=True, blank=True)
+	instruction = models.TextField(verbose_name="Delivery Instructions", null=True, blank=True)
+	total = models.FloatField(help_text="IN USD", default=0)
+	charge = models.FloatField(default=0, verbose_name="Delivery Charge")
+	otype = models.CharField(max_length=20, choices=otype, default='Delivery', verbose_name="Order Type")
+
+	class Meta:
+		verbose_name_plural = '08. Order'
+
+	def __str__(self):
+		return str(self.fname) + " " + str(self.lname)
+
+	def save(self, *args, **kwargs):
+		trackupdate(self)
+		return super().save(*args, **kwargs)
+
 class Cart(BaseModel):
+	order = models.ForeignKey(Order, on_delete=models.PROTECT, related_name="cart_order")
 	fooditem = models.ForeignKey(FoodItem, on_delete=models.PROTECT, related_name="cart_fooditem")
 	quantity = models.PositiveIntegerField()
 	total = models.PositiveIntegerField(default=0)
 
 	class Meta:
-		verbose_name_plural = '08. Cart Items'
+		verbose_name_plural = '09. Cart Items'
 
 	def __str__(self):
 		return str(self.fooditem)
@@ -203,33 +231,6 @@ class Cart(BaseModel):
 	def save(self, *args, **kwargs):
 		trackupdate(self)
 		self.total = self.quantity * self.fooditem.price
-		return super().save(*args, **kwargs)
-
-class Order(BaseModel):
-	"""docstring for Order"""
-	restaurant = models.ForeignKey(Restaurant, on_delete=models.PROTECT, related_name="order_restaurant")
-	user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='order_user')
-	voucher = models.ForeignKey(Voucher, on_delete=models.PROTECT, related_name="order_voucher", null=True, blank=True)
-	cart = models.ManyToManyField(Cart, related_name="order_cart")
-	orderid = models.CharField(max_length=30)
-	name = models.CharField(max_length=160)
-	email = models.EmailField()
-	phone = models.PositiveIntegerField()
-	time = models.TimeField(verbose_name="Pickup/Delivery/Schedule Time")
-	address = models.TextField()
-	instruction = models.TextField(verbose_name="Delivery Instructions", null=True, blank=True)
-	total = models.PositiveIntegerField(help_text="IN USD", default=0)
-	charge = models.PositiveIntegerField(default=0, verbose_name="Delivery Charge")
-	otype = models.CharField(max_length=20, choices=otype, default='Delivery', verbose_name="Order Type")
-
-	class Meta:
-		verbose_name_plural = '09. Order'
-	
-	def __str__(self):
-		return str(self.name)
-
-	def save(self, *args, **kwargs):
-		trackupdate(self)
 		return super().save(*args, **kwargs)
 
 class Partner(BaseModel):

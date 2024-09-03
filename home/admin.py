@@ -9,7 +9,7 @@ from django.utils.safestring import mark_safe
 from restaurant.models import *
 import csv
 
-class AddressInline(admin.StackedInline):
+class AddressInline(admin.TabularInline):
     model = Address
     extra = 0
     fields = ('user', 'address')
@@ -23,10 +23,17 @@ class FoodItemInline(admin.StackedInline):
     raw_id_fields = ['restaurant', 'cuisine', 'category']
     classes = ['collapse']
 
+class CartInline(admin.TabularInline):
+    model = Cart
+    extra = 0
+    fields = ('order','fooditem','quantity','total','status')
+    raw_id_fields = ['order','fooditem']
+    classes = ['collapse']
+
 INLINE_CONFIG = {
     User: [AddressInline],
-    Cuisine: [FoodItemInline],
     Restaurant: [FoodItemInline],
+    Order: [CartInline],
 }
 
 class ListAdminMixin(admin.ModelAdmin):

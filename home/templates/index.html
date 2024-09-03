@@ -786,6 +786,18 @@ body.menu-open {
     font-size: 1.5rem;
     color: #333;
 }
+.d-none {
+	display: none;
+}
+
+.quantity-controls {
+	display: flex;
+	align-items: center;
+}
+
+.item-quantity {
+	margin: 0 10px;
+}
 </style>
 </head>
 
@@ -807,7 +819,7 @@ body.menu-open {
 				<div class="col-3">
 					<div class="header-style">
 						<a href="{% url 'home:home-page' %}">
-							<img src="{% static 'images/order-easy.png' %}" class="img-fluid log-imag" alt=""
+							<img src="{% static 'images/order-easy.png' %}" class="img-fluid log-imag" alt="logo.png"
 								height="150px" width="200px">
 						</a>
 						<div class="extras bag">
@@ -882,6 +894,9 @@ body.menu-open {
 										{% csrf_token %}
 										<div id="cart-content">
 											<div id="cart-items"></div>
+											<input type="hidden" id="order-type-input" name="order_type" value="Delivery">								
+											<input type="hidden" id="restaurent-input" name="restaurent_id">								
+											<input type="hidden" id="dcharge" name="charge">								
 											<div class="omc-sv">
 												<div class="voucher-code voucher-section mt-4">
 													<input type="text" name="VoucherCode" id="voucher-code"
@@ -889,9 +904,9 @@ body.menu-open {
 													<button class="btn add-voucher" id="apply-voucher">Add</button>
 												</div>
 											</div>
-											<input type="hidden" name="cart_data" id="cart-data">
+											<input type="hidden" name="cart_data" id="cart-data">	
 											<div class="cart-footer">
-												<button type="submit" id="checkout" class="btn btn-success">Checkout</button>
+												<button type="submit" id="checkout" name="cart_checkout" class="btn btn-success">Checkout</button>
 											</div>
 										</div>
 									</form>
@@ -908,7 +923,7 @@ body.menu-open {
 					<nav class="navbar">
 						<ul class="">
 							<a href="{% url 'home:home-page' %}">
-								<img src="{% static 'images/order-easy.png' %}" class="img-fluid log-imag" alt=""
+								<img src="{% static 'images/order-easy.png' %}" class="img-fluid log-imag" alt="logo.png"
 									height="100px" width="150px">
 							</a>
 							<li class="navbar-dropdown active">
@@ -1142,7 +1157,7 @@ body.menu-open {
 				<div class="col-lg-5 col-md-6 col-sm-12">
 					<div class="footer-description" style="word-wrap: break-word;">
 						<a href="{% url 'home:home-page' %}">
-							<img src="{% static 'images/order-easy.png' %}" alt="" class="foot-img" height="150px">
+							<img src="{% static 'images/order-easy.png' %}" alt="logo.png" class="foot-img" height="150px">
 						</a>
 						<h2>The Best Restaurants
 							in Your Home</h2>

@@ -135,10 +135,10 @@
 			<div class="container">
 				<div class="row align-items-center mx-0">
 					<div class="col-lg-6" data-aos="flip-up"  data-aos-delay="200" data-aos-duration="300">
-							<div class="city-restaurants">
-								<h2>12 Best Restaurants in Your City</h2>
-								<p>Magna sit amet purus gravida quis blandit turpis cursus. Venenatis tellus in metus vulputate.</p>
-							</div>
+						<div class="city-restaurants">
+							<h2>12 Best Restaurants in Your City</h2>
+							<p>Magna sit amet purus gravida quis blandit turpis cursus. Venenatis tellus in metus vulputate.</p>
+						</div>
 					</div>
 					{% for restaurant in restaurants|slice:":3" %}
 					<div class="col-lg-6 mb-2" data-aos="flip-up" data-aos-delay="300" data-aos-duration="400">
@@ -154,11 +154,11 @@
 										<i class="fa-regular fa-star"></i>
 									{% endfor %}
 								</div>
-								<div class="cafa-button">
+								{% comment %} <div class="cafa-button">
 									{% for categorys in categories %}
 										<a class="end mt-5" href="">{{categorys.title}}</a>
 									{% endfor %}
-								</div>
+								</div> {% endcomment %}
 								<p>{{ restaurant.content | truncatechars:150 }}</p>
 							</div>
 						</div>
