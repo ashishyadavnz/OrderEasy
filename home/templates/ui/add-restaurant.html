@@ -1,0 +1,194 @@
+{% extends "index.html" %}
+{% load custom_filter %}
+{% load static %}
+{% block content %}
+<style>
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    
+    .form-control,
+    .form-control-file,
+    .form-check-input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+    
+    .form-control-file {
+        padding: 0;
+    }
+    
+    .form-control:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+    }
+    
+    .form-check-input {
+        width: auto;
+        margin-right: 10px;
+    }
+    
+    .btn-primary {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+    }
+    
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="menu-layer ">	
+    <section class="hero-section about gap">
+        <div class="container">
+            
+        </div>
+	</section>
+	<!-- banner -->
+	<section class="banner mb-5" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
+		<div class="container">
+			
+		</div>
+	</section>
+	<section class="best-restaurants gap">
+		<div class="container">
+			<div class="row mx-0">
+                <div class="container">
+                    <h1>Create a New Restaurant</h1>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label for="id_title">Title:</label>
+                            {{ form.title|add_class:"form-control" }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="id_logo">Logo:</label>
+                            {{ form.logo|add_class:"form-control-file" }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="id_image">Image:</label>
+                            {{ form.image|add_class:"form-control-file" }}
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="id_phone">Phone:</label>
+                            {{ form.phone|add_class:"form-control" }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="id_email">Email:</label>
+                            {{ form.email|add_class:"form-control" }}
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="id_found">Found:</label>
+                            {{ form.found|add_class:"form-control" }}
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="id_city">City:</label>
+                            {{ form.city|add_class:"form-control" }}
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="id_postcode">Postcode:</label>
+                            {{ form.postcode|add_class:"form-control" }}
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="id_address">Address:</label>
+                            {{ form.address|add_class:"form-control" }}
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="id_latitude">Latitude:</label>
+                            {{ form.latitude|add_class:"form-control" }}
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="id_longitude">Longitude:</label>
+                            {{ form.longitude|add_class:"form-control" }}
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="id_website">Website:</label>
+                            {{ form.website|add_class:"form-control" }}
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="id_facebook">Facebook:</label>
+                            {{ form.facebook|add_class:"form-control" }}
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="id_twitter">Twitter:</label>
+                            {{ form.twitter|add_class:"form-control" }}
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="id_instagram">Instagram:</label>
+                            {{ form.instagram|add_class:"form-control" }}
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="id_linkedin">LinkedIn:</label>
+                            {{ form.linkedin|add_class:"form-control" }}
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="id_vip">VIP:</label>
+                            {{ form.vip|add_class:"form-check-input" }}
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="id_source">Source:</label>
+                            {{ form.source|add_class:"form-control" }}
+                        </div>
+            
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+			</div>
+		</div>
+	</section>
+  <div class="bsl-popup" data-theme="quickeat" data-category="html">
+    <div class="bsl-popup__buttons"></div>
+    <div class="bsl-popup__content bsl-popup__content-related">
+      <div class="bsl-popup__menu"></div>
+      <div class="bsl-popup__tabs">
+        <div class="bsl-popup__tab bsl-popup__tab-demo"></div>
+        <div class="bsl-popup__tab bsl-popup__tab-all"></div>
+        <div class="bsl-popup__tab bsl-popup__tab-related"></div>
+        <div class="bsl-popup__tab bsl-popup__tab-version"></div>
+      </div>
+    </div>
+    <div class="bsl-popup__content bsl-popup__content-help"></div>
+  </div>
+</div>
+{% endblock %}

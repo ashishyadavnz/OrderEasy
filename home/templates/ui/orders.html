@@ -1,0 +1,59 @@
+{% extends "index.html" %} {% load custom_filter %} {% load static %} {% block content %}
+<section class="hero-section about gap">
+    <div class="container">
+
+    </div>
+</section>
+<div class="container mt-3">
+    <div class="d-md-flex justify-content-between">
+        <h1 class="">Orders </h1>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Time</th>
+                <th>Address</th>
+                <th>Total</th>
+                <th>Charge</th>
+                <th>Order Type</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody id="orderItemsTable">
+            {% for item in orderItem %}
+            <tr id="orderItem-{{ item.slug }}">
+                <td >{{ item.orderid }}</td>
+                <td >{{ item.name }}</td>
+                <td >{{ item.email }}</td>
+                <td >{{ item.phone }}</td>
+                <td >{{ item.time }}</td>
+                <td >{{ item.address }}</td>
+                <td >{{ item.total }}</td>
+                <td >{{ item.charge }}</td>
+                <td >{{ item.otype }}</td>
+                <td >{{ item.instruction }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="orderItemModal" tabindex="-1" aria-labelledby="orderItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderItemModalLabel">Order Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

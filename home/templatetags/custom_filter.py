@@ -17,3 +17,7 @@ def is_restaurant_open(start_time, end_time):
     if start_time and end_time:
         return start_time <= current_time <= end_time
     return False
+
+@register.filter(name='add_class')
+def add_class(value, arg):
+    return value.as_widget(attrs={'class': arg})

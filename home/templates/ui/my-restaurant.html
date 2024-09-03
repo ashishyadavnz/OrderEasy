@@ -5,72 +5,23 @@
 
 
 <div class="menu-layer">	
-  <section class="hero-section about gap">
-				<div class="container">
-					{% comment %} <div class="row align-items-center">
-						<div class="col-lg-6" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
-							<div class="about-text">
-								<ul class="crumbs d-flex">
-									<li><a href="{% url 'home:home-page' %}">Home</a></li>
-									<li class="two"><a href="{% url 'restaurant:restaurant' %}"><i class="fa-solid fa-right-long"></i>Restaurants</a></li>
-								</ul>
-								<h2>Restaurants</h2>
-								<p>Egestas sed tempus urna et pharetra pharetra massa. Fermentum posuere urna nec tincidunt praesent semper.</p>
-								<div class="restaurant">
-									<div class="nice-select-one">
-										<select class="nice-select Advice">
-											{% for rest in restaurants  %}
-											<option>{{rest.title}}</option>
-											{% endfor %}
-									</select>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-6" data-aos="fade-up"  data-aos-delay="300" data-aos-duration="400">
-							<div class="restaurants-girl-img food-photo-section">
-								<img alt="man" src="{% static 'images/photo-11.png' %}">
-								<a href="#" class="one"><i class="fa-solid fa-burger"></i>Burgers</a>
-								<a href="#" class="two"><i class="fa-solid fa-drumstick-bite"></i>Chicken</a>
-								<a href="#" class="three"><i class="fa-solid fa-cheese"></i>Steaks</a>
-								<a href="#" class="for"><i class="fa-solid fa-pizza-slice"></i>Fish</a>
-							</div>
-						</div>
-					</div> {% endcomment %}
-				</div>
+    <section class="hero-section about gap">
+        <div class="container">
+            
+        </div>
 	</section>
 	<!-- banner -->
 	<section class="banner mb-5" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
 		<div class="container">
-			{% comment %} <div class="banner-img" style="background-image: url(https://bslthemes.com/html/quickeat/assets/img/food-4.jpg);">
-				<div class="banner-logo">
-					<h4>Restaurant<br>of the Month
-					<span class="chevron chevron--left"></span>
-				</h4>
-					<div class="banner-wilmington">
-						<img alt="logo" src="{% static 'images/logos-6.jpg' %}">
-						<h6>The Wilmington</h6>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-xl-6 col-lg-12">
-						<div class="choose-lunches">
-
-							<h2>Choose 2 lunches</h2>
-							<h3>pay for one</h3>
-							<a href="#" class="button button-2 non">Order Now<i class="fa-solid fa-arrow-right"></i></a>
-						</div>
-					</div>
-				</div>
-			</div> {% endcomment %}
 		</div>
 	</section>
-	<!-- best-restaurants -->
 	<section class="best-restaurants gap">
 		<div class="container">
 			<div class="row mx-0">
 				{% if restaurants %}
+					<div class="d-flex justify-content-between mt-2">
+						<h1>My Restaurants</h1> <a class="button button-2" href="{% url 'restaurant:add_restaurant' %}">Add a new restaurant</a>
+					</div>
 					{% for restaurant in restaurants %}
 						<div class="col-lg-6 restaurant-card mb-3" 
 							 data-latitude="{{ restaurant.latitude }}" 
@@ -81,7 +32,7 @@
 							<div class="logos-card restaurant-page">
 								<img alt="{{ restaurant.title }}" src="{% if restaurant.logo %}{{ restaurant.logo.url }}{% endif %}" style="width: 100px; height: 100px; object-fit: cover;">
 								<div class="cafa">
-									<h4><a href="{% url 'restaurant:restaurant-card' restaurant.slug %}">{{ restaurant.title }}</a></h4>
+									<h4><a href="{% url 'restaurant:food_items' restaurant.slug %}">{{ restaurant.title }}</a></h4>
 									<div>
 										{% for i in restaurant.rating|range_custom %}
 											<i class="fa-solid fa-star"></i>

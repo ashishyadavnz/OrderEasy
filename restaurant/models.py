@@ -190,16 +190,19 @@ class Reservation(BaseModel):
 		return super().save(*args, **kwargs)
 
 class Cart(BaseModel):
-	menu = models.ForeignKey(Menu, on_delete=models.PROTECT, related_name="cart_menu")
+	fooditem = models.ForeignKey(FoodItem, on_delete=models.PROTECT, related_name="cart_fooditem")
 	quantity = models.PositiveIntegerField()
 	total = models.PositiveIntegerField(default=0)
 
 	class Meta:
 		verbose_name_plural = '08. Cart Items'
 
+	def __str__(self):
+		return str(self.fooditem)
+
 	def save(self, *args, **kwargs):
 		trackupdate(self)
-		self.total = self.quantity * self.menu.price
+		self.total = self.quantity * self.fooditem.price
 		return super().save(*args, **kwargs)
 
 class Order(BaseModel):

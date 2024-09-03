@@ -4,6 +4,12 @@
 {% block content %}
 
 <div class="menu-layer">
+  <div class="cart-overlay">
+	<div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: none;">
+		<div id="toast" style="background-color: #4caf50; color: white; padding: 15px; border-radius: 5px;">
+			Item added to cart successfully!
+		</div>
+	</div>
 	<!-- <section class="hero-section about gap" style="background-image: url(https://bslthemes.com/html/quickeat/assets/img/background-1.png);">
 		<div class="container mt-5">
 			<div class="row align-items-center mx-0">
@@ -77,7 +83,7 @@
 	</section> -->
 	<!-- new design -->
 	<section class="hero-section about gap" style="background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');">
-		<img src="{% if restaurant.image %}{{ restaurant.image.url }}{% endif %}" alt="{{restaurant.title}}" class="img-fluid w-100 mt-4" style="height: 400px; object-fit: cover; filter: brightness(0.8);">
+		<img loading="lazy" src="{% if restaurant.image %}{{ restaurant.image.url }}{% endif %}" alt="{{restaurant.title}}" class="img-fluid w-100 mt-4" style="height: 400px; object-fit: cover; filter: brightness(0.8);">
 		<div class="container-fluid mt-5 position-relative">
 			<div class="position-relative">
 				<div class="d-flex flex-column align-items-start justify-content-center" style="position: absolute; bottom: -45px; padding: 30px;">
@@ -94,7 +100,7 @@
 						<div class="d-flex align-items-center container">
 							<div class="row">
 								<div class="col-md-2">
-									<img src="{% if restaurant.logo %}{{ restaurant.logo.url }}{% endif %}" alt="{{restaurant.title}}" class="rounded-circle me-3" style="width: 100px; object-fit: cover; height: 100px;">
+									<img loading="lazy" src="{% if restaurant.logo %}{{ restaurant.logo.url }}{% endif %}" alt="{{restaurant.title}}" class="rounded-circle me-3" style="width: 100px; object-fit: cover; height: 100px;">
 								</div>
 								<div class="col-md-10">
 									<div>
@@ -298,7 +304,7 @@
 									{% for menu in breakfast_items %}
 										<div class="col-xl-4 col-lg-6" data-aos="flip-up" data-aos-delay="200" data-aos-duration="300">
 											<div class="dish">
-												<img alt="food-dish" class="img-fluid" src="{{ menu.cuisine.image.url }}">
+												<img loading="lazy" alt="food-dish" class="img-fluid" src="{{ menu.cuisine.image.url }}">
 												<div class="dish-foods">
 													<h3>{{ menu.cuisine.title }}</h3>
 													<div class="dish-icon">
@@ -343,7 +349,7 @@
 									{% for menu in lunch_items %}
 										<div class="col-xl-4 col-lg-6">
 											<div class="dish">
-												<img alt="food-dish" class="img-fluid" src="{{ menu.cuisine.image.url }}">
+												<img loading="lazy" alt="food-dish" class="img-fluid" src="{{ menu.cuisine.image.url }}" >
 												<div class="dish-foods">
 													<h3>{{ menu.cuisine.title }}</h3>
 													<div class="dish-icon">
@@ -389,7 +395,7 @@
 									{% for menu in dinner_items %}
 										<div class="col-xl-4 col-lg-6">
 											<div class="dish">
-												<img alt="food-dish" class="img-fluid" src="{% if menu.cuisine.image %}{{ menu.cuisine.image.url }}{% endif %} ">
+												<img alt="food-dish" class="img-fluid" src="{% if menu.cuisine.image %}{{ menu.cuisine.image.url }}{% endif %} " loading="lazy">
 												<div class="dish-foods">
 													<h3>{{ menu.cuisine.title }}</h3>
 													<div class="dish-icon">
@@ -484,7 +490,7 @@
 										<div class="col-md-4 mt-3">
 											<div class="card shadow-sm mb-4 h-100 hover-card">
 												{% if item.image %}
-													<img src="{{ item.image.url }}" style="height: 300px !important; width: 400px!important" alt="{{ item.title }}">
+													<img src="{{ item.image.url }}" style="height: 300px !important; width: 100%!important; object-fit: fill;" alt="{{ item.title }}">
 												{% endif %}
 												<div class="card-body">
 													<h5 class="card-title">{{ item.title }}</h5>
@@ -498,7 +504,7 @@
 															<strong>End Time:</strong> {{ item.end|date:"H:i" }}
 														{% endif %}
 													</p>
-													<button class="btn add-to-cart" style="background-color:#F29F05;" data-id="{{ cuisine.id }}" data-title="{{ cuisine.title }}" data-image="{% if cuisine.image %}{{ cuisine.image.url }}{% endif %}">Add to Cart</button>
+													<button class="btn add-to-cart add-spc" style="background-color:#F29F05;" data-id="{{ item.id }}" data-title="{{ item.title }}" data-image="{% if item.image.url %}{{ item.image.url }}{% endif %}" data-price="{{item.price}}">Add to Cart</button>		
 												</div>
 											</div>
 										</div>
@@ -662,7 +668,7 @@
 				}
 				
 				updateCartDisplay();
-				document.querySelector("#cart-section").classList.add("show");
+				//document.querySelector("#cart-section").classList.add("show");
 			});
 		});
 	
@@ -677,28 +683,10 @@
 				cartItem.classList.add("cart-item");
 				cartItem.innerHTML = `
 					<p>${item.title} - $${item.price} x ${item.quantity}</p>
-					<button class="btn btn-sm btn-primary increase-qty" data-id="${item.id}">+</button>
+					<button class="btn btn-sm btn-primary increase-qty " data-id="${item.id}">+</button>
 				`;
 				cartContent.appendChild(cartItem);
 			});
-		}
-	});
-</script>
-<script>
-		document.addEventListener("DOMContentLoaded", function() {
-		const modal = document.getElementById("bookTableModal");
-		const btn = document.getElementById("bookTableButton");
-		const span = document.getElementsByClassName("close-button")[0];
-		btn.onclick = function() {
-			modal.style.display = "block";
-		}
-		span.onclick = function() {
-			modal.style.display = "none";
-		}
-		window.onclick = function(event) {
-			if (event.target == modal) {
-				modal.style.display = "none";
-			}
 		}
 	});
 </script>
@@ -716,10 +704,9 @@
 					const distance = calculateDistance(userLat, userLon, restaurantLat, restaurantLon);
 					card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
 	
-					// Store the delivery charge based on the distance
 					let deliveryCharge = 0;
 					if (distance > 7) {
-						deliveryCharge = distance * 1; // Charge $1 per km for the entire distance
+						deliveryCharge = distance * 1; 
 					}
 					card.setAttribute('data-delivery-charge', deliveryCharge.toFixed(2));
 				});
@@ -780,14 +767,23 @@
             }
 
             updateCartDisplay();
+			showToast(); 
         });
     });
+		function showToast() {
+			const toastContainer = document.getElementById('toast-container');
+			toastContainer.style.display = 'block';
+			setTimeout(() => {
+				toastContainer.style.display = 'none';
+			}, 2000);
+		}
+
 	applyVoucherBtn.addEventListener("click", function() {
         const voucherCode = voucherInput.value.trim();
         if (voucherCode) {
             // For demo purposes, we'll just apply a fixed discount
             // In a real application, you might need to validate the voucher code via an API call
-            voucherDiscount = 10.00; // Example discount
+            voucherDiscount = 10.00; 
         } else {
             voucherDiscount = 0;
         }
@@ -808,18 +804,28 @@
 			const cartItem = document.createElement("div");
 			cartItem.classList.add("cart-item");
 			cartItem.innerHTML = `
-				<img src="${item.image}" alt="${item.title}" class="cart-item-image">
-				<p>${item.title} - $${item.price} x ${item.quantity}</p>
-				<div>
-					<button class="btn btn-sm btn-primary increase-qty" data-id="${item.id}">+</button>
-					<button class="btn btn-sm btn-danger decrease-qty" data-id="${item.id}">-</button>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-3">
+						<img src="${item.image}" alt="${item.title}" class="cart-item-image" loading="lazy">
+					</div>
+					<div class="col-md-5 pt-2" style="text-align: center;">
+						<p style="font-size:20px"><strong>${item.title}</strong></p>
+					</div>
+					<div class="col-md-2 pt-2" style="text-align: centerp-2;">
+						<p style="font-size:20px"><strong>$${item.price} x ${item.quantity}</strong></p>
+					</div>
+					<div class="col-md-2 float-right">
+						<button class="btn  btn-primary increase-qty  me-2" data-id="${item.id}">+</button>
+						<button class="btn  btn-danger decrease-qty"  data-id="${item.id}">-</button>
+					</div>
 				</div>
+			</div>
 			`;
 			cartContent.appendChild(cartItem);
 		});
 	
 		if (orderType === 'Delivery') {
-			// Assuming that the selected restaurant is the first one in the cart for simplicity
 			const selectedRestaurantCard = document.querySelector('.restaurant-card'); 
 			const deliveryCharge = parseFloat(selectedRestaurantCard.getAttribute('data-delivery-charge')) || 0;
 			totalAmount += deliveryCharge;
@@ -836,7 +842,25 @@
 		cartContent.appendChild(totalAmountItem);
 	
 		// document.querySelector("#cart-section").classList.add("show");
-	
+	    const cartDataInput = document.getElementById('cart-data');
+        cartDataInput.value = JSON.stringify(cart);
+		const cartDataOrder =document.getElementById('order-type-input')
+		cartDataOrder.value = orderType;
+		const restaurentInput =document.getElementById('restaurent-input')
+		restaurentInput.value = "{{restaurant.id}}"
+        console.log(cartDataOrder,"cartsection ")
+        document.querySelectorAll(".increase-qty").forEach(button => {
+            button.addEventListener("click", function() {
+                const itemId = this.getAttribute("data-id");
+                const item = cart.find(cartItem => cartItem.id === itemId);
+                if (item) {
+                    item.quantity += 1;
+                    updateCartDisplay();
+					
+                }
+            });
+        });
+
 		document.querySelectorAll(".increase-qty").forEach(button => {
 			button.addEventListener("click", function() {
 				const itemId = this.getAttribute("data-id");
@@ -886,23 +910,7 @@
 		});
 	});
 </script>
-<script>
-var modal = document.getElementById("infoModal");
-var btn = document.getElementById("openModal");
-var span = document.getElementById("closeModal");
-btn.onclick = function() {
-  modal.style.display = "block";
-}
-span.onclick = function() {
-  modal.style.display = "none";
-}
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
 
-</script>
 <script>
 var feedbackModal = document.getElementById("feedbackModal");
 var feedbackBtn = document.getElementById("openFeedbackModal");

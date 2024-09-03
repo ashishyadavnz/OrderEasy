@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.urls import reverse
 from .models import *
 from django.utils import timezone
-from restaurant.models import FoodItem, Restaurant, Category,Cuisine 
+from restaurant.models import Cart, FoodItem, Restaurant, Category,Cuisine 
 from blog.models import Post
 from django.contrib.auth import authenticate,logout, login as auth_login
 
@@ -53,7 +53,64 @@ def becomePartner(request):
     return render(request, 'ui/become-partner.html')
 
 def checkout(request):
-    return render(request, 'ui/checkout.html')
+    user_info = None
+    if request.user.is_authenticated:
+        user_info = {
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+            'email': request.user.email,
+            'phone': request.user.mobile,
+        }
+    
+    if request.method == 'POST':
+        cart_data = request.POST.get('cart_data')
+        order_type = request.POST.get('order_type')
+        restaurent = request.POST.get('restaurent_id')
+        print(order_type,"this is order type") 
+        try:
+            cart_items = json.loads(cart_data)
+        except json.JSONDecodeError:
+            cart_items = []
+        request.session['cart'] = cart_items
+        request.session['order_type'] = order_type  
+        request.session['restaurent'] = restaurent  
+        for item in cart_items:
+            try:
+                food_item = FoodItem.objects.get(id=item['id'])
+                cart_item = Cart(
+                    fooditem=food_item,
+                    quantity=item['quantity'],
+                    total=item['quantity'] * item['price']
+                )
+                cart_item.save()
+            except FoodItem.DoesNotExist:
+                continue
+        return redirect('home:checkout')
+        
+        # total = sum(item['price'] * item['quantity'] for item in cart_items)
+        
+        # context = {
+        #     'cart': cart_items,
+        #     'total': total,
+        #     'user_info': user_info,
+        #     'order_type': order_type, 
+        # }
+        # return render(request, 'ui/checkout.html', context)
+
+    cart = request.session.get('cart', [])
+    rid = request.session.get('restaurent', None)
+    restaurent = Restaurant.objects.filter(id=rid).last()
+    total = sum(item['price'] * item['quantity'] for item in cart)
+    order_type = request.session.get('order_type', 'Delivery')  
+    
+    context = {
+        'cart': cart,
+        'total': total,
+        'user_info': user_info,
+        'order_type': order_type,
+        'restaurent': restaurent,
+    }
+    return render(request, 'ui/checkout.html', context)
 
 def notfound(request):
     return render(request, 'ui/404.html')
@@ -92,6 +149,8 @@ def faq_message(request):
 
 def register(request):
     if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
         username = request.POST['username']
         email = request.POST['email']
         mobile = request.POST['mobile']
@@ -99,7 +158,6 @@ def register(request):
         confirm_password = request.POST['confirm_password']
         profile_picture = request.FILES.get('profile_picture')
         guest = request.POST.get('guest') == 'on'
-
 
         if password != confirm_password:
             messages.error(request, "Passwords do not match")
@@ -114,7 +172,10 @@ def register(request):
             return redirect('home:register')
 
         # Create the user
+
         user = User.objects.create_user(
+            first_name=first_name,
+            last_name=last_name,
             username=username,
             email=email,
             mobile=mobile,
@@ -122,9 +183,11 @@ def register(request):
             image=profile_picture,
             guest=guest    
         )
-        
+        if user:
+            auth_login(request,user)
+
         messages.success(request, "Account created successfully")
-        return redirect('home:login')
+        return redirect('restaurant:restaurant')
 
     return render(request, 'ui/register.html')
 
@@ -139,12 +202,13 @@ def login(request):
         if user is not None:
             auth_login(request, user)
             messages.success(request, "Login successful")
-            return redirect('home:home-page')
+            return redirect('restaurant:restaurant')
         else:
             messages.error(request, "Invalid username or password")
             return redirect('home:login')
 
     return render(request, 'ui/login.html')
+
 
 def user_logout(request):
     logout(request)
