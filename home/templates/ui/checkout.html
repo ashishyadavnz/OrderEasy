@@ -56,16 +56,16 @@
                         
                         <div class="banner-wilmington">
                             <img alt="logo" src="https://bslthemes.com/html/quickeat/assets/img/logo-s.jpg" class="img-fluid">
-                            <h6>Your Restaurant Name</h6>
+                            <h6>Your Restaurant Name: {{restaurent.title}}</h6>
                         </div>
                         
                         <ul>
                             {% for item in cart %}
-                                <li class="price-list">
-                                    <i class="closeButton fa-solid fa-xmark"></i>
+                                <li class="price-list my-2">
+                                    {% comment %} <i class="closeButton fa-solid fa-xmark"></i> {% endcomment %}
                                     <div class="counter-container">
                                         <div class="counter-food">
-                                            <img alt="food" src="{{ item.image }}" class="img-fluid" width="150px" style="object-fit: cover;">
+                                            <img alt="food" src="{{ item.image }}" style="width: 106px; height: 69px; object-fit: cover; border-radius: 4px;">
                                             <div class="food-details">
                                                 <h5>{{ item.title }}</h5>
                                                 <!-- <h3>${{ item.price }}</h3> -->
@@ -76,17 +76,17 @@
                                         </div>
                                     </div>                                    
                                     <div class="price">
-                                        <div>
+                                        <div class="d-flex py-auto my-auto">
+                                            <span style="padding-top: 10px; padding-right: 10px;">Sum</span>
                                             <h2>${{ item.price }}</h2>
-                                            <span>Sum</span>
                                         </div>
-                                        <div>
-                                            <div class="qty-input">
-                                                <button class="qty-count qty-count--minus" data-action="minus" type="button">-</button>
+                                        <div class="d-flex">
+                                            <div class="qty-input d-flex">
+                                                <span>Quantity</span>
+                                                {% comment %} <button class="qty-count qty-count--minus" data-action="minus" type="button">-</button> {% endcomment %}
                                                 <input class="product-qty" type="number" name="product-qty" min="0" value="{{ item.quantity }}" readonly>
-                                                <button class="qty-count qty-count--add" data-action="add" type="button">+</button>
+                                                {% comment %} <button class="qty-count qty-count--add" data-action="add" type="button">+</button> {% endcomment %}
                                             </div>
-                                            <span>Quantity</span>
                                         </div>
                                     </div>
                                 </li>

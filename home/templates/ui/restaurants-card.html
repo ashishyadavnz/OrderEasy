@@ -841,6 +841,8 @@
         cartDataInput.value = JSON.stringify(cart);
 		const cartDataOrder =document.getElementById('order-type-input')
 		cartDataOrder.value = orderType;
+		const restaurentInput =document.getElementById('restaurent-input')
+		restaurentInput.value = "{{restaurant.id}}"
         console.log(cartDataOrder,"cartsection ")
         document.querySelectorAll(".increase-qty").forEach(button => {
             button.addEventListener("click", function() {
