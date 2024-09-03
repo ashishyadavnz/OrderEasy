@@ -839,7 +839,9 @@
 		// document.querySelector("#cart-section").classList.add("show");
 	    const cartDataInput = document.getElementById('cart-data');
         cartDataInput.value = JSON.stringify(cart);
-        console.log(cartDataInput,"cartsection ")
+		const cartDataOrder =document.getElementById('order-type-input')
+		cartDataOrder.value = orderType;
+        console.log(cartDataOrder,"cartsection ")
         document.querySelectorAll(".increase-qty").forEach(button => {
             button.addEventListener("click", function() {
                 const itemId = this.getAttribute("data-id");
