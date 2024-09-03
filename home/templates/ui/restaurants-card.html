@@ -490,7 +490,7 @@
 										<div class="col-md-4 mt-3">
 											<div class="card shadow-sm mb-4 h-100 hover-card">
 												{% if item.image %}
-													<img src="{{ item.image.url }}" style="height: 300px !important; width: 400px!important; object-fit: cover;" alt="{{ item.title }}">
+													<img src="{{ item.image.url }}" style="height: 300px !important; width: 100%!important; object-fit: fill;" alt="{{ item.title }}">
 												{% endif %}
 												<div class="card-body">
 													<h5 class="card-title">{{ item.title }}</h5>
