@@ -102,7 +102,14 @@
                             <span>Dilivery Charge:</span>
                             <h5>${{ order.charge }}</h5>
                         </div>
-                        
+
+                        {% if order.voucher %}
+                            <div class="totel-price">
+                                <span>Voucher Applied:</span>
+                                <h5>-${{ order.voucher.discount }}</h5>
+                            </div>
+                        {% endif %}
+
                         <div class="totel-price">
                             <span>To pay:</span>
                             <h2>${{ order.total }}</h2>
