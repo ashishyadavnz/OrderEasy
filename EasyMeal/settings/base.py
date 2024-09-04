@@ -264,7 +264,7 @@ CHANNEL_LAYERS = {
 import firebase_admin
 from firebase_admin import credentials
 
-cred_path = BASE_DIR / "ordereasy-firebase-adminsdk-z9man-08998093b3.json"
+cred_path = BASE_DIR / "ordermeal-firebase-sdk-file.json"
 cred = credentials.Certificate(cred_path)
 firebase_admin.initialize_app(cred)
 
