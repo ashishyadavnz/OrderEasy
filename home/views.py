@@ -72,6 +72,7 @@ def checkout(request):
                 voucher=voucher,
                 otype = order_type,
                 charge = float(charge),
+                status = 'Inactive'
             )
             if request.user.is_authenticated:
                 order.fname = request.user.first_name
@@ -120,6 +121,7 @@ def checkout(request):
             odr.otype = otype
             odr.address = address
             odr.instruction = instructions
+            odr.status = 'Active'
             odr.save()
             devices = FCMDevice.objects.filter(user=odr.user)
             title = f'Order Created'
