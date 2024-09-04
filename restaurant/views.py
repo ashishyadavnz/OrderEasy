@@ -160,6 +160,10 @@ def validate_voucher(request):
         voucher_code = request.POST.get('voucher_code')
         total_amount = float(request.POST.get('total_amount'))
 
+        if 'applied_vouchers' in request.session and voucher_code in request.session['applied_vouchers']:
+            return JsonResponse({'status': 'error', 'message': 'This voucher has already been used.'})
+
+
         try:
             voucher = Voucher.objects.get(name=voucher_code)
             if voucher.validity < timezone.now():
@@ -167,6 +171,11 @@ def validate_voucher(request):
 
             if total_amount < voucher.payment:
                 return JsonResponse({'status': 'error', 'message': f'Order total must be at least ${voucher.payment} to apply this voucher.'})
+             
+            if 'applied_vouchers' not in request.session:
+                request.session['applied_vouchers'] = []
+            request.session['applied_vouchers'].append(voucher_code)
+            request.session.modified = True
 
             return JsonResponse({'status': 'success', 'discount': voucher.discount, 'id':voucher.id})
         

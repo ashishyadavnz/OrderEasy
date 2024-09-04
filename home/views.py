@@ -59,14 +59,16 @@ def checkout(request):
             cart_data = request.POST.get('cart_data')
             order_type = request.POST['order_type']
             restaurent = request.POST['restaurent_id']
-            voucher_id = request.POST.get('voucher_id')
+            voucher_id = request.POST.get('voucher_id',None)
             charge = request.POST['charge']
             try:
                 cart_items = json.loads(cart_data)
             except json.JSONDecodeError:
                 cart_items = []
             rests = Restaurant.objects.get(id=restaurent)
-            voucher = Voucher.objects.filter(id=voucher_id).last()
+            voucher = None
+            if voucher_id:
+                voucher = Voucher.objects.filter(id=voucher_id).last()
             order = Order(
                 restaurant=rests,
                 voucher=voucher,
