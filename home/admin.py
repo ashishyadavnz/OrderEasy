@@ -30,8 +30,15 @@ class CartInline(admin.TabularInline):
     raw_id_fields = ['order','fooditem']
     classes = ['collapse']
 
+class RestaurantInline(admin.StackedInline):
+    model = Restaurant
+    extra = 0
+    fields = ('owner','country','state','timezone','title','logo','image','content','found','phone','email','city','postcode','address','start','end','members','latitude','longitude','website','facebook','twitter','instagram','linkedin','verified','vip','source','status')
+    raw_id_fields = ['owner','country','state','timezone']
+    classes = ['collapse']
+
 INLINE_CONFIG = {
-    User: [AddressInline],
+    User: [AddressInline, RestaurantInline],
     Restaurant: [FoodItemInline],
     Order: [CartInline],
 }
