@@ -240,7 +240,11 @@
 							<div class="item">
 								<h4>"{{ testimonial.content|safe }}"</h4>
 								<div class="thomas">
-									<img alt="{{ testimonial.name }}" src="{% if testimonial.image %}{{ testimonial.image.url }}{% endif %}" style="border-radius: 50%;" height="80px" width="80px">
+									<img alt="{{ testimonial.name }}" src="{% if testimonial.image %}{{ testimonial.image.url }}{% endif %}" 
+									style="border-radius: 50%;
+									height: 80px;
+									width: 80px;
+									object-fit: cover;">
 									<div>
 										<h6>{{ testimonial.name }}</h6>
 										<div>

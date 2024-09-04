@@ -16,13 +16,13 @@
 	<!-- loader end-->
   <!-- hero-section -->
   <section class="hero-section about gap">
-		<div class="container">
+		<div class="container pt-2">
 				<div class="row align-items-center mx-0">
 					<div class="col-xl-6 col-lg-12" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
 						<div class="about-text">
 							<ul class="crumbs d-flex">
-								<li><a href="indexThem.html">Home</a></li>
-								<li class="two"><a href="contact.html"><i class="fa-solid fa-right-long"></i>Contacts</a></li>
+								<li><a href="{% url "home:home-page" %}">Home</a></li>
+								<li class="two"><a href="{% url "home:contact" %}"><i class="fa-solid fa-right-long"></i>Contacts</a></li>
 							</ul>
 							<h2>Contact us</h2>
 							<p>Egestas sed tempus urna et pharetra pharetra massa. Fermentum posuere urna nec tincidunt praesent semper.</p>

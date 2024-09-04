@@ -74,7 +74,7 @@ class User(AbstractUser, BaseModel):
 	gender = models.CharField(max_length=6, choices=gender, default='Male')
 	role = models.CharField(max_length=10, choices=role, default='Customer')
 	dob = models.DateField(null=True, blank=True)
-	image = models.ImageField(upload_to='user/image/', blank=True, null=True, default="default/st-logo.png")
+	image = models.ImageField(upload_to='user/image/', blank=True, null=True,)
 	city = models.CharField(max_length=30, blank=True)
 	postcode = models.PositiveIntegerField(blank=True, null=True)
 	address = models.TextField(blank=True)
@@ -127,7 +127,7 @@ class Address(BaseModel):
 		verbose_name_plural = "02. Address"
 
 	def __str__(self):
-		return self.title
+		return f'{self.user.username}'
 	
 	def save(self, *args, **kwargs):
 		trackupdate(self)
@@ -252,7 +252,7 @@ class FaqMessage(BaseModel):
 	
 class Testimonial(BaseModel):
 	name = models.CharField(max_length = 80)
-	image = models.ImageField(upload_to='user/image/', blank=True, null=True, default="default/st-logo.png")
+	image = models.ImageField(upload_to='user/image/', blank=True, null=True, )
 	content = RichTextUploadingField()
 	rating  = models.FloatField(default=0.0)
 
