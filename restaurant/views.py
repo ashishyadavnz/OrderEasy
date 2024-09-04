@@ -153,3 +153,24 @@ def delete_food_item(request,restro, slug):
     food_item.status = 'Delete'
     food_item.save()
     return JsonResponse({'status': 'success'})
+
+
+def validate_voucher(request):
+    if request.method == 'POST':
+        voucher_code = request.POST.get('voucher_code')
+        total_amount = float(request.POST.get('total_amount'))
+
+        try:
+            voucher = Voucher.objects.get(name=voucher_code)
+            if voucher.validity < timezone.now():
+                return JsonResponse({'status': 'error', 'message': 'Voucher has expired.'})
+
+            if total_amount < voucher.payment:
+                return JsonResponse({'status': 'error', 'message': f'Order total must be at least ${voucher.payment} to apply this voucher.'})
+
+            return JsonResponse({'status': 'success', 'discount': voucher.discount, 'id':voucher.id})
+        
+        except Voucher.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Invalid voucher code.'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})

@@ -20,11 +20,17 @@ def restaurant_add(sender, instance=None, created=False, **kwargs):
 def order_add(sender, instance=None, created=False, **kwargs):
 	if created:
 		instance.orderid = 'ORDER00000' + str(instance.id)
-		instance.total = instance.total + instance.charge
+		total = instance.total + instance.charge
+		if instance.voucher:
+			total -= instance.voucher.discount
+		instance.total = total
 		instance.save()
 
 @receiver(post_save, sender=Cart)
 def cart_add(sender, instance=None, created=False, **kwargs):
 	cart = Cart.objects.filter(order=instance.order).aggregate(Sum('total'))['total__sum'] or 0
-	instance.order.total = instance.order.charge + cart
+	total = instance.order.charge
+	if instance.order.voucher:
+		total -= instance.order.voucher.discount
+	instance.order.total = total + cart
 	instance.order.save()
