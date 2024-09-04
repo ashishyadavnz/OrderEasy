@@ -15,27 +15,63 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>Time</th>
+                <th>Order Time</th>
+                <th>Delivery Time</th>
                 <th>Address</th>
                 <th>Total</th>
                 <th>Charge</th>
                 <th>Order Type</th>
+                <th>Instruction</th>
                 <th>Details</th>
             </tr>
         </thead>
         <tbody id="orderItemsTable">
             {% for item in orderItem %}
             <tr id="orderItem-{{ item.slug }}">
-                <td >{{ item.orderid }}</td>
-                <td >{{ item.name }}</td>
-                <td >{{ item.email }}</td>
-                <td >{{ item.phone }}</td>
-                <td >{{ item.time }}</td>
-                <td >{{ item.address }}</td>
-                <td >{{ item.total }}</td>
-                <td >{{ item.charge }}</td>
-                <td >{{ item.otype }}</td>
-                <td >{{ item.instruction }}</td>
+                <td>{{ item.orderid }}</td>
+                <td>{% if item.fname %}{{ item.fname }} {{ item.lname }}{% else %}{{item.user.username}}{% endif %} </td>
+                <td>{% if item.email %} {{ item.email }} {% endif %}</td>
+                <td>{% if item.phone %} {{ item.phone }} {% else %} {{item.user.mobile}} {% endif %}
+                </td>
+                <td>{{ item.utimestamp }}</td>
+                <td>{% if item.time %}{{ item.time }}{% endif %}</td>
+                <td>{{ item.address }}</td>
+                <td>{{ item.total }}</td>
+                <td>{{ item.charge }}</td>
+                <td>{{ item.otype }}</td>
+                <td>{{ item.instruction }}</td>
+                <td><button class="btn button button-2" data-bs-toggle="modal" data-bs-target="#orderItemModal-{{item.id}}">Cart</button>
+                    <div class="modal fade" id="orderItemModal-{{item.id}}" tabindex="-1" aria-labelledby="orderItemModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="orderItemModalLabel">Order Item ({{item.orderid}})</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Food</th>
+                                                <th>Quantity</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="orderItemsTable">
+                                            {% for cart in item.cart_order.all %}
+                                            <tr id="orderItem-{{ item.slug }}">
+                                                <td>{{ cart.fooditem.title }}</td>
+                                                <td>{{ cart.quantity }}</td>
+                                                <td>{{ cart.total }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -43,17 +79,5 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="orderItemModal" tabindex="-1" aria-labelledby="orderItemModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="orderItemModalLabel">Order Item</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              
-            </div>
-        </div>
-    </div>
-</div>
+
 {% endblock %}

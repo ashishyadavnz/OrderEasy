@@ -55,7 +55,7 @@
                         </div>
                         
                         <div class="banner-wilmington">
-                            <img alt="logo" src="https://bslthemes.com/html/quickeat/assets/img/logo-s.jpg" class="img-fluid mx-2">
+                            <img alt="logo" src="{% if order.restaurant.logo %}{{order.restaurant.logo.url}}{% else %}{% static 'images/order-easy.png' %}{% endif %}" class="img-fluid mx-2" style="width: 120px; height: 100px; object-fit: cover;">
                             Restaurant: <h6> {{order.restaurant.title}}</h6>
                         </div>
                         
@@ -65,7 +65,7 @@
                                     {% comment %} <i class="closeButton fa-solid fa-xmark"></i> {% endcomment %}
                                     <div class="counter-container">
                                         <div class="counter-food">
-                                            <img alt="food"class="mx-2" src="{% if item.image %}{{item.image}}{% else %}{% endif %}" style="width: 106px; height: 69px; object-fit: cover; border-radius: 4px;">
+                                            <img alt="food"class="mx-2" src="{% if item.image %}{{item.image}}{% else %}{% static 'images/order-easy.png' %}{% endif %}" style="width: 106px; height: 69px; object-fit: cover; border-radius: 4px;">
                                             <div class="food-details">
                                                 <h5>{{ item.title }}</h5>
                                                 <!-- <h3>${{ item.price }}</h3> -->
