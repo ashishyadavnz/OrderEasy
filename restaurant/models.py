@@ -13,7 +13,7 @@ class Restaurant(BaseModel):
 	timezone = models.ForeignKey(Timezone, on_delete=models.PROTECT, blank=True, null=True)
 	title = models.CharField(max_length=160)
 	slug = AutoSlugField(populate_from=['title'], unique=True, editable=True)
-	logo = models.ImageField(upload_to='company/logo/', default="default/easymeal.png")
+	logo = models.ImageField(upload_to='company/logo/',null=True, blank=True)
 	image = models.ImageField(upload_to='company/image/', null=True, blank=True)
 	identifier = models.CharField(max_length=100,unique=True,null=True,blank=True)
 	content = models.TextField(null=True,blank=True)
