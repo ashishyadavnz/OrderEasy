@@ -127,7 +127,7 @@ class Address(BaseModel):
 		verbose_name_plural = "02. Address"
 
 	def __str__(self):
-		return self.title
+		return f'{self.user.username}'
 	
 	def save(self, *args, **kwargs):
 		trackupdate(self)

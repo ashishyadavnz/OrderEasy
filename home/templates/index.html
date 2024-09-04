@@ -813,7 +813,7 @@ body.menu-open {
 			<span>Loading</span>
 		</div>
 	</div>
-	<header>
+	<header class="pb-0">
 		<div class="container">
 			<div class="d-flex row  mx-0" >
 				<div class="col-3">
@@ -836,34 +836,34 @@ body.menu-open {
 					<div id="navbar-container" class="d-flex col-8">
 						<nav class="navbar">
 							<ul class="navbar-links">
-								<li class="navbar-dropdown active">
+								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'home-page' %}active{% endif %}">
 									<a href="{% url 'home:home-page' %}">Home</a>
 								</li>
-								<li class="navbar-dropdown">
+								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'about-page' %}active{% endif %}">
 									<a href="{% url 'home:about-page' %}">About Us</a>
 								</li>
 								{% if request.user and request.user.role == 'Owner' %}
-									<li class="navbar-dropdown">
+									<li class="navbar-dropdown {% if request.resolver_match.url_name == 'my_restaurant' %}active{% endif %}">
 										<a href="{% url 'restaurant:my_restaurant' %}">My Restaurants</a>
 									</li>
 								{% else %}
-									<li class="navbar-dropdown">
+									<li class="navbar-dropdown {% if request.resolver_match.url_name == 'restaurant' %}active{% endif %}">
 										<a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
 									</li>
 								{% endif %}
 								<li class="navbar-dropdown">
-									<a href="">Pages</a>
+									<span>Pages</span>
 									<div class="dropdown">
 										<a href="{% url 'blog:blog_page' %}">Blog</a>
 										<!-- <a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a> -->
-										<a href="{% url  'blog:service'  %}">Services</a>
+										{% comment %} <a href="{% url  'blog:service'  %}">Services</a> {% endcomment %}
 										<a href="{% url 'home:faq' %}">FAQ</a>
 										<a href="{% url  'home:pricing-table'  %}">Pricing Table</a>
 										<a href="{% url  'home:become-partner'  %}">Become A Partner</a>
 										<a href="{% url  'home:page-not-found'  %}">404</a>
 									</div>
 								</li>
-								<li class="navbar-dropdown">
+								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
 									<a href="{% url  'home:contact'  %}">Contacts</a>
 								</li>
 								<li class="navbar-dropdown">
@@ -952,7 +952,7 @@ body.menu-open {
 								<div class="dropdown-content">
 									<a href="{% url 'blog:blog_page' %}">Blog</a>
 									<a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a>
-									<a href="{% url  'blog:service'  %}">Services</a>
+									{% comment %} <a href="{% url  'blog:service'  %}">Services</a> {% endcomment %}
 									<a href="{% url 'home:faq' %}">FAQ</a>
 									<a href="{% url  'home:pricing-table'  %}">Pricing Table</a>
 									<a href="{% url  'home:become-partner'  %}">Become A Partner</a>
@@ -1124,7 +1124,7 @@ body.menu-open {
 										href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single
 										Blog</a>
 								</li>
-								<li><a href="{% url  'blog:service'  %}">Services</a></li>
+								{% comment %} <li><a href="{% url  'blog:service'  %}">Services</a></li> {% endcomment %}
 								<li><a href="{% url 'home:faq' %}">FAQ</a></li>
 								<li><a href="{% url  'home:pricing-table'  %}">Pricing Table</a></li>
 								<li><a href="{% url  'home:become-partner'  %}">Become A Partner</a></li>
@@ -1262,16 +1262,18 @@ body.menu-open {
 	</script>
 	<script>
 		document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
-			toggle.addEventListener('click', function(event) {
-				event.preventDefault();
-				var parent = this.parentNode;
-			var dropdownContent = parent.querySelector('.dropdown-content');
-
-			if (window.innerWidth <= 768) {
-				parent.classList.toggle('active');
-				dropdownContent.style.display = parent.classList.contains('active') ? 'block' : 'none';
+			if(toggle){
+				toggle.addEventListener('click', function(event) {
+					event.preventDefault();
+					var parent = this.parentNode;
+					var dropdownContent = parent.querySelector('.dropdown-content');
+	
+					if (window.innerWidth <= 768) {
+						parent.classList.toggle('active');
+						dropdownContent.style.display = parent.classList.contains('active') ? 'block' : 'none';
+					}
+				});
 			}
-		});
 	});
 	</script>
 	<script>
@@ -1341,9 +1343,12 @@ body.menu-open {
 	document.addEventListener('DOMContentLoaded', displayDistances);
 </script>
 <script>
-	document.getElementById('checkout').addEventListener('click', function() {
-    document.getElementById('cart-form').submit();
-});
+	let checkout = document.getElementById('checkout')
+	if(checkout){
+		checkout.addEventListener('click', function() {
+			document.getElementById('cart-form').submit();
+		});
+	}
 </script>
 
 {% comment %} food items {% endcomment %}
