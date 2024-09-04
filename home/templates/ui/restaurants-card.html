@@ -607,9 +607,7 @@
 			<div class="modal-header">
 				<h5 class="modal-title text-warning" id="booktableLabel">Make a table reservation</h5>
 				{% comment %} <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> {% endcomment %}
-				<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
 				<form method="post">
@@ -656,47 +654,6 @@
 
 {% block script_js %}
 <script>
-	document.addEventListener("DOMContentLoaded", function() {
-		const cart = [];
-		
-		document.querySelectorAll(".add-to-cart").forEach(button => {
-			button.addEventListener("click", function() {
-				console.log("Add to Cart button clicked"); // Debug line
-				const menuId = this.getAttribute("data-id");
-				const menuTitle = this.getAttribute("data-title");
-				const menuPrice = parseFloat(this.getAttribute("data-price"));
-				
-				const existingItem = cart.find(item => item.id === menuId);
-				if (existingItem) {
-					existingItem.quantity += 1;
-				} else {
-					cart.push({ id: menuId, title: menuTitle, price: menuPrice, quantity: 1 });
-				}
-				
-				updateCartDisplay();
-				//document.querySelector("#cart-section").classList.add("show");
-			});
-		});
-	
-		function updateCartDisplay() {
-			const cartIcon = document.querySelector("#desktop-menu i");
-			cartIcon.textContent = `(${cart.length})`;  
-			const cartContent = document.querySelector("#cart-content #cart-items");
-			cartContent.innerHTML = ""; 
-	
-			cart.forEach(item => {
-				const cartItem = document.createElement("div");
-				cartItem.classList.add("cart-item");
-				cartItem.innerHTML = `
-					<p>${item.title} - $${item.price} x ${item.quantity}</p>
-					<button class="btn btn-sm btn-primary increase-qty " data-id="${item.id}">+</button>
-				`;
-				cartContent.appendChild(cartItem);
-			});
-		}
-	});
-</script>
-<script>
 	function displayDistances() {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function(position) {
@@ -730,7 +687,6 @@
     const deliveryOption = document.getElementById('delivery-option');
     const pickupOption = document.getElementById('pickup-option');
     let orderType = 'Delivery'; 
-
     function activateOption(selectedOption) {
         orderType = selectedOption;
         if (selectedOption === 'Delivery') {
@@ -751,8 +707,8 @@
         activateOption('Pickup');
     });
 
-    const cart = [];
-
+	let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
     document.querySelectorAll(".add-to-cart").forEach(button => {
         button.addEventListener("click", function() {
             const menuId = this.getAttribute("data-id");
@@ -761,20 +717,19 @@
             const menuImage = this.getAttribute("data-image");
             const quantityInput = this.closest('.card-body').querySelector('.qty-input');
             const quantity = parseInt(quantityInput.value);
-
             const existingItem = cart.find(item => item.id === menuId);
             if (existingItem) {
                 existingItem.quantity += quantity;
             } else {
                 cart.push({ id: menuId, title: menuTitle, price: menuPrice, image: menuImage, quantity });
             }
-
             updateCartDisplay();
             showToast(); 
-
-            // Show quantity controls
             const controls = this.closest('.card-body')?.querySelectorAll('.increase-qty, .decrease-qty');
             controls?.forEach(control => control.classList.remove('d-none'));
+
+			localStorage.setItem('cart', JSON.stringify(cart));
+
         });
     });
 
@@ -786,6 +741,8 @@
             if (existingItem) {
                 existingItem.quantity = newQuantity;
                 updateCartDisplay();
+				localStorage.setItem('cart', JSON.stringify(cart));
+
             }
         }
     });
@@ -797,6 +754,8 @@
             if (item) {
                 item.quantity += 1;
                 updateCartDisplay();
+				localStorage.setItem('cart', JSON.stringify(cart));
+
             }
         }
 
@@ -811,11 +770,12 @@
                     if (index > -1) {
                         cart.splice(index, 1);
                     }
-                    // Hide quantity controls when the quantity is less than 1
                     const controls = e.target.closest('.card-body')?.querySelectorAll('.increase-qty, .decrease-qty');
                     controls?.forEach(control => control.classList.add('d-none'));
                 }
                 updateCartDisplay();
+				localStorage.setItem('cart', JSON.stringify(cart));
+
             }
         }
     });
@@ -861,6 +821,7 @@
                     </div>
                 </div>
             `;
+			
             cartContent.appendChild(cartItem);
         });
 		let dcharge = 0;
@@ -880,8 +841,7 @@
         totalAmountItem.innerHTML = `<p>Total: $${totalAmount.toFixed(2)}</p>`;
         cartContent.appendChild(totalAmountItem);
 
-		// document.querySelector("#cart-section").classList.add("show");
-        const cartDataInput = document.getElementById('cart-data');
+		const cartDataInput = document.getElementById('cart-data');
         cartDataInput.value = JSON.stringify(cart);
 		const cartDataOrder =document.getElementById('order-type-input')
         cartDataOrder.value = orderType;
@@ -889,6 +849,14 @@
 		restaurentInput.value = "{{restaurant.id}}"
 		const dchargeInput =document.getElementById('dcharge')
 		dchargeInput.value = dcharge
+		const checkoutButton = document.getElementById('checkout');
+            if (cart.length > 0) {
+                checkoutButton.style.display = 'block';  
+            } else {
+                checkoutButton.style.display = 'none';  
+            }
+		
+		
     }
 
     document.querySelector("#desktop-menu").addEventListener("click", function() {
@@ -898,9 +866,57 @@
     document.querySelector("#close-cart").addEventListener("click", function() {
         document.querySelector("#cart-section").classList.remove("show");
     });
+
+	document.getElementById('checkout').addEventListener('click', function() {
+		localStorage.removeItem('cart');  
+	});
+
+	updateCartDisplay();
+
 });
-	
 </script>
+<!-- add voucher function -->
+ <script>
+	document.getElementById('apply-voucher').addEventListener('click', function(event) {
+    event.preventDefault();
+    
+    const voucherCode = document.getElementById('voucher-code').value;
+    const totalAmountElement = document.querySelector("#cart-content .cart-item:last-child p");
+    let totalAmount = parseFloat(totalAmountElement.textContent.replace('Total: $', ''));
+
+    fetch("{% url 'restaurant:validate_voucher' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: new URLSearchParams({
+            'voucher_code': voucherCode,
+            'total_amount': totalAmount
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            const discount = data.discount;
+            totalAmount -= discount;
+            totalAmountElement.textContent = `Total: $${totalAmount.toFixed(2)}`;
+            document.getElementById('voucher-code').disabled = true;
+            document.getElementById('apply-voucher').disabled = true;
+			const voucher_Input =document.getElementById('voucher_id')
+			voucher_Input.value = data.id;
+            alert(`Voucher applied! You saved $${discount}.`);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while applying the voucher.');
+    });
+});
+
+ </script>
 <script>
 	
 	document.addEventListener('DOMContentLoaded', function() {

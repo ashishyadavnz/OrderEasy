@@ -9,6 +9,8 @@ from blog.models import Post
 from django.contrib.auth import authenticate,logout, login as auth_login
 
 
+
+
 def home(request):
     restaurants = Restaurant.objects.all()
     categories = Category.objects.all()
@@ -59,14 +61,16 @@ def checkout(request):
             cart_data = request.POST.get('cart_data')
             order_type = request.POST['order_type']
             restaurent = request.POST['restaurent_id']
-            voucher_id = request.POST.get('voucher_id')
+            voucher_id = request.POST.get('voucher_id',None)
             charge = request.POST['charge']
             try:
                 cart_items = json.loads(cart_data)
             except json.JSONDecodeError:
                 cart_items = []
             rests = Restaurant.objects.get(id=restaurent)
-            voucher = Voucher.objects.filter(id=voucher_id).last()
+            voucher = None
+            if voucher_id:
+                voucher = Voucher.objects.filter(id=voucher_id).last()
             order = Order(
                 restaurant=rests,
                 voucher=voucher,
@@ -208,7 +212,6 @@ def register(request):
             messages.error(request, "Mobile number already exists")
             return redirect('home:register')
 
-        # Create the user
 
         user = User.objects.create_user(
             first_name=first_name,
@@ -260,15 +263,11 @@ def place_order(request):
         time = request.POST['time']
         address = request.POST['address']
         instruction = request.POST.get('instruction', '')
-        otype = request.POST.get('otype', 'Delivery')  # 'Delivery' or 'Pickup'
-        cart_items = request.POST.getlist('cart_items')  # This should contain the cart items
-
-        # Calculate the total and delivery charge
+        otype = request.POST.get('otype', 'Delivery')  
+        cart_items = request.POST.getlist('cart_items')
         total = sum([item.price * item.quantity for item in cart_items])
-        delivery_charge = 5 if otype == 'Delivery' else 0  # Adjust delivery charge as needed
+        delivery_charge = 5 if otype == 'Delivery' else 0  
         total += delivery_charge
-
-        # Create the order
         order = Order.objects.create(
             name=name,
             email=email,
@@ -280,21 +279,21 @@ def place_order(request):
             charge=delivery_charge,
             otype=otype,
         )
-
-        # Add cart items to the order
         for item in cart_items:
             order.cart.add(item)
 
-        # Save the order
         order.save()
 
         return redirect('home:home-page')
 
     return render(request, 'ui/restaurant-card.html')
 
-
 def submit_feedback(request, slug):
     restaurant = get_object_or_404(Restaurant, slug=slug)  
+    if not request.user.is_authenticated:
+        messages.error(request, 'You need to log in to submit feedback.')
+        return redirect(reverse('home:login') + f'?next={request.path}')
+
     if request.method == 'POST':
         rating = request.POST.get('rating')
         review = request.POST.get('review')
@@ -326,4 +325,4 @@ def fcm_token(request):
 
         return JsonResponse({'token': device.registration_id, 'created': created})
     
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+    return JsonResponse({'error': 'Invalid request'}, status=200)
