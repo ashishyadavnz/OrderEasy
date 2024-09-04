@@ -14,6 +14,7 @@ urlpatterns = [
         path('page-not-found/', views.notfound,name='page-not-found'),
         path('register/',views.register,name='register'),
         path('login/', views.login, name='login'),
+        path("notify/", views.index, name="index"),
         path('logout/', views.user_logout, name='logout'),
         path('<slug:slug>/submit-feedback/', views.submit_feedback, name='submit_feedback'),
    

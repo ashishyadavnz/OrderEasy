@@ -1,5 +1,6 @@
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, render, redirect, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.urls import reverse
 from .models import *
@@ -324,5 +325,16 @@ def fcm_token(request):
             device.save()
 
         return JsonResponse({'token': device.registration_id, 'created': created})
-    
+
     return JsonResponse({'error': 'Invalid request'}, status=200)
+
+@csrf_exempt
+def index(request):
+    devices = FCMDevice.objects.all()
+    data = {
+        'type': "Alert",
+    }
+    res = devices.send_message(
+        Message(notification=Notification(title="Nitesh", body="Nitesh@2", image=settings.EASYLOGO),data=data,)
+    )
+    return HttpResponse(res)
