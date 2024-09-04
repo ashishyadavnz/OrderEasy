@@ -875,6 +875,48 @@
 
 });
 </script>
+<!-- add voucher function -->
+ <script>
+	document.getElementById('apply-voucher').addEventListener('click', function(event) {
+    event.preventDefault();
+    
+    const voucherCode = document.getElementById('voucher-code').value;
+    const totalAmountElement = document.querySelector("#cart-content .cart-item:last-child p");
+    let totalAmount = parseFloat(totalAmountElement.textContent.replace('Total: $', ''));
+
+    fetch("{% url 'restaurant:validate_voucher' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: new URLSearchParams({
+            'voucher_code': voucherCode,
+            'total_amount': totalAmount
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            const discount = data.discount;
+            totalAmount -= discount;
+            totalAmountElement.textContent = `Total: $${totalAmount.toFixed(2)}`;
+            document.getElementById('voucher-code').disabled = true;
+            document.getElementById('apply-voucher').disabled = true;
+			const voucher_Input =document.getElementById('voucher_id')
+			voucher_Input.value = data.id;
+            alert(`Voucher applied! You saved $${discount}.`);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while applying the voucher.');
+    });
+});
+
+ </script>
 <script>
 	
 	document.addEventListener('DOMContentLoaded', function() {
