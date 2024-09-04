@@ -323,4 +323,4 @@ def fcm_token(request):
 
         return JsonResponse({'token': device.registration_id, 'created': created})
     
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+    return JsonResponse({'error': 'Invalid request'}, status=200)
