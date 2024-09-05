@@ -125,7 +125,7 @@
                         <input type="text" name="last_name" placeholder="Last Name" value="{% if order.lname %}{{ order.lname }}{% endif %}" required>
                         <div class="row">
                             <div class="col-lg-6">
-                                <input type="text" name="email" placeholder="E-mail" value="{% if order.email %}{{ order.email }}{% endif %}" required>
+                                <input class="email-input" type="email" name="email" placeholder="E-mail" value="{% if order.email %}{{ order.email }}{% endif %}" required>
                             </div>
                             <div class="col-lg-6">
                                 <input type="number" name="phone" placeholder="Phone" value="{% if order.phone %}{{ order.phone }}{% endif %}" required>
