@@ -178,9 +178,9 @@
 				<div class="col-lg-5" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
 					<div class="food-photo-section">
 						<img alt="img" src="{% static 'images/photo-3.png' %}">
-						<a href="" class="one"><i class="fa-solid fa-burger"></i>Burgers</a>
-						<a href="" class="two"><i class="fa-solid fa-cheese"></i>Steaks</a>
-						<a href="" class="three"><i class="fa-solid fa-pizza-slice"></i>Pizza</a>
+						<a href="javascript:void(0)" class="one"><i class="fa-solid fa-burger"></i>Burgers</a>
+						<a href="javascript:void(0)" class="two"><i class="fa-solid fa-cheese"></i>Steaks</a>
+						<a href="javascript:void(0)" class="three"><i class="fa-solid fa-pizza-slice"></i>Pizza</a>
 					</div>
 				</div>
 				<div class="col-lg-6 offset-lg-1" data-aos="fade-up" data-aos-delay="300" data-aos-duration="400">
@@ -188,7 +188,7 @@
 						<h2>Food from your favorite restaurants
 								to your table</h2>
 								<p>Pretium lectus quam id leo in vitae turpis massa sed. Lorem donec massa sapien faucibus et molestie. Vitae elementum curabitur vitae nunc.</p>
-								<a href="restuarants.html" class="button button-2">Order Now</a>
+								<a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a>
 					</div>
 				</div>
 			</div>
@@ -281,7 +281,7 @@
 						<img alt="img" src="{% static 'images/photo-6.jpg' %}">
 						<div class="Join-courier">
 							<h3>Join Courier</h3>
-							<a href="become-partner.html" class="button button-2">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+							<a href="{% url 'home:become-partner' %}" class="button button-2">Learn More <i class="fa-solid fa-arrow-right"></i></a>
 						</div>
 					</div>
 				</div>
@@ -290,7 +290,7 @@
 						<img alt="img" src="{% static 'images/photo-7.jpg' %}">
 						<div class="Join-courier">
 							<h3>Join Merchant</h3>
-							<a href="become-partner.html" class="button button-2">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+							<a href="{% url 'home:become-partner' %}" class="button button-2">Learn More <i class="fa-solid fa-arrow-right"></i></a>
 						</div>
 					</div>
 				</div>
@@ -309,7 +309,7 @@
 						<img alt="{{post.title}}"style="height: 280px !important;" src="{{post.thumbnail.url}}" class="w-100"	>
 						<div class="quickeat">
 							{% for tag in post.tag.all %}
-								<a href="">{{ tag.title }}</a>
+								<a href="javascript:void(0)">{{ tag.title }}</a>
 							{% endfor %}
 						</div>
 						<h3>{{post.title}}</h3>
