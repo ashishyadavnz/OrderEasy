@@ -506,9 +506,11 @@
 													</p>
 													<div class="cart-actions">
 														<input type="number" class="qty-input" value="1" min="1" hidden>
+														<input type="hidden" class="carditem{{item.id}}">
 														<button class="btn add-to-cart" style="background-color:#F29F05; color: white;" data-id="{{ item.id }}" data-title="{{ item.title }}" data-image="{% if item.image %}{{ item.image.url }}{% endif %}" data-price="{{ item.price }}">Add to Cart</button>
-														<button class="btn btn-danger decrease-qty d-none" data-id="{{ item.id }}" hidden>-</button>
-														<button class="btn btn-danger increase-qty d-none" data-id="{{ item.id }}" hidden>+</button>
+														<button class="btn btn-danger decrease-qty d-none" data-id="{{ item.id }}">-</button>
+														<span class="item-quantity d-none" data-id="{{ item.id }}" style="margin-left: 10px;">Qty: 0</span> 
+														<button class="btn btn-danger increase-qty d-none" data-id="{{ item.id }}">+</button>
 													</div>          
 												</div>
 											</div>
@@ -725,8 +727,13 @@
             }
             updateCartDisplay();
             showToast(); 
+			this.classList.add('d-none');
             const controls = this.closest('.card-body')?.querySelectorAll('.increase-qty, .decrease-qty');
             controls?.forEach(control => control.classList.remove('d-none'));
+
+			const quantitySpan = this.closest('.cart-actions').querySelector('.item-quantity');
+            quantitySpan.classList.remove('d-none');
+            quantitySpan.textContent = `Qty: ${quantity}`;
 
 			localStorage.setItem('cart', JSON.stringify(cart));
 
@@ -770,8 +777,16 @@
                     if (index > -1) {
                         cart.splice(index, 1);
                     }
+					let itemstr = '.carditem'+itemId
+					$('body').find(itemstr).parent().find('.add-to-cart').removeClass('d-none');
+					$('body').find(itemstr).parent().find('.decrease-qty').addClass('d-none');
+					$('body').find(itemstr).parent().find('.item-quantity').addClass('d-none');
+					$('body').find(itemstr).parent().find('.increase-qty').addClass('d-none');
                     const controls = e.target.closest('.card-body')?.querySelectorAll('.increase-qty, .decrease-qty');
-                    controls?.forEach(control => control.classList.add('d-none'));
+					controls?.forEach(control => control.classList.add('d-none'));
+                
+					const quantitySpan = e.target.closest('.cart-actions')?.querySelector('.item-quantity');
+					quantitySpan?.classList.add('d-none');
                 }
                 updateCartDisplay();
 				localStorage.setItem('cart', JSON.stringify(cart));
@@ -823,7 +838,15 @@
             `;
 			
             cartContent.appendChild(cartItem);
+			
+			const itemQtySpan = document.querySelector(`.item-quantity[data-id='${item.id}']`);
+			console.log("heyyyyyy")
+            if (itemQtySpan) {
+                itemQtySpan.textContent = `Qty: ${item.quantity}`;
+            }
+			
         });
+
 		let dcharge = 0;
         if (orderType === 'Delivery') {
             const selectedRestaurantCard = document.querySelector('.restaurant-card'); 
