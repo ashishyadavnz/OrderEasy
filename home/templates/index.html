@@ -79,7 +79,7 @@
 									<div class="dropdown">
 										<a href="{% url 'blog:blog_page' %}">Blog</a>
 										<!-- <a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a> -->
-										{% comment %} <a href="{% url  'blog:service'  %}">Services</a> {% endcomment %}
+										<a href="{% url 'blog:service' %}">Services</a> 
 										<a href="{% url 'home:faq' %}">FAQ</a>
 										<a href="{% url  'home:pricing-table'  %}">Pricing Table</a>
 										<a href="{% url  'home:become-partner'  %}">Become A Partner</a>
@@ -161,7 +161,7 @@
 							</li>
 							<hr>
 							<li class="navbar-dropdown">
-								<a href="" class="dropdown-toggle">Restaurants</a>
+								<a href="javascript:void(0)" class="dropdown-toggle">Restaurants</a>
 								<div class="dropdown-content">
 									<a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
 									{% if restaurants and restaurants.first %}
@@ -174,11 +174,11 @@
 							</li>
 							<hr>
 							<li class="navbar-dropdown">
-								<a href="" class="dropdown-toggle">Pages</a>
+								<a href="javascript:void(0)" class="dropdown-toggle">Pages</a>
 								<div class="dropdown-content">
 									<a href="{% url 'blog:blog_page' %}">Blog</a>
 									<a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a>
-									{% comment %} <a href="{% url  'blog:service'  %}">Services</a> {% endcomment %}
+									<a href="{% url  'blog:service'  %}">Services</a> 
 									<a href="{% url 'home:faq' %}">FAQ</a>
 									<a href="{% url  'home:pricing-table'  %}">Pricing Table</a>
 									<a href="{% url  'home:become-partner'  %}">Become A Partner</a>
