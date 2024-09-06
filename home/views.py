@@ -3,11 +3,17 @@ from django.shortcuts import get_object_or_404, render, redirect, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.urls import reverse
+from firebase_admin.messaging import Message, Notification
+from fcm_django.models import FCMDevice
 from .models import *
 from django.utils import timezone
 from restaurant.models import *
 from blog.models import Post
 from django.contrib.auth import authenticate,logout, login as auth_login
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
+from django.utils.html import strip_tags
+from django.core.mail import EmailMessage
 
 
 
@@ -128,6 +134,41 @@ def checkout(request):
             odr.instruction = instructions
             odr.status = 'Active'
             odr.save()
+            restaurant_owner_email = odr.restaurant.email
+            subject_owner = f"New Order from {first_name} {last_name}"
+            context_owner = {
+                'restaurant_owner': odr.restaurant.owner,
+                'order': odr,
+                'cart_items': request.session.get('cart_items', [])
+            }
+            html_message_owner = render_to_string('ui/order_owner.html', context_owner)
+            plain_message_owner = strip_tags(html_message_owner) 
+            email_owner = EmailMessage(
+                subject_owner,
+                html_message_owner,
+                settings.EMAIL_HOST_USER,
+                [restaurant_owner_email]
+            )
+            email_owner.content_subtype = "html" 
+            email_owner.send(fail_silently=False)
+            print(email_owner,"email for owenr") 
+            subject_customer = "Order Confirmation"
+            context_customer = {
+                'first_name': first_name,
+                'order': odr,
+            }
+            html_message_customer = render_to_string('ui/order_confirm.html', context_customer)
+            plain_message_customer = strip_tags(html_message_customer)
+            email_customer = EmailMessage(
+                subject_customer,
+                html_message_customer,
+                settings.EMAIL_HOST_USER,
+                [email]
+            )
+            email_customer.content_subtype = "html" 
+            email_customer.send(fail_silently=False)
+
+
             devices = FCMDevice.objects.filter(user=odr.user)
             title = f'Order Created'
             body = f'{first_name} {last_name} has generated order in your restaurent. Order id is {odr.orderid}.'
@@ -310,31 +351,60 @@ def submit_feedback(request, slug):
         return redirect(reverse('restaurant:restaurant-card', kwargs={'slug': slug}))  
     return render(request, 'ui/restaurant-card.html', {'restaurant': restaurant})
     
+@csrf_exempt
 def fcm_token(request):
     if request.method == 'POST' and request.user.is_authenticated:
-        user = request.user
         token = request.POST.get('token')
         if not token:
             return JsonResponse({'error': 'Token is required'}, status=400)
 
-        device, created = FCMDevice.objects.get_or_create(registration_id=token)
-        if device:
-            device.user= user
-            device.name= f'{user.first_name} {user.last_name}' if user.first_name else user.username
-            device.type='web'
+        device, created = FCMDevice.objects.get_or_create(
+            registration_id=token,
+            defaults={'user': request.user, 'type': 'web'}
+        )
+        if not created:
+            device.user = request.user
+            device.name = f'{request.user.first_name} {request.user.last_name}' if request.user.first_name else request.user.username
+            device.type = 'web'
+            device.active = True
             device.save()
 
-        return JsonResponse({'token': device.registration_id, 'created': created})
+        return JsonResponse({'token': device.registration_id, 'created': created}, status=201)
 
-    return JsonResponse({'error': 'Invalid request'}, status=200)
+    return JsonResponse({'error': 'Invalid request or not authenticated'}, status=200)
 
 @csrf_exempt
 def index(request):
-    devices = FCMDevice.objects.all()
+    devices = FCMDevice.objects.filter(active=True)
     data = {
         'type': "Alert",
     }
-    res = devices.send_message(
-        Message(notification=Notification(title="Nitesh", body="Nitesh@2", image=settings.EASYLOGO),data=data,)
-    )
-    return HttpResponse(res)
+
+    notification = Notification(title="Test Title", body="This is a test notification", image=settings.EASYLOGO)
+
+    from firebase_admin.messaging import UnregisteredError, SendResponse
+
+    responses = []
+    for device in devices:
+        try:
+            response = device.send_message(
+                Message(notification=notification, data=data)
+            )
+            if isinstance(response, SendResponse) and response.message_id:
+                responses.append({
+                    'device_id': device.id,
+                    'message_id': response.message_id
+                })
+            else:
+                responses.append({
+                    'device_id': device.id,
+                    'error': f'Error sending to device {device.id}: {response.exception}'
+                })
+        except UnregisteredError:
+            responses.append({
+                'device_id': device.id,
+                'error': 'Device token unregistered'
+            })
+
+    return JsonResponse({'status': 'Notifications sent', 'responses': responses})
+

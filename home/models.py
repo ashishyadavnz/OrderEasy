@@ -12,8 +12,6 @@ from django.core.validators import FileExtensionValidator
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.utils.safestring import mark_safe
 from django.utils.html import strip_tags
-from firebase_admin.messaging import Message, Notification
-from fcm_django.models import FCMDevice
 from rest_framework.authtoken.models import Token
 from geolocation.models import *
 from datetime import timedelta, date

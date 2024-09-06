@@ -46,7 +46,9 @@
 										<a class="end" href="javascript:void(0)">{{ categorys.title }}</a>
 										{% endfor %}
 									</div>
+									{% if restaurant.content %}
 									<p>{{ restaurant.content | truncatechars:150  }}</p>
+									{% endif %}
 									{% if restaurant.start and restaurant.end %}
 									<p><b>{{ restaurant.start }}</b> To <b>{{ restaurant.end }}</b></p>
 									{% endif %}

@@ -3,7 +3,7 @@
 <html class="wide wow-animation" lang="en">
 
 <head>
-	<title>{% block title %}{% endblock %} OrderEasy</title>
+	<title>{% block title %}{% endblock %} Order Easy</title>
 	<meta name="viewport" content="width=device-width height=device-height initial-scale=1.0">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -446,9 +446,11 @@
 	<script src="{% static 'js/custom.js' %}"></script>
 	<script src="{% static 'js/ownchar.js' %}"></script>
 	<script type="module">
-		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-		import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-messaging.js";
-		const firebaseConfig = {
+        // Initialize Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+        import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-messaging.js";
+
+        const firebaseConfig = {
 			apiKey: "AIzaSyBZgRCZexv8ErSYGyo6IpbO1Q438e-CFTA",
 			authDomain: "timestint-st.firebaseapp.com",
 			projectId: "timestint-st",
@@ -456,20 +458,33 @@
 			messagingSenderId: "507688135519",
 			appId: "1:507688135519:web:1b3a39ef85863310fce4ea",
 			measurementId: "G-6XJ70609DK"
-		};
-		const app = initializeApp(firebaseConfig);
-		const messaging = getMessaging();
-		getToken(messaging, { vapidKey: 'BHzwzJsxsIu-lTCvdZQfK1eqfCJd1tqDzGySY9DEjX6CwlZA1LB42062q2bv9uH3B2R18H_TVxbGVZl9X0yZjwI' }).then((currentToken) => {
-			if (currentToken) {
-				sendTokenToServer(currentToken)
-				console.log("Token is : ", currentToken);
-			} else {
-				console.log('No registration token available. Request permission to generate one.');
-			}
-		}).catch((err) => {
-			console.log('An error occurred while retrieving token. ', err);
-		});
-	</script>
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const messaging = getMessaging();
+
+        // Get the device token
+        getToken(messaging, { vapidKey: 'BHzwzJsxsIu-lTCvdZQfK1eqfCJd1tqDzGySY9DEjX6CwlZA1LB42062q2bv9uH3B2R18H_TVxbGVZl9X0yZjwI' }).then((currentToken) => {
+            if (currentToken) {
+                sendTokenToServer(currentToken);
+                console.log("Token is: ", currentToken);
+            } else {
+                console.log('No registration token available. Request permission to generate one.');
+            }
+        }).catch((err) => {
+            console.log('An error occurred while retrieving token: ', err);
+        });
+
+        // Register Service Worker for Firebase Messaging
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('js/firebase-messaging-sw.js')
+            .then(function(registration) {
+                console.log('Service Worker registered with scope:', registration.scope);
+            }).catch(function(err) {
+                console.log('Service Worker registration failed:', err);
+            });
+        }
+    </script>
 	{% block script_js %}
 	{% endblock %}
 	<script>
@@ -662,16 +677,16 @@
 				url: '{% url "home:fcm_token" %}',  
 				data: {
 					'token': currentToken,
-					'csrfmiddlewaretoken': '{{ csrf_token }}' 
+					'csrfmiddlewaretoken': '{{ csrf_token }}'  // Ensure this token is available in the template context
 				},
 				success: function(response) {
 					console.log('Token saved or retrieved:', response);
 				},
-				error: function(error) {
-					console.error('Error saving token:', error);
+				error: function(xhr, status, error) {
+					console.error('Error saving token:', xhr.responseText);
 				}
 			});
-		}
+		}		
 	</script>
 </body>
 </html>
