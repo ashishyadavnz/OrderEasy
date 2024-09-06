@@ -266,21 +266,22 @@ from firebase_admin import credentials
 
 cred_path = BASE_DIR / "ordereasy-firebase-sdk-file.json"
 cred = credentials.Certificate(cred_path)
-firebase_admin.initialize_app(cred)
+firebase_app = firebase_admin.initialize_app(cred)  # Initialize Firebase app
 
 FCM_DJANGO_SETTINGS = {
-    "DEFAULT_FIREBASE_APP": None,
+    "DEFAULT_FIREBASE_APP": firebase_app,  # Use initialized app here
     "APP_VERBOSE_NAME": "FCM Easy Meal",
     "ONE_DEVICE_PER_USER": False,
     "DELETE_INACTIVE_DEVICES": False,
 }
 
 
+
 # Email 
 
 EMAIL_BACKEND= 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'no-reply@securitytroops.com' 
-EMAIL_HOST_PASSWORD = 'Stroops2018'
+EMAIL_HOST_USER = 'ordereasynz1@gmail.com' 
+EMAIL_HOST_PASSWORD = 'Genuine@77'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
