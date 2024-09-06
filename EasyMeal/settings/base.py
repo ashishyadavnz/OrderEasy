@@ -266,14 +266,15 @@ from firebase_admin import credentials
 
 cred_path = BASE_DIR / "ordereasy-firebase-sdk-file.json"
 cred = credentials.Certificate(cred_path)
-firebase_admin.initialize_app(cred)
+firebase_app = firebase_admin.initialize_app(cred)  # Initialize Firebase app
 
 FCM_DJANGO_SETTINGS = {
-    "DEFAULT_FIREBASE_APP": None,
+    "DEFAULT_FIREBASE_APP": firebase_app,  # Use initialized app here
     "APP_VERBOSE_NAME": "FCM Easy Meal",
     "ONE_DEVICE_PER_USER": False,
     "DELETE_INACTIVE_DEVICES": False,
 }
+
 
 
 # Email 

@@ -3,6 +3,8 @@ from django.shortcuts import get_object_or_404, render, redirect, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.urls import reverse
+from firebase_admin.messaging import Message, Notification
+from fcm_django.models import FCMDevice
 from .models import *
 from django.utils import timezone
 from restaurant.models import *
@@ -349,31 +351,60 @@ def submit_feedback(request, slug):
         return redirect(reverse('restaurant:restaurant-card', kwargs={'slug': slug}))  
     return render(request, 'ui/restaurant-card.html', {'restaurant': restaurant})
     
+@csrf_exempt
 def fcm_token(request):
     if request.method == 'POST' and request.user.is_authenticated:
-        user = request.user
         token = request.POST.get('token')
         if not token:
             return JsonResponse({'error': 'Token is required'}, status=400)
 
-        device, created = FCMDevice.objects.get_or_create(registration_id=token)
-        if device:
-            device.user= user
-            device.name= f'{user.first_name} {user.last_name}' if user.first_name else user.username
-            device.type='web'
+        device, created = FCMDevice.objects.get_or_create(
+            registration_id=token,
+            defaults={'user': request.user, 'type': 'web'}
+        )
+        if not created:
+            device.user = request.user
+            device.name = f'{request.user.first_name} {request.user.last_name}' if request.user.first_name else request.user.username
+            device.type = 'web'
+            device.active = True
             device.save()
 
-        return JsonResponse({'token': device.registration_id, 'created': created})
+        return JsonResponse({'token': device.registration_id, 'created': created}, status=201)
 
-    return JsonResponse({'error': 'Invalid request'}, status=200)
+    return JsonResponse({'error': 'Invalid request or not authenticated'}, status=200)
 
 @csrf_exempt
 def index(request):
-    devices = FCMDevice.objects.all()
+    devices = FCMDevice.objects.filter(active=True)
     data = {
         'type': "Alert",
     }
-    res = devices.send_message(
-        Message(notification=Notification(title="Nitesh", body="Nitesh@2", image=settings.EASYLOGO),data=data,)
-    )
-    return HttpResponse(res)
+
+    notification = Notification(title="Test Title", body="This is a test notification", image=settings.EASYLOGO)
+
+    from firebase_admin.messaging import UnregisteredError, SendResponse
+
+    responses = []
+    for device in devices:
+        try:
+            response = device.send_message(
+                Message(notification=notification, data=data)
+            )
+            if isinstance(response, SendResponse) and response.message_id:
+                responses.append({
+                    'device_id': device.id,
+                    'message_id': response.message_id
+                })
+            else:
+                responses.append({
+                    'device_id': device.id,
+                    'error': f'Error sending to device {device.id}: {response.exception}'
+                })
+        except UnregisteredError:
+            responses.append({
+                'device_id': device.id,
+                'error': 'Device token unregistered'
+            })
+
+    return JsonResponse({'status': 'Notifications sent', 'responses': responses})
+
