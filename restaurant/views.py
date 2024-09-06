@@ -12,6 +12,8 @@ from home.forms import *
 # Create your views here.
 
 def restaurant(request, cuisine_slug=None):
+    if request.user.is_authenticated and request.user.role == 'Owner':
+        return redirect('restaurant:my_restaurant')
     restaurants = Restaurant.objects.filter(status='Active')
     cat = Category.objects.all()
     if cuisine_slug:
