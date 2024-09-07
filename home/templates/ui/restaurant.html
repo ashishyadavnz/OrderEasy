@@ -109,11 +109,11 @@
 											<span class="text-danger">Closed</span>
 										{% endif %}
 										</span>
-										{% if restaurant.lowest_price %}
-										<p><strong>Delivery starts from:</strong> NZ${{ restaurant.lowest_price }}</p>
+										{% comment %} {% if restaurant.lowest_price %}
+										<p><strong>Delivery starts from:</strong>  NZ$ {{ restaurant.lowest_price }}</p>
 										{% else %}
-										<p><strong>Delivery starts from:</strong> 0NZ$</p>
-										{% endif %}
+										<p><strong>Delivery starts from:</strong>  NZ$ 0</p>
+										{% endif %} {% endcomment %}
 										<p class="distance">Distance: Calculating...</p> 
 									</div>
 								</div>

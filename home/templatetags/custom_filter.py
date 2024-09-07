@@ -1,7 +1,7 @@
 from django import template
 from django.utils import timezone
-
 from home.models import Pages  # Make sure this import is correct
+import pytz
 
 register = template.Library()
 
@@ -15,7 +15,8 @@ def range_diff(value, diff):
 
 @register.filter
 def is_restaurant_open(start_time, end_time):
-    current_time = timezone.now().time()  # This now uses Django's timezone
+    auckland_tz = pytz.timezone('Pacific/Auckland')
+    current_time = timezone.now().astimezone(auckland_tz).time()
     if start_time and end_time:
         return start_time <= current_time <= end_time
     return False
