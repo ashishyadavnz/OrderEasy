@@ -37,7 +37,7 @@
 			<span>Loading</span>
 		</div>
 	</div>
-	<header class="pb-0 fixed-header" style="background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');">
+	<header class="pb-0 fixed-header" >
 		<div class="container">
 			<div class="d-flex row  mx-0" >
 				<div class="col-3">
@@ -630,16 +630,11 @@
 			var title = $row.find('.food-title').text();
 			var category = $row.find('.food-category').data('category');
 			var cuisine = $row.find('.food-cuisine').data('cuisine');
-			var start = $row.find('.food-start').data('start');
-			var end = $row.find('.food-end').data('end');
 			var price = $row.find('.food-price').text();
-			console.log(title,category,cuisine,start,end,price)
 			var available = $row.find('.food-available').data('available').trim() === 'True';
 			$('#id_title').val(title);
 			$('#id_category').val(category); 
 			$('#id_cuisine').val(cuisine); 
-			$('#id_start').val(start);
-			$('#id_end').val(end);
 			$('#id_price').val(price);
 			$('#id_available').prop('checked', available);
 			$('#foodItemModal').modal('show');
