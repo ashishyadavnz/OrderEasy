@@ -1,10 +1,13 @@
+
+{% load static %}
 <div style="font-family: Arial, sans-serif; color: #333; background-color: #fdf4e3; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
     <div style="text-align: center; margin-bottom: 20px;">
-        <img src="home/static/images/order-easy.png" alt="OrderEasy" style="max-width: 150px;">
+        <img src="{% static 'images/order-easy.png' %}" alt="OrderEasy" style="max-width: 150px;">
     </div>
     
     <h1 style="color: #F29F05; text-align: center; font-size: 24px;">New Order Received!</h1>
     <p style="font-size: 18px;"><strong>Customer:</strong> {{ order.fname }} {{ order.lname }}</p>
+    <p style="font-size: 18px;"><strong>Order ID:</strong> {{ order.orderid }}</p>
     <p style="font-size: 18px;"><strong>Order Type:</strong> {{ order.otype }}</p>
     <p style="font-size: 18px;"><strong>Address:</strong> {{ order.address }}</p>
     

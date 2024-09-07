@@ -56,7 +56,10 @@
                         
                         <div class="banner-wilmington">
                             <img alt="logo" src="{% if order.restaurant.logo %}{{order.restaurant.logo.url}}{% else %}{% static 'images/order-easy.png' %}{% endif %}" class="img-fluid mx-2" style="width: 120px; height: 100px; object-fit: cover;">
-                            Restaurant: <h6> {{order.restaurant.title}}</h6>
+                            <div class="d-block">
+                                <span>Restaurant:</span> 
+                                <h6> {{order.restaurant.title}}</h6>
+                            </div>
                         </div>
                         
                         <ul>
