@@ -1,14 +1,16 @@
+{% load static %}
 <div style="font-family: Arial, sans-serif; color: #333; background-color: #eaf6ea; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
     <div style="text-align: center; margin-bottom: 20px;">
-        <img src="home/static/images/order-easy.png" alt="OrderEasy" style="max-width: 150px;">
+        <img src="{% static 'images/order-easy.png' %}" alt="OrderEasy" style="max-width: 150px;">
     </div>
     
     <h1 style="color: #5cb85c; text-align: center; font-size: 24px;">Thank you for your order, {{ first_name }}!</h1>
     <p style="font-size: 18px;">Your order has been placed successfully with the following details:</p>
     
     <ul style="font-size: 16px; padding-left: 20px;">
-        <li style="margin-bottom: 10px;"><strong>Order ID:</strong> {{ order.id }}</li>
+        <li style="margin-bottom: 10px;"><strong>Order ID:</strong> {{ order.orderid }}</li>
         <li style="margin-bottom: 10px;"><strong>Total Amount:</strong> <span style="color: #d9534f;">${{ order.total|floatformat:2 }}</span></li>
+l
         <li style="margin-bottom: 10px;"><strong>Delivery Address:</strong> {{ order.address }}</li>
     </ul>
 
@@ -23,7 +25,7 @@
     <!-- Contact Section -->
     <div style="margin-top: 30px; text-align: center; border-top: 1px solid #ddd; padding-top: 20px;">
         <p style="font-size: 16px;">Need help or have questions? Reach out to us:</p>
-        <p><a href="https://example.com/contact" style="color: #F29F05; text-decoration: none;">Contact Us</a></p>
-        <p style="font-size: 14px;">Visit our website: <a href="https://example.com" style="color: #F29F05;">https://example.com</a></p>
+        <p><a href="{{url}}contact" style="color: #F29F05; text-decoration: none;">Contact Us</a></p>
+        <p style="font-size: 14px;">Visit our website: <a href="{{url}}" style="color: #F29F05;">Go to website</a></p>
     </div>
 </div>

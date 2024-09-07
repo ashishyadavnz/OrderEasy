@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect,HttpResponse
 from django.contrib import messages
+from django.utils.dateparse import parse_date
 from .models import *
 from django.utils import timezone
 from django.db.models import Min
@@ -8,6 +9,7 @@ from datetime import datetime, timedelta
 from django.db.models import F
 from django.db.models.functions import ACos, Cos, Radians, Sin
 from home.forms import *
+import pytz
 
 # Create your views here.
 
@@ -124,7 +126,14 @@ def food_items(request ,restro):
     return render(request, 'ui/my-menu.html', {'food_items': foodItem,'restro':restro,'categories':categories,'cuisines':cuisines})
 
 def orders_items(request ,restro):
-    orderItem = Order.objects.filter(restaurant__slug = restro,status='Active')
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    orderItem = Order.objects.filter(restaurant__slug=restro, status='Active')
+    if start_date and end_date:
+        start_date_parsed = parse_date(start_date)
+        end_date_parsed = parse_date(end_date)
+        if start_date_parsed and end_date_parsed:
+            orderItem = orderItem.filter(timestamp__date__gte=start_date_parsed, timestamp__date__lte=end_date_parsed ,status='Active')
     return render(request, 'ui/orders.html', {'orderItem': orderItem,'restro':restro})
 
 def create_food_item(request ,restro):
@@ -168,7 +177,8 @@ def validate_voucher(request):
 
         try:
             voucher = Voucher.objects.get(name=voucher_code)
-            if voucher.validity < timezone.now():
+            auckland_tz = pytz.timezone('Pacific/Auckland')
+            if voucher.validity < timezone.now().astimezone(auckland_tz):
                 return JsonResponse({'status': 'error', 'message': 'Voucher has expired.'})
 
             if total_amount < voucher.payment:

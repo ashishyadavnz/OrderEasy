@@ -11,7 +11,7 @@ class ReservationForm(ModelForm):
 class RestaurantForm(ModelForm):
 	class Meta:
 		model = Restaurant
-		fields = ('title', 'logo', 'image', 'phone','email', 'found','city','postcode','address','website','latitude','longitude','facebook','twitter','instagram','linkedin','vip','source')
+		fields = ('title', 'logo', 'image', 'phone','email', 'found','city','postcode','address','website','latitude','longitude','facebook','twitter','instagram','linkedin')
 
 	def __init__(self, *args, **kwargs):
 		user = kwargs.pop('user', None)

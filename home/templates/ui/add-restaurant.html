@@ -42,23 +42,6 @@
         width: auto;
         margin-right: 10px;
     }
-    
-    .btn-primary {
-        display: block;
-        width: 100%;
-        padding: 10px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        font-size: 16px;
-        cursor: pointer;
-        text-align: center;
-    }
-    
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
 </style>
 
 <div class="menu-layer ">	
@@ -108,7 +91,7 @@
             
                         <div class="form-group">
                             <label for="id_found">Found:</label>
-                            {{ form.found|add_class:"form-control" }}
+                            <input type="date" name="found" id="id_found" class="form-control">
                         </div>
             
                         <div class="form-group">
@@ -160,18 +143,9 @@
                             <label for="id_linkedin">LinkedIn:</label>
                             {{ form.linkedin|add_class:"form-control" }}
                         </div>
+        
             
-                        <div class="form-group">
-                            <label for="id_vip">VIP:</label>
-                            {{ form.vip|add_class:"form-check-input" }}
-                        </div>
-            
-                        <div class="form-group">
-                            <label for="id_source">Source:</label>
-                            {{ form.source|add_class:"form-control" }}
-                        </div>
-            
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="button-price">Save</button>
                     </form>
                 </div>
 			</div>

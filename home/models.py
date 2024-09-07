@@ -259,3 +259,22 @@ class Testimonial(BaseModel):
 
 	def __str__(self):
 		return self.name
+
+class Pages(models.Model):
+    name = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+    slug = AutoSlugField(populate_from=['name'], unique=True, editable=True)
+    description = RichTextUploadingField()
+    meta_title = models.CharField(max_length=160)
+    meta_description = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    utimestamp = models.DateTimeField(auto_now=True)
+    track = models.TextField(blank=True, editable=False)
+    utrack = models.TextField(blank=True, editable=False)
+    status = models.CharField(max_length=20, choices=status, default='Active')
+
+    class Meta:
+        verbose_name_plural = "11.Pages"
+
+    def __str__(self):
+        return self.title

@@ -41,11 +41,13 @@
 											<i class="fa-regular fa-star"></i>
 										{% endfor %}
 									</div>
+									{% comment %} 
 									<div class="cafa-button">
 										{% for categorys in cat %}
 										<a class="end" href="javascript:void(0)">{{ categorys.title }}</a>
 										{% endfor %}
 									</div>
+									{% endcomment %}
 									{% if restaurant.content %}
 									<p>{{ restaurant.content | truncatechars:150  }}</p>
 									{% endif %}
@@ -60,9 +62,9 @@
 									{% endif %}
 									</span>
 									{% if restaurant.lowest_price %}
-									<p><strong>Delivery starts from:</strong> ${{ restaurant.lowest_price }}</p>
+									<p><strong>Delivery starts from:</strong> NZ${{ restaurant.lowest_price }}</p>
 									{% else %}
-									<p><strong>Delivery starts from:</strong> 0$</p>
+									<p><strong>Delivery starts from:</strong> NZ$0</p>
 									{% endif %}
 									<p class="distance">Distance: Calculating...</p> 
 								</div>
