@@ -41,11 +41,13 @@
 											<i class="fa-regular fa-star"></i>
 										{% endfor %}
 									</div>
+									{% comment %} 
 									<div class="cafa-button">
 										{% for categorys in cat %}
 										<a class="end" href="javascript:void(0)">{{ categorys.title }}</a>
 										{% endfor %}
 									</div>
+									{% endcomment %}
 									{% if restaurant.content %}
 									<p>{{ restaurant.content | truncatechars:150  }}</p>
 									{% endif %}

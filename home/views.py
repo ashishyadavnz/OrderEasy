@@ -408,3 +408,9 @@ def index(request):
 
     return JsonResponse({'status': 'Notifications sent', 'responses': responses})
 
+def page_detail(request,slug):
+    item = Pages.objects.filter(slug=slug,status='Active').last()
+    if item:
+        return render(request, 'ui/custom-page.html',{"page":"item","item":item})
+    else:
+        return redirect('/page-not-found/')

@@ -1,5 +1,7 @@
 from django import template
-from django.utils import timezone  # Make sure this import is correct
+from django.utils import timezone
+
+from home.models import Pages  # Make sure this import is correct
 
 register = template.Library()
 
@@ -21,3 +23,8 @@ def is_restaurant_open(start_time, end_time):
 @register.filter(name='add_class')
 def add_class(value, arg):
     return value.as_widget(attrs={'class': arg})
+
+@register.filter
+def is_page(value):
+    item = Pages.objects.filter(status="Active",slug=value).last()
+    return item

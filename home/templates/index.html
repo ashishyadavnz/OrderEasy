@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filter %}
 <!DOCTYPE html>
 <html class="wide wow-animation" lang="en">
 
@@ -405,7 +406,8 @@
 										class="fa-solid fa-arrow-right"></i></a></li>
 							<li><a href="{% url 'restaurant:restaurant' %}">Restaurants<i
 										class="fa-solid fa-arrow-right"></i></a></li>
-							<li><a href="{% url  'home:contact'  %}">Contacts<i class="fa-solid fa-arrow-right"></i></a>
+							<li><a href="{% url  'home:contact'  %}">Contact<i class="fa-solid fa-arrow-right"></i></a>
+							<li><a href="{% url 'home:faq' %}">FAQ's<i class="fa-solid fa-arrow-right"></i></a>
 							</li>
 						</ul>
 					</div>
@@ -413,13 +415,13 @@
 				<div class="col-lg-4 col-md-6 col-sm-12">
 					<div class="menu contacts">
 						<h4>Contacts</h4>
-						<div class="footer-location">
+						<!-- <div class="footer-location">
 							<i class="fa-solid fa-location-dot"></i>
 							<p>1717 Harrison St, San Francisco, CA 94103,
 								United States</p>
-						</div>
-						<a href="mailto:quickeat@mail.net"><i class="fa-solid fa-envelope"></i>quickeat@mail.net</a>
-						<a href="callto:+14253261627"><i class="fa-solid fa-phone"></i>+1 425 326 16 27</a>
+						</div> -->
+						<a href="mailto:ordereasynz@gmail.com"><i class="fa-solid fa-envelope"></i>ordereasynz@gmail.com</a>
+						<a href="callto:02040007241"><i class="fa-solid fa-phone"></i>02040007241</a>
 					</div>
 					<ul class="social-media">
 						<li><a href="javascript:void(0)"><i class="fa-brands fa-facebook-f"></i></a></li>
@@ -431,8 +433,12 @@
 			<div class="footer-two gap no-bottom">
 				<p>Copyright © {% now "Y" %}. OrderEasy. All rights reserved.</p>
 				<div class="privacy">
-					<a href="javascript:void(0)">Privacy Policy</a>
-					<a href="javascript:void(0)">Terms & Services</a>
+					{% if 'privacy-policy'|is_page %}
+					<a href="{% url 'home:page_detail' 'privacy-policy' %}">Privacy Policy</a>
+					{% endif %}
+					{% if 'terms-conditions'|is_page %}
+					<a href="{% url 'home:page_detail' 'terms-conditions' %}">Terms & Conditions</a>
+					{% endif %}
 				</div>
 			</div>
 		</div>
