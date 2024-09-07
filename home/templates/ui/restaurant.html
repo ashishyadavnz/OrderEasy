@@ -72,13 +72,13 @@
 			<div class="row mx-0">
 				{% if restaurants %}
 					{% for restaurant in restaurants %}
-						<div class="col-lg-6  mb-3" 
+						<div class="restaurant-card col-lg-6  mb-3" 
 							data-latitude="{{ restaurant.latitude }}" 
 							data-longitude="{{ restaurant.longitude }}"
 							data-aos="flip-up" 
 							data-aos-delay="200" 
 							data-aos-duration="300">
-							<div class="restaurant-card h-100">
+							<div class="h-100">
 								<div class="logos-card restaurant-page  h-100">
 									<img alt="{{ restaurant.title }}" src="{% if restaurant.logo %}{{ restaurant.logo.url }}{% else %}{% static 'images/order-easy.png' %}{% endif %}" style="width: 100px; height: 100px; object-fit: cover;">
 									<div class="cafa">
