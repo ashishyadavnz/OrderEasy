@@ -539,37 +539,18 @@
 	});
 	</script>
 	<script>
-		function getUserLocation() {
-			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(
-					function(position) {
-						const latitude = position.coords.latitude;
-						const longitude = position.coords.longitude;
-		
-						console.log("Latitude:", latitude);
-						console.log("Longitude:", longitude);
-						/*
-						fetch('/save-location/', {
-							method: 'POST',
-							headers: {
-								'Content-Type': 'application/json',
-								'X-CSRFToken': getCookie('csrftoken')  // For Django CSRF protection
-							},
-							body: JSON.stringify({ latitude: latitude, longitude: longitude })
-						}).then(response => response.json())
-						  .then(data => console.log(data))
-						  .catch(error => console.error('Error:', error));
-						*/
-					},
-					function(error) {
-						console.error("Error Code = " + error.code + " - " + error.message);
-					}
-				);
-			} else {
-				console.error("Geolocation is not supported by this browser.");
-			}
+		function trackLocation() {
+			navigator.geolocation.getCurrentPosition(
+				function(position) {
+					console.log("Initial Position: ", position.coords.latitude, position.coords.longitude);
+				},
+				function(error) {
+					console.error("Error: ", error);
+				},
+				{ enableHighAccuracy: true }
+			);
 		}
-		getUserLocation();		
+		trackLocation();
 	</script>
 	<script>
 	function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -588,10 +569,11 @@
 			navigator.geolocation.getCurrentPosition(function(position) {
 				const userLat = position.coords.latitude;
 				const userLon = position.coords.longitude;
+				console.log(userLat, userLon, "aaaaa")
 				document.querySelectorAll('.restaurant-card').forEach(function(card) {
 					const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
 					const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
-	
+					console.log(userLat, userLon, "bbbb")
 					const distance = calculateDistance(userLat, userLon, restaurantLat, restaurantLon);
 					card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
 				   
