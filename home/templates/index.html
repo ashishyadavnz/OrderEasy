@@ -62,9 +62,6 @@
 								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'home-page' %}active{% endif %}">
 									<a href="{% url 'home:home-page' %}">Home</a>
 								</li>
-								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'about-page' %}active{% endif %}">
-									<a href="{% url 'home:about-page' %}">About Us</a>
-								</li>
 								{% if request.user and request.user.role == 'Owner' %}
 									<li class="navbar-dropdown {% if request.resolver_match.url_name == 'my_restaurant' %}active{% endif %}">
 										<a href="{% url 'restaurant:my_restaurant' %}">My Restaurants</a>
@@ -74,27 +71,27 @@
 										<a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
 									</li>
 								{% endif %}
-								<li class="navbar-dropdown">
+								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'blog_page' %}active{% endif %}">
+									<a href="{% url 'blog:blog_page' %}">Blog</a>
+								</li>
+								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'about-page' %}active{% endif %}">
+									<a href="{% url 'home:about-page' %}">About Us</a>
+								</li>
+								
+								<!-- <li class="navbar-dropdown">
 									<a href="JavaScript:void(0)">Pages</a>
 									<div class="dropdown">
 										<a href="{% url 'blog:blog_page' %}">Blog</a>
-										<!-- <a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a> -->
+										<a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a>
 										<a href="{% url 'blog:service' %}">Services</a> 
 										<a href="{% url 'home:faq' %}">FAQ</a>
 										<a href="{% url  'home:pricing-table'  %}">Pricing Table</a>
 										<a href="{% url  'home:become-partner'  %}">Become A Partner</a>
 										<a href="{% url  'home:page-not-found'  %}">404</a>
 									</div>
-								</li>
+								</li> -->
 								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
-									<a href="{% url  'home:contact'  %}">Contacts</a>
-								</li>
-								<li class="navbar-dropdown">
-									{% if user.is_authenticated %}
-										<a href="{% url 'home:logout' %}">Logout</a>
-									{% else %}
-										<a href="{% url 'home:login' %}">Register</a>
-									{% endif %}
+									<a href="{% url  'home:contact'  %}">Contact</a>
 								</li>
 								
 							</ul>
@@ -136,10 +133,16 @@
 										</div>
 									</form>
 								</div>
-								
-								<a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a>
+								<!-- <a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a> -->
 							</div>
 						{% endif %}
+						<div class="bag">
+							{% if user.is_authenticated %}
+								<a href="{% url 'home:logout' %}" class="button button-2">Logout</a>
+							{% else %}
+								<a href="{% url 'home:login' %}" class="button button-2">Register</a>
+							{% endif %}
+						</div>
 					</div>
 				</div>
 				<div class="side-menu" id="content" style="display: none;">
@@ -223,11 +226,11 @@
 												src="https://bslthemes.com/html/quickeat/assets/img/dish-6.png">
 											<h4>Pasta, kiwi and sauce chilli</h4>
 										</div>
-										<h3>$39</h3>
+										<h3>NZ$39</h3>
 									</div>
 									<div class="price">
 										<div>
-											<h2>$39</h2>
+											<h2>NZ$39</h2>
 											<span>Sum</span>
 										</div>
 										<div>
@@ -251,11 +254,11 @@
 												src="https://bslthemes.com/html/quickeat/assets/img/dish-7.png">
 											<h4>Rice with shrimps and kiwi</h4>
 										</div>
-										<h3>$49</h3>
+										<h3>NZ$49</h3>
 									</div>
 									<div class="price">
 										<div>
-											<h2>$49</h2>
+											<h2>NZ$49</h2>
 											<span>Sum</span>
 										</div>
 										<div>
@@ -274,11 +277,11 @@
 							</ul>
 							<div class="totel-price">
 								<span>Total order:</span>
-								<h5>$137</h5>
+								<h5>NZ$137</h5>
 							</div>
 							<div class="totel-price">
 								<span>To pay:</span>
-								<h2>$137</h2>
+								<h2>NZ$137</h2>
 							</div>
 							<button class="button-price">Checkout</button>
 
