@@ -22,7 +22,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class CuisineViewSet(viewsets.ModelViewSet):
     queryset = Cuisine.objects.filter(status='Active').order_by("-id")
     serializer_class = CuisineSerializer
-    filterset_fields = ['category','title','status']
+    filterset_fields = ['title','status']
     search_fields=['title','content']
     http_method_names = ['get', 'post', 'patch']
     lookup_field = 'slug'
