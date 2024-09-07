@@ -2,7 +2,14 @@
 {% load custom_filter %}
 {% load static %}
 {% block content %}
-
+<style>
+	.fixed-header{
+		position: sticky;
+		top: 0;
+		z-index:500;
+		padding-bottom: 30px !important;
+	}
+</style>
 <div class="menu-layer">
   <div class="cart-overlay">
 	<div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: none;">
@@ -82,8 +89,8 @@
 		</div>
 	</section> -->
 	<!-- new design -->
-	<section class="hero-section about gap" style="background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');">
-		<img loading="lazy" src="{% if restaurant.image %}{{ restaurant.image.url }}{% else %}{% static 'images/order-easy.png' %}{% endif %}" alt="{{restaurant.title}}" class="img-fluid w-100 mt-4" style="height: 400px; object-fit: cover; filter: brightness(0.8);">
+	<section class="hero-section about gap pt-0" style="background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');">
+		<img loading="lazy" src="{% if restaurant.image %}{{ restaurant.image.url }}{% else %}{% static 'images/order-easy.png' %}{% endif %}" alt="{{restaurant.title}}" class="img-fluid w-100 " style="height: 400px; object-fit: cover; filter: brightness(0.8);">
 		<div class="container-fluid mt-5 position-relative">
 			<div class="position-relative">
 				<div class="d-flex flex-column align-items-start justify-content-center" style="position: absolute; bottom: -45px; padding: 30px;">
