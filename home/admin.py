@@ -177,39 +177,35 @@ class ListAdminMixin(admin.ModelAdmin):
     actions = ['export_as_csv', 'copy_selected_entries']
 
 class CustomUserAdmin(ListAdminMixin, UserAdmin):
-    def __init__(self, model, admin_site):
-        super().__init__(model, admin_site)
-
     add_fieldsets = (
-		(None, {
+        (None, {
             'classes': ('wide', 'extrapretty'),
-            'fields': ('username', 'password1', 'password2','mobile','email' ),
+            'fields': ('first_name', 'last_name', 'email', 'mobile', 'username', 'password1', 'password2'),
         }),
-	)
-
+    )
     fieldsets = [
+        (None, {'fields': ('email', 'username', 'mobile', 'first_name', 'last_name', 'password', 'status')}),
         ('Personal info', {
-            'fields': (
-                'referrer', 'country', 'state', 'city', 'mobile', 'gender', 'role', 'dob', 'image', 'address', 'postcode', 'identifier', 'otp','guest', 'source', 'status'
-            ),
+            'fields': ('referrer', 'country', 'state', 'city', 'gender', 'role', 'dob', 'image', 'address', 'postcode', 'identifier', 'otp', 'guest', 'source'),
         }),
         ('Permissions', {
-            'classes': ('collapse', ),
+            'classes': ('collapse',),
             'fields': ('notification', 'multilogin', 'is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
         }),
         ('Important dates', {
-            'classes': ('collapse', ),
+            'classes': ('collapse',),
             'fields': ('last_login', 'date_joined'),
         }),
         ('Location', {
-            'classes': ('collapse', ),
-            'fields': ('latitude','longitude')
+            'classes': ('collapse',),
+            'fields': ('latitude', 'longitude'),
         }),
         ('Track Record', {
-            'classes': ('collapse', ),
+            'classes': ('collapse',),
             'fields': ('timestamp', 'utimestamp', 'track', 'utrack', 'locate'),
         }),
     ]
+
 
 models = apps.get_models()
 
