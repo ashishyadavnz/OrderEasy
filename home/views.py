@@ -14,17 +14,27 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
 from django.core.mail import EmailMessage
+from django.db.models import Sum,Avg
 import threading
 
 
 
 def home(request):
+    today = datetime.datetime.now()
     restaurants = Restaurant.objects.all()
     categories = Category.objects.all()
     posts = Post.objects.all()
     testimonials = Testimonial.objects.all()
     # cuisines = Cuisine.objects.filter(menu_cuisine__restaurant__in=restaurants).distinct()
     cuisines = Cuisine.objects.filter(fooditems_cuisine__isnull=False).distinct()
+    if request.user.is_authenticated:
+        orders = Order.objects.filter(timestamp__date=today.date())
+        sum = orders.aggregate(Sum('total'))['total__sum'] or 0
+        order_count = len(orders)
+        avg = orders.aggregate(Avg('total'))['total__avg'] or 0
+        if request.user.role == 'Owner':
+            return render(request, 'ui/owner-dashboard.html',{"today_kpi":{'total_amount':sum,'order_count':order_count,'average':avg}})
+        
 
     return render(request, 'ui/indexThem.html', {
         'restaurants': restaurants,
@@ -400,3 +410,9 @@ def index(request):
 
     return JsonResponse({'status': 'Notifications sent', 'responses': responses})
 
+def page_detail(request,slug):
+    item = Pages.objects.filter(slug=slug,status='Active').last()
+    if item:
+        return render(request, 'ui/custom-page.html',{"page":"item","item":item})
+    else:
+        return redirect('/page-not-found/')

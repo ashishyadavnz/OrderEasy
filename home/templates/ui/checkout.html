@@ -71,17 +71,17 @@
                                             <img alt="food"class="mx-2" src="{% if item.image %}{{item.image}}{% else %}{% static 'images/order-easy.png' %}{% endif %}" style="width: 106px; height: 69px; object-fit: cover; border-radius: 4px;">
                                             <div class="food-details">
                                                 <h5>{{ item.title }}</h5>
-                                                <!-- <h3>${{ item.price }}</h3> -->
+                                                <!-- <h3>NZ${{ item.price }}</h3> -->
                                             </div>
                                         </div>
                                         <div class="price">
-                                            <h3>${{ item.price }}</h3>
+                                            <h3>NZ${{ item.price }}</h3>
                                         </div>
                                     </div>                                    
                                     <div class="price">
                                         <div class="d-flex py-auto my-auto">
                                             <span style="padding-top: 10px; padding-right: 10px;">Sum</span>
-                                            <h2>${{ item.total }}</h2>
+                                            <h2>NZ${{ item.total }}</h2>
                                         </div>
                                         <div class="d-flex">
                                             <div class="qty-input d-flex">
@@ -98,24 +98,24 @@
                         
                         <div class="totel-price">
                             <span>Total order:</span>
-                            <h5>${{ total }}</h5>
+                            <h5>NZ${{ total }}</h5>
                         </div>
 
                         <div class="totel-price">
                             <span>Dilivery Charge:</span>
-                            <h5>${{ order.charge }}</h5>
+                            <h5>NZ${{ order.charge }}</h5>
                         </div>
 
                         {% if order.voucher %}
                             <div class="totel-price">
                                 <span>Voucher Applied:</span>
-                                <h5>-${{ order.voucher.discount }}</h5>
+                                <h5>-NZ${{ order.voucher.discount }}</h5>
                             </div>
                         {% endif %}
 
                         <div class="totel-price">
                             <span>To pay:</span>
-                            <h2>${{ order.total|floatformat:2 }}</h2>
+                            <h2>NZ${{ order.total|floatformat:2 }}</h2>
                         </div>
                     </div>
                 </div>

@@ -489,6 +489,19 @@ margin-bottom: 15px;
 .form-input, .form-select {
 width: 100%;
 }
+.floating_label{
+    position: relative;
+}
+.floating_label label{
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    background: white;
+    padding: 0 5px;
+    font-size: 14px;
+    margin: 0;
+}
+
 .form-control {
 padding: 10px;
 border: 1px solid #ccc;
@@ -782,7 +795,6 @@ padding-left: 20px;
 border-radius: 10px;
 margin-top: 20px;
 outline: none;
-color: #CFCFCF;
 border: 1px solid #CFCFCF;
 
 }

@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filter %}
 <!DOCTYPE html>
 <html class="wide wow-animation" lang="en">
 
@@ -36,7 +37,7 @@
 			<span>Loading</span>
 		</div>
 	</div>
-	<header class="pb-0">
+	<header class="pb-0 fixed-header" >
 		<div class="container">
 			<div class="d-flex row  mx-0" >
 				<div class="col-3">
@@ -62,9 +63,6 @@
 								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'home-page' %}active{% endif %}">
 									<a href="{% url 'home:home-page' %}">Home</a>
 								</li>
-								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'about-page' %}active{% endif %}">
-									<a href="{% url 'home:about-page' %}">About Us</a>
-								</li>
 								{% if request.user and request.user.role == 'Owner' %}
 									<li class="navbar-dropdown {% if request.resolver_match.url_name == 'my_restaurant' %}active{% endif %}">
 										<a href="{% url 'restaurant:my_restaurant' %}">My Restaurants</a>
@@ -74,27 +72,27 @@
 										<a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
 									</li>
 								{% endif %}
-								<li class="navbar-dropdown">
+								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'blog_page' %}active{% endif %}">
+									<a href="{% url 'blog:blog_page' %}">Blog</a>
+								</li>
+								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'about-page' %}active{% endif %}">
+									<a href="{% url 'home:about-page' %}">About Us</a>
+								</li>
+								
+								<!-- <li class="navbar-dropdown">
 									<a href="JavaScript:void(0)">Pages</a>
 									<div class="dropdown">
 										<a href="{% url 'blog:blog_page' %}">Blog</a>
-										<!-- <a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a> -->
+										<a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a>
 										<a href="{% url 'blog:service' %}">Services</a> 
 										<a href="{% url 'home:faq' %}">FAQ</a>
 										<a href="{% url  'home:pricing-table'  %}">Pricing Table</a>
 										<a href="{% url  'home:become-partner'  %}">Become A Partner</a>
 										<a href="{% url  'home:page-not-found'  %}">404</a>
 									</div>
-								</li>
+								</li> -->
 								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
-									<a href="{% url  'home:contact'  %}">Contacts</a>
-								</li>
-								<li class="navbar-dropdown">
-									{% if user.is_authenticated %}
-										<a href="{% url 'home:logout' %}">Logout</a>
-									{% else %}
-										<a href="{% url 'home:login' %}">Register</a>
-									{% endif %}
+									<a href="{% url  'home:contact'  %}">Contact</a>
 								</li>
 								
 							</ul>
@@ -136,10 +134,16 @@
 										</div>
 									</form>
 								</div>
-								
-								<a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a>
+								<!-- <a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a> -->
 							</div>
 						{% endif %}
+						<div class="bag">
+							{% if user.is_authenticated %}
+								<a href="{% url 'home:logout' %}" class="button button-2">Logout</a>
+							{% else %}
+								<a href="{% url 'home:login' %}" class="button button-2">Sign In</a>
+							{% endif %}
+						</div>
 					</div>
 				</div>
 				<div class="side-menu" id="content" style="display: none;">
@@ -223,11 +227,11 @@
 												src="https://bslthemes.com/html/quickeat/assets/img/dish-6.png">
 											<h4>Pasta, kiwi and sauce chilli</h4>
 										</div>
-										<h3>$39</h3>
+										<h3>NZ$39</h3>
 									</div>
 									<div class="price">
 										<div>
-											<h2>$39</h2>
+											<h2>NZ$39</h2>
 											<span>Sum</span>
 										</div>
 										<div>
@@ -251,11 +255,11 @@
 												src="https://bslthemes.com/html/quickeat/assets/img/dish-7.png">
 											<h4>Rice with shrimps and kiwi</h4>
 										</div>
-										<h3>$49</h3>
+										<h3>NZ$49</h3>
 									</div>
 									<div class="price">
 										<div>
-											<h2>$49</h2>
+											<h2>NZ$49</h2>
 											<span>Sum</span>
 										</div>
 										<div>
@@ -274,11 +278,11 @@
 							</ul>
 							<div class="totel-price">
 								<span>Total order:</span>
-								<h5>$137</h5>
+								<h5>NZ$137</h5>
 							</div>
 							<div class="totel-price">
 								<span>To pay:</span>
-								<h2>$137</h2>
+								<h2>NZ$137</h2>
 							</div>
 							<button class="button-price">Checkout</button>
 
@@ -328,10 +332,20 @@
 						</a>
 					</div>
 					<ul>
-						<li><a href="{% url 'home:home-page' %}">Home</a>
+						<li><a href="{% url 'home:home-page' %}">Home</a></li>
+						{% if request.user and request.user.role == 'Owner' %}
+							<li>
+								<a href="{% url 'restaurant:my_restaurant' %}">My Restaurants</a>
+							</li>
+						{% else %}
+							<li>
+								<a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
+							</li>
+						{% endif %}
+						<li>
+							<a href="{% url 'blog:blog_page' %}">Blog</a>
 						</li>
 						<li><a href="{% url 'home:about-page' %}">About Us</a></li>
-						<li class="menu-item-has-children"><a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
 							<!-- <ul class="sub-menu">
 								<li><a href="{% url 'restaurant:restaurant' %}">Restaurants</a></li>
 								<li>     {% if restaurants and restaurants.first %}
@@ -343,6 +357,7 @@
 								<li><a href="{% url  'home:checkout'  %}">Checkout</a></li>
 							</ul> -->
 						</li>
+						{% comment %}
 						<li class="menu-item-has-children"><a href="JavaScript:void(0)">Pages</a>
 							<ul class="sub-menu">
 								<li><a href="{% url 'blog:blog_page' %}">Blog</a></li>
@@ -350,14 +365,15 @@
 										href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single
 										Blog</a>
 								</li>
-								{% comment %} <li><a href="{% url  'blog:service'  %}">Services</a></li> {% endcomment %}
+								 <li><a href="{% url  'blog:service'  %}">Services</a></li> 
 								<li><a href="{% url 'home:faq' %}">FAQ</a></li>
 								<li><a href="{% url  'home:pricing-table'  %}">Pricing Table</a></li>
 								<li><a href="{% url  'home:become-partner'  %}">Become A Partner</a></li>
 								<li><a href="{% url  'home:page-not-found'  %}">404</a></li>
 							</ul>
 						</li>
-						<li><a href="{% url  'home:contact'  %}">contacts</a></li>
+						{% endcomment %}
+						<li><a href="{% url  'home:contact'  %}">Contact</a></li>
 					</ul>
 					<a href="JavaScript:void(0)" id="res-cross"></a>
 				</div>
@@ -402,7 +418,8 @@
 										class="fa-solid fa-arrow-right"></i></a></li>
 							<li><a href="{% url 'restaurant:restaurant' %}">Restaurants<i
 										class="fa-solid fa-arrow-right"></i></a></li>
-							<li><a href="{% url  'home:contact'  %}">Contacts<i class="fa-solid fa-arrow-right"></i></a>
+							<li><a href="{% url  'home:contact'  %}">Contact<i class="fa-solid fa-arrow-right"></i></a>
+							<li><a href="{% url 'home:faq' %}">FAQ's<i class="fa-solid fa-arrow-right"></i></a>
 							</li>
 						</ul>
 					</div>
@@ -410,13 +427,13 @@
 				<div class="col-lg-4 col-md-6 col-sm-12">
 					<div class="menu contacts">
 						<h4>Contacts</h4>
-						<div class="footer-location">
+						<!-- <div class="footer-location">
 							<i class="fa-solid fa-location-dot"></i>
 							<p>1717 Harrison St, San Francisco, CA 94103,
 								United States</p>
-						</div>
-						<a href="mailto:quickeat@mail.net"><i class="fa-solid fa-envelope"></i>quickeat@mail.net</a>
-						<a href="callto:+14253261627"><i class="fa-solid fa-phone"></i>+1 425 326 16 27</a>
+						</div> -->
+						<a href="mailto:ordereasynz@gmail.com"><i class="fa-solid fa-envelope"></i>ordereasynz@gmail.com</a>
+						<a href="callto:02040007241"><i class="fa-solid fa-phone"></i>02040007241</a>
 					</div>
 					<ul class="social-media">
 						<li><a href="javascript:void(0)"><i class="fa-brands fa-facebook-f"></i></a></li>
@@ -428,8 +445,12 @@
 			<div class="footer-two gap no-bottom">
 				<p>Copyright © {% now "Y" %}. OrderEasy. All rights reserved.</p>
 				<div class="privacy">
-					<a href="javascript:void(0)">Privacy Policy</a>
-					<a href="javascript:void(0)">Terms & Services</a>
+					{% if 'privacy-policy'|is_page %}
+					<a href="{% url 'home:page_detail' 'privacy-policy' %}">Privacy Policy</a>
+					{% endif %}
+					{% if 'terms-conditions'|is_page %}
+					<a href="{% url 'home:page_detail' 'terms-conditions' %}">Terms & Conditions</a>
+					{% endif %}
 				</div>
 			</div>
 		</div>
@@ -591,16 +612,11 @@
 			var title = $row.find('.food-title').text();
 			var category = $row.find('.food-category').data('category');
 			var cuisine = $row.find('.food-cuisine').data('cuisine');
-			var start = $row.find('.food-start').data('start');
-			var end = $row.find('.food-end').data('end');
 			var price = $row.find('.food-price').text();
-			console.log(title,category,cuisine,start,end,price)
 			var available = $row.find('.food-available').data('available').trim() === 'True';
 			$('#id_title').val(title);
 			$('#id_category').val(category); 
 			$('#id_cuisine').val(cuisine); 
-			$('#id_start').val(start);
-			$('#id_end').val(end);
 			$('#id_price').val(price);
 			$('#id_available').prop('checked', available);
 			$('#foodItemModal').modal('show');

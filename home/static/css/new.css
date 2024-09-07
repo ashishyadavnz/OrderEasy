@@ -803,7 +803,6 @@ ul.data h6 i {
     background-color: white;
     border: 0;
     padding-left: 40px;
-    color: #cfcfcf;
     border-radius: 10px;
 }
 .get-the-menu input[type="text"]::placeholder{
@@ -1890,7 +1889,6 @@ ul.food-dishes li {
     height: 55px;
     border-radius: 12px;
     padding-left: 20px;
-     color: #cfcfcf;
 }
 .error-page h2 {
     position: absolute;
@@ -1950,7 +1948,6 @@ ul.food-dishes li {
     position: relative;
 }
 .name-form input[type="text"] {
-    color: #cfcfcf;
     border: 1px solid #F2F2F2;
     width: 100%;
     height: 60px;
@@ -1981,7 +1978,6 @@ ul.food-dishes li {
     border-radius: 20px;
     padding-left: 25px;
     height: 150px;
-    color: #cfcfcf;
     border: 1px solid #F2F2F2;
     outline: none;
     margin-bottom: 10px;
@@ -2083,7 +2079,6 @@ ul.food-dishes li {
     border-radius: 15px;
     padding-right: 200px;
     padding-left: 16px;
-    color: #cfcfcf;
     border: 1px solid #F2F2F2;
     height: 60px;
     border-radius: 10px;
@@ -2492,7 +2487,6 @@ li.hide-button h6 i{
     padding: 20px;
     border-radius: 10px;
     border: 1px solid #CFCFCF;
-    color: #CFCFCF;
     outline: none;
 }
 .comment-blog textarea::placeholder,.comment-blog input[type="text"]::placeholder{
@@ -2503,7 +2497,6 @@ li.hide-button h6 i{
     height: 60px;
     border-radius: 10px;
     border: 1px solid #CFCFCF;
-    color: #CFCFCF;
     outline: none;
     padding-left: 20px;
     margin: 20px 0;
