@@ -109,11 +109,11 @@
 											<span class="text-danger">Closed</span>
 										{% endif %}
 										</span>
-										{% if restaurant.lowest_price %}
+										{% comment %} {% if restaurant.lowest_price %}
 										<p><strong>Delivery starts from:</strong> ${{ restaurant.lowest_price }}</p>
 										{% else %}
 										<p><strong>Delivery starts from:</strong> 0$</p>
-										{% endif %}
+										{% endif %} {% endcomment %}
 										<p class="distance">Distance: Calculating...</p> 
 									</div>
 								</div>
