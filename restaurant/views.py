@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from django.db.models import F
 from django.db.models.functions import ACos, Cos, Radians, Sin
 from home.forms import *
+import pytz
 
 # Create your views here.
 
@@ -168,7 +169,8 @@ def validate_voucher(request):
 
         try:
             voucher = Voucher.objects.get(name=voucher_code)
-            if voucher.validity < timezone.now():
+            auckland_tz = pytz.timezone('Pacific/Auckland')
+            if voucher.validity < timezone.now().astimezone(auckland_tz):
                 return JsonResponse({'status': 'error', 'message': 'Voucher has expired.'})
 
             if total_amount < voucher.payment:
