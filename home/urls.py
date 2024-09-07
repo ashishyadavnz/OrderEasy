@@ -13,10 +13,10 @@ urlpatterns = [
         path('become-partner/',views.becomePartner,name='become-partner'),
         path('page-not-found/', views.notfound,name='page-not-found'),
         path('register/',views.register,name='register'),
-        path('<str:slug>/', views.page_detail, name='page_detail'),
         path('login/', views.login, name='login'),
         path("notify/", views.index, name="index"),
         path('logout/', views.user_logout, name='logout'),
+        path('<str:slug>/', views.page_detail, name='page_detail'),
         path('', views.home, name='home-page'),
    
 ]

@@ -91,7 +91,7 @@
             
                         <div class="form-group">
                             <label for="id_found">Found:</label>
-                            {{ form.found|add_class:"form-control" }}
+                            <input type="date" name="found" id="id_found" class="form-control">
                         </div>
             
                         <div class="form-group">
@@ -143,18 +143,9 @@
                             <label for="id_linkedin">LinkedIn:</label>
                             {{ form.linkedin|add_class:"form-control" }}
                         </div>
+        
             
-                        <div class="form-group">
-                            <label for="id_vip">VIP:</label>
-                            {{ form.vip|add_class:"form-check-input" }}
-                        </div>
-            
-                        <div class="form-group">
-                            <label for="id_source">Source:</label>
-                            {{ form.source|add_class:"form-control" }}
-                        </div>
-            
-                        <button type="submit" class="float-end button button-2">Save</button>
+                        <button type="submit" class="button-price">Save</button>
                     </form>
                 </div>
 			</div>
