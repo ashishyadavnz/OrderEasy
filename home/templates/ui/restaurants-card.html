@@ -2,7 +2,15 @@
 {% load custom_filter %}
 {% load static %}
 {% block content %}
-
+<style>
+	.fixed-header{
+		position: sticky;
+		top: 0;
+		z-index:500;
+		padding-bottom: 30px !important;
+		background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');
+	}
+</style>
 <div class="menu-layer">
   <div class="cart-overlay">
 	<div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: none;">
@@ -54,9 +62,9 @@
 									{% endif %}
 								</span>
 								{% if restaurant.lowest_price %}
-								<p><strong>Delivery starts from:</strong> ${{ restaurant.lowest_price }}</p>
+								<p><strong>Delivery starts from:</strong> NZ${{ restaurant.lowest_price }}</p>
 								{% else %}
-								<p><strong>Delivery starts from:</strong>0$</p>
+								<p><strong>Delivery starts from:</strong>0NZ$</p>
 								{% endif %}
 								<p class="distance">Distance: Calculating...</p>
 							</div>							
@@ -82,8 +90,8 @@
 		</div>
 	</section> -->
 	<!-- new design -->
-	<section class="hero-section about gap" style="background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');">
-		<img loading="lazy" src="{% if restaurant.image %}{{ restaurant.image.url }}{% else %}{% static 'images/order-easy.png' %}{% endif %}" alt="{{restaurant.title}}" class="img-fluid w-100 mt-4" style="height: 400px; object-fit: cover; filter: brightness(0.8);">
+	<section class="hero-section about gap pt-0" style="background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');">
+		<img loading="lazy" src="{% if restaurant.image %}{{ restaurant.image.url }}{% else %}{% static 'images/order-easy.png' %}{% endif %}" alt="{{restaurant.title}}" class="img-fluid w-100 " style="height: 400px; object-fit: cover; filter: brightness(0.8);">
 		<div class="container-fluid mt-5 position-relative">
 			<div class="position-relative">
 				<div class="d-flex flex-column align-items-start justify-content-center" style="position: absolute; bottom: -45px; padding: 30px;">
@@ -165,9 +173,9 @@
 												{% endif %}
 											</span>
 											{% if restaurant.lowest_price %}
-											<p><strong>Delivery starts from:</strong> ${{ restaurant.lowest_price }}</p>
+											<p><strong>Delivery starts from:</strong> NZ${{ restaurant.lowest_price }}</p>
 											{% else %}
-											<p><strong>Delivery starts from:</strong>0$</p>
+											<p><strong>Delivery starts from:</strong>0NZ$</p>
 											{% endif %}
 											<p class="distance">Distance: Calculating...</p>
 										</div>
@@ -319,7 +327,7 @@
 														</div>
 													</div>
 													<div class="price">
-														<h2>${{ menu.price }}</h2>
+														<h2>NZ${{ menu.price }}</h2>
 														<div class="qty-input">
 															<button class="qty-count qty-count--minus" data-action="minus" type="button">-</button>
 															<input class="product-qty" type="number" name="product-qty" min="0" value="1">
@@ -364,7 +372,7 @@
 														</div>
 													</div>
 													<div class="price">
-														<h2>${{ menu.price }}</h2>
+														<h2>NZ${{ menu.price }}</h2>
 														<div class="qty-input">
 															<button class="qty-count qty-count--minus" data-action="minus" type="button">-</button>
 															<input class="product-qty" type="number" name="product-qty" min="0" value="1">
@@ -410,7 +418,7 @@
 														</div>
 													</div>
 													<div class="price">
-														<h2>${{ menu.price }}</h2>
+														<h2>NZ${{ menu.price }}</h2>
 														<div class="qty-input">
 															<button class="qty-count qty-count--minus" data-action="minus" type="button">-</button>
 															<input class="product-qty" type="number" name="product-qty" min="0" value="1">
@@ -495,7 +503,7 @@
 												<div class="card-body">
 													<h5 class="card-title">{{ item.title }}</h5>
 													<p class="card-text">
-														<strong>Price:</strong> ${{ item.price }}<br>
+														<strong>Price:</strong> NZ${{ item.price }}<br>
 														<strong>Available:</strong> {% if item.available %}Yes{% else %}No{% endif %}<br>
 														{% if item.start %}
 															<strong>Start Time:</strong> {{ item.start|date:"H:i" }}<br>
@@ -550,7 +558,7 @@
                             </div>
                         </div>
                         <div class="price">
-                            <h2>${{ item.price }}</h2>
+                            <h2>NZ${{ item.price }}</h2>
                             <div class="qty-input">
                                 <button class="qty-count qty-count--minus" data-action="minus" type="button">-</button>
                                 <input class="product-qty" type="number" name="product-qty" min="0" value="1">
@@ -827,7 +835,7 @@
                             <p style="font-size:20px"><strong>${item.title}</strong></p>
                         </div>
                         <div class="col-md-2 pt-2" style="text-align: center;">
-                            <p style="font-size:20px"><strong>$${item.price} x <span class="cart-item-quantity">${item.quantity}</span></strong></p>
+                            <p style="font-size:20px"><strong>NZ$${item.price} x <span class="cart-item-quantity">${item.quantity}</span></strong></p>
                         </div>
                         <div class="col-md-2 float-right">
                             <a class="btn   decrease-qty" data-id="${item.id}">-</a>
@@ -855,13 +863,13 @@
 			dcharge = deliveryCharge;
             const deliveryChargeItem = document.createElement("div");
             deliveryChargeItem.classList.add("cart-item");
-            deliveryChargeItem.innerHTML = `<p>Delivery Charge: $${deliveryCharge.toFixed(2)}</p>`;
+            deliveryChargeItem.innerHTML = `<p>Delivery Charge: NZ$${deliveryCharge.toFixed(2)}</p>`;
             cartContent.appendChild(deliveryChargeItem);
         }
 
         const totalAmountItem = document.createElement("div");
         totalAmountItem.classList.add("cart-item");
-        totalAmountItem.innerHTML = `<p>Total: $${totalAmount.toFixed(2)}</p>`;
+        totalAmountItem.innerHTML = `<p>Total: NZ$${totalAmount.toFixed(2)}</p>`;
         cartContent.appendChild(totalAmountItem);
 
 		const cartDataInput = document.getElementById('cart-data');
@@ -905,7 +913,7 @@
     
     const voucherCode = document.getElementById('voucher-code').value;
     const totalAmountElement = document.querySelector("#cart-content .cart-item:last-child p");
-    let totalAmount = parseFloat(totalAmountElement.textContent.replace('Total: $', ''));
+    let totalAmount = parseFloat(totalAmountElement.textContent.replace('Total: NZ$', ''));
 
     fetch("{% url 'restaurant:validate_voucher' %}", {
         method: 'POST',
@@ -923,12 +931,12 @@
         if (data.status === 'success') {
             const discount = data.discount;
             totalAmount -= discount;
-            totalAmountElement.textContent = `Total: $${totalAmount.toFixed(2)}`;
+            totalAmountElement.textContent = `Total: NZ$${totalAmount.toFixed(2)}`;
             document.getElementById('voucher-code').disabled = true;
             document.getElementById('apply-voucher').disabled = true;
 			const voucher_Input =document.getElementById('voucher_id')
 			voucher_Input.value = data.id;
-            alert(`Voucher applied! You saved $${discount}.`);
+            alert(`Voucher applied! You saved NZ$${discount}.`);
         } else {
             alert(data.message);
         }

@@ -18,19 +18,26 @@ from django.utils.crypto import get_random_string
 from datetime import timedelta
 from random import randint
 from django.contrib.auth.hashers import make_password
-
-
-
-
+from django.db.models import Sum,Avg
+import threading
 
 
 def home(request):
+    today = datetime.datetime.now()
     restaurants = Restaurant.objects.all()
     categories = Category.objects.all()
     posts = Post.objects.all()
     testimonials = Testimonial.objects.all()
     # cuisines = Cuisine.objects.filter(menu_cuisine__restaurant__in=restaurants).distinct()
     cuisines = Cuisine.objects.filter(fooditems_cuisine__isnull=False).distinct()
+    if request.user.is_authenticated:
+        orders = Order.objects.filter(timestamp__date=today.date())
+        sum = orders.aggregate(Sum('total'))['total__sum'] or 0
+        order_count = len(orders)
+        avg = orders.aggregate(Avg('total'))['total__avg'] or 0
+        if request.user.role == 'Owner':
+            return render(request, 'ui/owner-dashboard.html',{"today_kpi":{'total_amount':sum,'order_count':order_count,'average':avg}})
+        
 
     return render(request, 'ui/indexThem.html', {
         'restaurants': restaurants,
@@ -140,44 +147,36 @@ def checkout(request):
             odr.instruction = instructions
             odr.status = 'Active'
             odr.save()
-            restaurant_owner_email = odr.restaurant.email
-            subject_owner = f"New Order from {first_name} {last_name}"
-            context_owner = {
+            
+            # email send to owner
+            message = loader.render_to_string('email/order_owner.html', {
                 'restaurant_owner': odr.restaurant.owner,
                 'order': odr,
                 'cart_items': request.session.get('cart_items', [])
-            }
-            html_message_owner = render_to_string('ui/order_owner.html', context_owner)
-            plain_message_owner = strip_tags(html_message_owner) 
-            email_owner = EmailMessage(
-                subject_owner,
-                html_message_owner,
-                settings.EMAIL_HOST_USER,
-                [restaurant_owner_email]
-            )
-            email_owner.content_subtype = "html" 
-            email_owner.send(fail_silently=False)
-            print(email_owner,"email for owenr") 
-            subject_customer = "Order Confirmation"
-            context_customer = {
+            })
+            to_email = odr.restaurant.email
+            subject = f"New Order Received from {first_name} {last_name}"
+            threading.Thread(
+                target=custom_emailmessage,
+                args=(subject, message, to_email, True)
+            ).start()
+            
+            # email send to customer
+            message = loader.render_to_string('email/order_confirm.html', {
                 'first_name': first_name,
                 'order': odr,
-            }
-            html_message_customer = render_to_string('ui/order_confirm.html', context_customer)
-            plain_message_customer = strip_tags(html_message_customer)
-            email_customer = EmailMessage(
-                subject_customer,
-                html_message_customer,
-                settings.EMAIL_HOST_USER,
-                [email]
-            )
-            email_customer.content_subtype = "html" 
-            email_customer.send(fail_silently=False)
+                'url': request.META.get('HTTP_REFERER')
+            })
+            subject = "Order Confirmation"
+            threading.Thread(
+                target=custom_emailmessage,
+                args=(subject, message, email, True)
+            ).start()
 
-
+            # push notification send to owner
             devices = FCMDevice.objects.filter(user=odr.user)
-            title = f'Order Created'
-            body = f'{first_name} {last_name} has generated order in your restaurent. Order id is {odr.orderid}.'
+            title = f'Order Received'
+            body = f'New Order Received from {first_name} {last_name}. Order id is {odr.orderid}.'
             devices.send_message(
                 Message(notification=Notification(title=title, body=body, image=settings.EASYLOGO),data={})
             )
@@ -472,3 +471,9 @@ def index(request):
 
     return JsonResponse({'status': 'Notifications sent', 'responses': responses})
 
+def page_detail(request,slug):
+    item = Pages.objects.filter(slug=slug,status='Active').last()
+    if item:
+        return render(request, 'ui/custom-page.html',{"page":"item","item":item})
+    else:
+        return redirect('/page-not-found/')

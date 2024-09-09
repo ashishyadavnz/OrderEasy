@@ -72,13 +72,13 @@
 			<div class="row mx-0">
 				{% if restaurants %}
 					{% for restaurant in restaurants %}
-						<div class="col-lg-6  mb-3" 
+						<div class="restaurant-card col-lg-6  mb-3" 
 							data-latitude="{{ restaurant.latitude }}" 
 							data-longitude="{{ restaurant.longitude }}"
 							data-aos="flip-up" 
 							data-aos-delay="200" 
 							data-aos-duration="300">
-							<div class="restaurant-card h-100">
+							<div class="h-100">
 								<div class="logos-card restaurant-page  h-100">
 									<img alt="{{ restaurant.title }}" src="{% if restaurant.logo %}{{ restaurant.logo.url }}{% else %}{% static 'images/order-easy.png' %}{% endif %}" style="width: 100px; height: 100px; object-fit: cover;">
 									<div class="cafa">
@@ -109,11 +109,11 @@
 											<span class="text-danger">Closed</span>
 										{% endif %}
 										</span>
-										{% if restaurant.lowest_price %}
-										<p><strong>Delivery starts from:</strong> ${{ restaurant.lowest_price }}</p>
+										{% comment %} {% if restaurant.lowest_price %}
+										<p><strong>Delivery starts from:</strong>  NZ$ {{ restaurant.lowest_price }}</p>
 										{% else %}
-										<p><strong>Delivery starts from:</strong> 0$</p>
-										{% endif %}
+										<p><strong>Delivery starts from:</strong>  NZ$ 0</p>
+										{% endif %} {% endcomment %}
 										<p class="distance">Distance: Calculating...</p> 
 									</div>
 								</div>

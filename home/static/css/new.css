@@ -72,7 +72,7 @@ h1{
 }
 h2{
     line-height: 58px;
-    font-size: 48px;
+    font-size: 30px;
     margin: 0;
     color: #363636;
 }
@@ -803,7 +803,6 @@ ul.data h6 i {
     background-color: white;
     border: 0;
     padding-left: 40px;
-    color: #cfcfcf;
     border-radius: 10px;
 }
 .get-the-menu input[type="text"]::placeholder{
@@ -1369,10 +1368,10 @@ ul.paragraph li i {
     border-radius: 15px;
 }
 .banner-wilmington h6 {
-    font-size: 18px;
+    font-size: 30px;
     margin: 0;
     font-weight: bold;
-    padding-left: 15px;
+    /* padding-left: 15px; */
 }
 /*-------- restaurant logos-card    --------*/
 
@@ -1890,7 +1889,6 @@ ul.food-dishes li {
     height: 55px;
     border-radius: 12px;
     padding-left: 20px;
-     color: #cfcfcf;
 }
 .error-page h2 {
     position: absolute;
@@ -1950,7 +1948,6 @@ ul.food-dishes li {
     position: relative;
 }
 .name-form input[type="text"] {
-    color: #cfcfcf;
     border: 1px solid #F2F2F2;
     width: 100%;
     height: 60px;
@@ -1981,7 +1978,6 @@ ul.food-dishes li {
     border-radius: 20px;
     padding-left: 25px;
     height: 150px;
-    color: #cfcfcf;
     border: 1px solid #F2F2F2;
     outline: none;
     margin-bottom: 10px;
@@ -2083,7 +2079,6 @@ ul.food-dishes li {
     border-radius: 15px;
     padding-right: 200px;
     padding-left: 16px;
-    color: #cfcfcf;
     border: 1px solid #F2F2F2;
     height: 60px;
     border-radius: 10px;
@@ -2492,7 +2487,6 @@ li.hide-button h6 i{
     padding: 20px;
     border-radius: 10px;
     border: 1px solid #CFCFCF;
-    color: #CFCFCF;
     outline: none;
 }
 .comment-blog textarea::placeholder,.comment-blog input[type="text"]::placeholder{
@@ -2503,7 +2497,6 @@ li.hide-button h6 i{
     height: 60px;
     border-radius: 10px;
     border: 1px solid #CFCFCF;
-    color: #CFCFCF;
     outline: none;
     padding-left: 20px;
     margin: 20px 0;
@@ -2590,7 +2583,7 @@ li.hide-button h6 i{
     padding-left: 20px;
 }
 .counter-container h3{
-    font-size: 48px;
+    font-size: 30px;
     font-weight: bold;
 }
 .counter-food {
@@ -2598,7 +2591,8 @@ li.hide-button h6 i{
     align-items: center;
 }
 .price span {
-    color: #CFCFCF;
+    /* color: #CFCFCF; */
+    color: #1a1717;
     /* padding-top: 20px; */
     display: block;
 }
@@ -2620,7 +2614,8 @@ li.hide-button h6 i{
     justify-content: space-between;
 }
 .totel-price span{
-     color: #cfcfcf;
+     /* color: #cfcfcf; */
+     color: #1a1717;
      font-size: 18px;
 }
 .totel-price h5{
@@ -2652,7 +2647,8 @@ form.checkout-form input[type="password"]{
     border-radius: 10px;
     margin-top: 20px;
     outline: none;
-    color: #CFCFCF;
+    /* color: #CFCFCF; */
+    color: #1a1717;
     border: 1px solid #CFCFCF;
 }
 form.checkout-form textarea {
@@ -2662,7 +2658,8 @@ form.checkout-form textarea {
     border-radius: 10px;
     margin-top: 20px;
     outline: none;
-    color: #CFCFCF;
+    /* color: #CFCFCF; */
+    color: #1a1717;
     border: 1px solid #CFCFCF;
 }
 form.checkout-form input[type="text"]::placeholder,
@@ -2670,15 +2667,20 @@ form.checkout-form input[type="number"]::placeholder,
 form.checkout-form input[type="password"]::placeholder,
 form.checkout-form textarea::placeholder
 {
-    color: #CFCFCF;
+    /* color: #CFCFCF; */
+    color: #1a1717;
 }
 form.checkout-form .nice-select {
     width: 100%;
     height: 60px;
     margin-top: 10px;
     background-color: #FCFCFC;
-     color: #CFCFCF;
-     border: 1px solid #CFCFCF;;
+     /* color: #CFCFCF; */
+     color: #1a1717;
+     border: 1px solid #CFCFCF;
+}
+form.checkout-form .nice-select option::placeholder {
+     color: #1a1717;
 }
 form.checkout-form ul.list {
     width: 100%;
@@ -2690,7 +2692,8 @@ form.checkout-form .nice-select:after{
 }
 
 form.checkout-form span{
-    color: #CFCFCF;
+    /* color: #CFCFCF; */
+    color: #1a1717;;
     font-size: 14px;
     display: block;
     padding-top: 10px;

@@ -2,7 +2,7 @@ from django.db import models
 from django.forms.models import model_to_dict
 from django.db.models.fields.files import ImageFieldFile, FileField
 from django.db.models.fields import UUIDField
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from django.template import loader
 from django.conf import settings
 from django.apps import apps
@@ -105,6 +105,17 @@ def send_sms(number,message):
 def custom_mail(subject,email_template_name,user,c):
 	email = loader.render_to_string(email_template_name, c)
 	send_mail(subject, email, f'Easy Meal <{settings.DEFAULT_FROM_EMAIL}>' , [user.email], html_message=email, fail_silently=False)
+
+def custom_emailmessage(subject,message,to_email,html=False, attach=None, attachment=None):
+	email = EmailMessage(subject, message, f'Order Easy <{settings.DEFAULT_FROM_EMAIL}>', to=[to_email])
+	if html:
+		email.content_subtype = "html"
+	if attach:
+		email.attach_file(attach)
+	if attachment:
+		filename, content, mimetype = attachment
+		email.attach(filename, content, mimetype)
+	email.send()
 
 def percentage(instance):
 	per = 0

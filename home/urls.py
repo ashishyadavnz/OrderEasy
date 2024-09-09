@@ -2,11 +2,11 @@ from django.urls import path
 from . import views
 app_name="home"
 urlpatterns = [
-        path('', views.home, name='home-page'),
+        path('<slug:slug>/submit-feedback/', views.submit_feedback, name='submit_feedback'),
         path('ajax/fcm-token/',views.fcm_token,name='fcm_token'),
+        path('faq/message/', views.faq_message, name='faq_message'),
         path('about/',views.about,name='about-page'),
         path('faq/',views.faq,name='faq'),
-        path('faq/message/', views.faq_message, name='faq_message'),
         path('pricing-table/',views.pricingTable,name='pricing-table'),
         path('contact/',views.contact,name='contact'),
         path('checkout/',views.checkout,name='checkout'),
@@ -20,5 +20,6 @@ urlpatterns = [
         path('verify-otp/<int:user_id>/', views.verify_otp, name='verify_otp'),
         path('reset-password/<int:user_id>/', views.reset_password, name='reset_password'),
         path('<slug:slug>/submit-feedback/', views.submit_feedback, name='submit_feedback'),
-   
+        path('<str:slug>/', views.page_detail, name='page_detail'),
+        path('', views.home, name='home-page'),   
 ]

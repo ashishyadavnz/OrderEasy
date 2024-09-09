@@ -5,8 +5,21 @@
     </div>
 </section>
 <div class="container mt-3">
-    <div class="d-md-flex justify-content-between">
+    <div class="d-md-flex justify-content-between pb-3">
         <h1 class="">Orders </h1>
+        <form method="GET" class="d-md-flex align-items-center">
+            <div class=" pe-md-3 floating_label">
+                <label for="start_date">Start Date :</label>
+                <input class="form-control" type="date" name="start_date" id="start_date" value="{{ request.GET.start_date }}">
+            </div>
+        
+            <div class=" pe-md-3 floating_label">
+                <label for="end_date">End Date :</label>
+                <input class="form-control" type="date" name="end_date" id="end_date" value="{{ request.GET.end_date }}">
+            </div>
+        
+            <button type="submit" class="btn button-2 lh-lg">Filter</button>
+        </form>
     </div>
     <table class="table table-bordered">
         <thead>
@@ -16,11 +29,11 @@
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Order Time</th>
-                <th>Delivery Time</th>
                 <th>Address</th>
                 <th>Total</th>
-                <th>Charge</th>
+                <th>Delivery Charge</th>
                 <th>Order Type</th>
+                <th>Schedule Time</th>
                 <th>Instruction</th>
                 <th>Details</th>
             </tr>
@@ -34,13 +47,13 @@
                 <td>{% if item.phone %} {{ item.phone }} {% else %} {{item.user.mobile}} {% endif %}
                 </td>
                 <td>{{ item.utimestamp }}</td>
-                <td>{% if item.time %}{{ item.time }}{% endif %}</td>
                 <td>{{ item.address }}</td>
                 <td>{{ item.total }}</td>
                 <td>{{ item.charge }}</td>
                 <td>{{ item.otype }}</td>
+                <td>{% if item.time %}{{ item.time }}{% endif %}</td>
                 <td>{{ item.instruction }}</td>
-                <td><button class="btn button button-2" data-bs-toggle="modal" data-bs-target="#orderItemModal-{{item.id}}">Cart</button>
+                <td><button class="btn  button-2 lh-lg" data-bs-toggle="modal" data-bs-target="#orderItemModal-{{item.id}}">Cart</button>
                     <div class="modal fade" id="orderItemModal-{{item.id}}" tabindex="-1" aria-labelledby="orderItemModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
