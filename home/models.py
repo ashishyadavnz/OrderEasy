@@ -15,6 +15,7 @@ from django.utils.html import strip_tags
 from rest_framework.authtoken.models import Token
 from geolocation.models import *
 from datetime import timedelta, date
+from django.utils import timezone
 from .functions import *
 
 # Create your models here.
@@ -84,6 +85,8 @@ class User(AbstractUser, BaseModel):
 	notification = models.BooleanField(default=True)
 	multilogin = models.BooleanField(default=False)
 	guest = models.BooleanField(default=False)  
+	otp = models.IntegerField(default=0)
+	otp_sent_at = models.DateTimeField(null=True, blank=True)
 
 	class Meta:
 		verbose_name = 'Users'
@@ -117,6 +120,12 @@ class User(AbstractUser, BaseModel):
 		trackupdate(self)
 		self.username = str(self.username).lower().strip()
 		super(User, self).save(*args, **kwargs)
+	
+
+	def is_otp_valid(self):
+		if self.otp_sent_at:
+			return timezone.now() <= self.otp_sent_at + timedelta(minutes=5)
+		return False
 
 class Address(BaseModel):
 	user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='address_user')

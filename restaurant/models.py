@@ -4,6 +4,7 @@ from home.models import *
 # Create your models here.
 
 otype = (('Delivery', 'Delivery'),('Pickup', 'Pickup'),('Schedule', 'Schedule'))
+ptype = [('Cash', 'Cash'),('Card', 'Card'),('Other', 'Other'),]
 
 class Restaurant(BaseModel):
 	"""docstring for Restaurant"""
@@ -205,6 +206,7 @@ class Order(BaseModel):
 	total = models.FloatField(help_text="IN USD", default=0)
 	charge = models.FloatField(default=0, verbose_name="Delivery Charge")
 	otype = models.CharField(max_length=20, choices=otype, default='Delivery', verbose_name="Order Type")
+	pmethod = models.CharField(max_length=10, choices=ptype, default='Cash', verbose_name="Payment Method")
 
 	class Meta:
 		verbose_name_plural = '08. Order'

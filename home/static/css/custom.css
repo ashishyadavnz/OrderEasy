@@ -799,6 +799,330 @@ border: 1px solid #CFCFCF;
 
 }
 
+.verify-otp-section {
+    padding: 80px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url(https://bslthemes.com/html/quickeat/assets/img/background-1.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.verify-otp-container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.verify-otp-container:hover {
+    transform: scale(1.03);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.verify-otp-container h2 {
+    margin-bottom: 30px;
+    color: #333;
+    font-family: 'Roboto', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+.verify-otp-container::before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle at top left, rgba(242, 159, 5, 0.4), transparent);
+    opacity: 0.7;
+    z-index: 0;
+}
+
+.verify-otp-form-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.verify-otp-form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #F29F05;
+}
+
+.verify-otp-form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.verify-otp-form-group input:focus {
+    border-color: #F29F05;
+    box-shadow: 0 0 10px rgba(242, 159, 5, 0.2);
+}
+
+.btn-verify-otp {
+    padding: 14px;
+    background-color: #F29F05;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    width: 100%;
+    font-weight: 600;
+}
+
+.btn-verify-otp:hover {
+    background-color: #fff;
+    color: #F29F05;
+    border: 2px solid #F29F05;
+    transform: translateY(-3px);
+}
+
+.btn-verify-otp:active {
+    background-color: #d48804;
+    transform: translateY(0);
+}
+
+.text-danger {
+    color: #dc3545;
+}
+.reset-password-section {
+    padding: 80px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url(https://bslthemes.com/html/quickeat/assets/img/background-1.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.reset-password-container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.reset-password-container:hover {
+    transform: scale(1.03);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.reset-password-container h2 {
+    margin-bottom: 30px;
+    color: #333;
+    font-family: 'Roboto', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+.reset-password-container::before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle at top left, rgba(242, 159, 5, 0.4), transparent);
+    opacity: 0.7;
+    z-index: 0;
+}
+
+.reset-password-form-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.reset-password-form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #F29F05;
+}
+
+.reset-password-form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.reset-password-form-group input:focus {
+    border-color: #F29F05;
+    box-shadow: 0 0 10px rgba(242, 159, 5, 0.2);
+}
+
+.btn-reset-password {
+    padding: 14px;
+    background-color: #F29F05;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    width: 100%;
+    font-weight: 600;
+}
+
+.btn-reset-password:hover {
+    background-color: #fff;
+    color: #F29F05;
+    border: 2px solid #F29F05;
+    transform: translateY(-3px);
+}
+
+.btn-reset-password:active {
+    background-color: #d48804;
+    transform: translateY(0);
+}
+
+.forgot-password-section {
+    padding: 80px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url(https://bslthemes.com/html/quickeat/assets/img/background-1.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.forgot-password-container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.forgot-password-container:hover {
+    transform: scale(1.03);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.forgot-password-container h2 {
+    margin-bottom: 30px;
+    color: #333;
+    font-family: 'Roboto', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+.forgot-password-container::before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle at top left, rgba(242, 159, 5, 0.4), transparent);
+    opacity: 0.7;
+    z-index: 0;
+}
+
+.forgot-password-form-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.forgot-password-form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #F29F05;
+}
+
+.forgot-password-form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.forgot-password-form-group input:focus {
+    border-color: #F29F05;
+    box-shadow: 0 0 10px rgba(242, 159, 5, 0.2);
+}
+
+.btn-forgot-password {
+    padding: 14px;
+    background-color: #F29F05;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    width: 100%;
+    font-weight: 600;
+}
+
+.btn-forgot-password:hover {
+    background-color: #fff;
+    color: #F29F05;
+    border: 2px solid #F29F05;
+    transform: translateY(-3px);
+}
+
+.btn-forgot-password:active {
+    background-color: #d48804;
+    transform: translateY(0);
+}
+
+.error-message {
+    color: #ff4d4f;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.success-message {
+    color: #52c41a;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
 .profile-page .cover-img{
     aspect-ratio: 21/5;
     object-fit: cover;
@@ -818,4 +1142,3 @@ border: 1px solid #CFCFCF;
     top: 10px;
     right: 10px;
 }
-
