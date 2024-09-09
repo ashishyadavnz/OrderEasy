@@ -20,6 +20,7 @@ urlpatterns = [
         path('verify-otp/<int:user_id>/', views.verify_otp, name='verify_otp'),
         path('reset-password/<int:user_id>/', views.reset_password, name='reset_password'),
         path('<slug:slug>/submit-feedback/', views.submit_feedback, name='submit_feedback'),
+        path('profile/', views.profile, name='profile'),
         path('<str:slug>/', views.page_detail, name='page_detail'),
         path('', views.home, name='home-page'),   
 ]

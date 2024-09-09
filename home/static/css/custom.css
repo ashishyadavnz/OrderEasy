@@ -1122,3 +1122,23 @@ border: 1px solid #CFCFCF;
     font-weight: 600;
     margin-bottom: 15px;
 }
+
+.profile-page .cover-img{
+    aspect-ratio: 21/5;
+    object-fit: cover;
+    filter: brightness(0.7);
+    width:100%;
+}
+.profile-page .user-img{
+    padding:3px;
+}
+.profile-page .user-image{
+    object-fit: cover;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+.profile-page .edit-btn{
+    top: 10px;
+    right: 10px;
+}
