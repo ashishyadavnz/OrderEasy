@@ -16,6 +16,7 @@ urlpatterns = [
         path('login/', views.login, name='login'),
         path("notify/", views.index, name="index"),
         path('logout/', views.user_logout, name='logout'),
+        path('profile/', views.profile, name='profile'),
         path('<str:slug>/', views.page_detail, name='page_detail'),
         path('', views.home, name='home-page'),
    

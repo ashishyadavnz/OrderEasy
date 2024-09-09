@@ -15,6 +15,7 @@ from django.core.mail import send_mail
 from django.utils.html import strip_tags
 from django.core.mail import EmailMessage
 from django.db.models import Sum,Avg
+from .forms import ProfileForm
 
 
 
@@ -423,3 +424,22 @@ def page_detail(request,slug):
         return render(request, 'ui/custom-page.html',{"page":"item","item":item})
     else:
         return redirect('/page-not-found/')
+    
+def profile(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = ProfileForm(request.POST, request.FILES,instance=request.user)
+            if form.is_valid():
+                form = form.save(commit=False)
+                request.form = request.user
+                form.save()
+                messages.success(request, "Profile Updated.")
+                return redirect('home:profile')
+            else:
+                messages.error(request, "Error.")
+                return redirect('home:profile')
+        else:
+            form = ProfileForm(instance=request.user)
+        return render (request , 'ui/profile.html',{'user':request.user,'form':form})
+    else:
+       return HttpResponse('you are not authorized to access this page')
