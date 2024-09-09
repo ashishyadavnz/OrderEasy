@@ -28,3 +28,8 @@ class FoodItemForm(forms.ModelForm):
     class Meta:
         model = FoodItem
         exclude =['restaurant','status']
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields =['first_name','last_name','email','mobile','image','cover','gender','dob','country','state','city','postcode','address']

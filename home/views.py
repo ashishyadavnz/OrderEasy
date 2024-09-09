@@ -14,9 +14,13 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
 from django.core.mail import EmailMessage
+from django.utils.crypto import get_random_string
+from datetime import timedelta
+from random import randint
+from django.contrib.auth.hashers import make_password
 from django.db.models import Sum,Avg
+from .forms import ProfileForm
 import threading
-
 
 
 def home(request):
@@ -127,6 +131,8 @@ def checkout(request):
             otype = request.POST['otype']
             address = request.POST['address']
             instructions = request.POST.get('instructions')
+            payment_method = request.POST.get('payment_method', 'Cash') 
+
             odr = Order.objects.get(id=odrid)
             if not odr.user:
                 user = User.objects.filter(username=phone).last()
@@ -143,6 +149,7 @@ def checkout(request):
             odr.address = address
             odr.instruction = instructions
             odr.status = 'Active'
+            odr.pmethod = payment_method
             odr.save()
             
             # email send to owner
@@ -293,6 +300,64 @@ def login(request):
 
     return render(request, 'ui/login.html')
 
+def forgot_password(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        mobile = request.POST['mobile']
+
+        try:
+            user = User.objects.get(username=username, mobile=mobile)
+            otp = randint(100000, 999999)
+            user.otp = otp
+            user.otp_sent_at = timezone.now()
+            user.save()
+            send_mail(
+                'Password Reset OTP',
+                f'Your OTP for password reset is {otp}. It is valid for 10 minutes.',
+                settings.EMAIL_HOST_USER,
+                [user.email],
+                fail_silently=False,
+            )
+            messages.success(request, 'OTP has been sent to your email.')
+            return redirect('home:verify_otp', user_id=user.id)
+        except User.DoesNotExist:
+            messages.error(request, 'No account found with the provided username and mobile number.')
+            return redirect('home:forgot_password')
+
+    return render(request, 'ui/forgot_password.html')
+
+
+def verify_otp(request, user_id):
+    user = User.objects.get(id=user_id)
+
+    if request.method == 'POST':
+        entered_otp = request.POST['otp']
+        time_difference = timezone.now() - user.otp_sent_at
+        if user.otp == int(entered_otp) and time_difference <= timedelta(minutes=10):
+            return redirect('home:reset_password', user_id=user.id)
+        else:
+            messages.error(request, 'Invalid or expired OTP.')
+            return redirect('home:verify_otp', user_id=user.id)
+
+    return render(request, 'ui/verify_otp.html', {'user': user})
+
+def reset_password(request, user_id):
+    user = User.objects.get(id=user_id)
+
+    if request.method == 'POST':
+        password = request.POST['password']
+        password_confirm = request.POST['password_confirm']
+
+        if password == password_confirm:
+            user.password = make_password(password)
+            user.save()
+            messages.success(request, 'Password reset successfully. You can now log in.')
+            return redirect('home:login')
+        else:
+            messages.error(request, 'Passwords do not match.')
+            return redirect('home:reset_password', user_id=user.id)
+
+    return render(request, 'ui/reset_password.html', {'user': user})
 
 def user_logout(request):
     logout(request)
@@ -416,3 +481,22 @@ def page_detail(request,slug):
         return render(request, 'ui/custom-page.html',{"page":"item","item":item})
     else:
         return redirect('/page-not-found/')
+    
+def profile(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = ProfileForm(request.POST, request.FILES,instance=request.user)
+            if form.is_valid():
+                form = form.save(commit=False)
+                request.form = request.user
+                form.save()
+                messages.success(request, "Profile Updated.")
+                return redirect('home:profile')
+            else:
+                messages.error(request, "Error.")
+                return redirect('home:profile')
+        else:
+            form = ProfileForm(instance=request.user)
+        return render (request , 'ui/profile.html',{'user':request.user,'form':form})
+    else:
+       return HttpResponse('you are not authorized to access this page')

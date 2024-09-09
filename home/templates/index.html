@@ -94,6 +94,11 @@
 								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
 									<a href="{% url  'home:contact'  %}">Contact</a>
 								</li>
+								{% if request.user %}
+									<li class="navbar-dropdown {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+										<a href="{% url  'home:profile'  %}">Profile</a>
+									</li>
+								{% endif %}
 								
 							</ul>
 						</nav>
@@ -102,8 +107,8 @@
 						{% if request.user and request.user.role == 'Owner' %}
 						{% else %}
 							<div class="extras bag">
-								<a href="javascript:void(0)" id="desktop-menu" class="menu-btn">
-									<i class="fa-solid fa-bag-shopping"></i>
+								<a href="javascript:void(0)" id="desktop-menu" class="menu-btn p-2">
+									<i class="fa-solid fa-bag-shopping">&nbsp;(<span id="cart-total-amount"></span>)</i>
 								</a>							
 								<!-- Cart Section -->
 								<div id="cart-section" class="cart-sidebar">
@@ -191,8 +196,14 @@
 							</li>
 							<hr>
 							<li class="navbar-dropdown">
-								<a href="{% url  'home:contact'  %}">Contacts</a>
+								<a href="{% url  'home:contact'  %}">Contact</a>
 							</li>
+							{% if request.user %}
+								<hr>
+								<li class="navbar-dropdown">
+									<a href="{% url  'home:profile'  %}">Profile</a>
+								</li>
+							{% endif %}
 							<hr>
 						</ul>
 					</nav>
@@ -374,6 +385,9 @@
 						</li>
 						{% endcomment %}
 						<li><a href="{% url  'home:contact'  %}">Contact</a></li>
+						{% if request.user %}
+							<li><a href="{% url  'home:profile'  %}">Profile</a></li>
+						{% endif %}
 					</ul>
 					<a href="JavaScript:void(0)" id="res-cross"></a>
 				</div>

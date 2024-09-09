@@ -1,0 +1,201 @@
+{% extends "index.html" %} {% load custom_filter %} {% load static %} {% block content %}
+<section class="hero-section about gap">
+    <div class="container">
+
+    </div>
+</section>
+<div class="content-wrapper profile-page pt-md-3">
+	<div class="container profile my-2">
+		<div class="position-relative">
+            <img class="cover-img rounded-4" src="{% if user.cover %}{{user.cover.url}}{% else %}{% static 'images/profilecover.jpg' %}{% endif %}" alt="user cover">
+            <div class="position-absolute user-info top-0 w-100 h-100  d-flex ps-2 z-2">
+                <div class="d-flex align-items-center">
+                    <div class="user-img  bg-white rounded-circle">
+                        <img class="user-image" src="{% if user.image %}{{user.image.url}}{% else %}{% static 'images/order-easy.png' %}{% endif %}" alt="user photo">
+                    </div>
+                    <div class="user-name ms-2 fs-2 text-white">
+                        {% if user.first_name %}{{user.first_name}} {{user.last_name}}{% else %}{{user.username}}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="position-absolute z-3 edit-btn">
+                <button class="btn button button-2 d-lg-block d-none" data-bs-toggle="modal" data-bs-target="#editProfileModal" >
+                    <i class="fa-solid fa-edit"></i> Edit profile
+                </button>
+                <button class="btn rounded-circle p-2 lh-1 button-2 d-lg-none d-block" data-bs-toggle="modal" data-bs-target="#editProfileModal" >
+                    <i class="fa-solid fa-edit"></i>
+                </button>
+            </div>
+        </div>
+        <div class="pt-3">
+            <div class="row mx-0">
+                {% if user.first_name %}
+                    <div class="col-md-6 d-flex pt-3 ">
+                        <div class="fw-semibold me-2">First Name :</div><div>{{user.first_name}}</div>
+                    </div>
+                {% endif %}
+                {% if user.last_name %}
+                    <div class="col-md-6 d-flex pt-3">
+                    <div class="fw-semibold me-2">Last Name :</div><div>{{user.last_name}}</div>
+                    </div>
+                {% endif %}
+                {% if user.email %}
+                    <div class="col-md-6 d-flex pt-3">
+                    <div class="fw-semibold me-2">Email :</div><div>{{user.email}}</div>
+                    </div>
+                {% endif %}
+                {% if user.mobile %}
+                    <div class="col-md-6 d-flex pt-3">
+                    <div class="fw-semibold me-2">Phone Number :</div><div>{{user.mobile}}</div>
+                    </div>
+                {% endif %}
+                {% if user.gender %}
+                    <div class="col-md-6 d-flex pt-3">
+                    <div class="fw-semibold me-2">Gender :</div><div>{{user.gender}}</div>
+                    </div>
+                {% endif %}
+                {% if user.dob %}
+                    <div class="col-md-6 d-flex pt-3">
+                    <div class="fw-semibold me-2">Date of birth :</div><div>{{user.dob}}</div>
+                    </div>
+                {% endif %}
+                {% if user.country %}
+                    <div class="col-md-6 d-flex pt-3">
+                    <div class="fw-semibold me-2">Country :</div><div>{{user.country.name}}</div>
+                    </div>
+                {% endif %}
+                {% if user.state %}
+                    <div class="col-md-6 d-flex pt-3">
+                    <div class="fw-semibold me-2">State :</div><div>{{user.state.name}}</div>
+                    </div>
+                {% endif %}
+                {% if user.city %}
+                    <div class="col-md-6 d-flex pt-3">
+                    <div class="fw-semibold me-2">City :</div><div>{{user.city}}</div>
+                    </div>
+                {% endif %}
+                {% if user.postcode %}
+                    <div class="col-md-6 d-flex pt-3">
+                    <div class="fw-semibold me-2">Postcode :</div><div>{{user.postcode}}</div>
+                    </div>
+                {% endif %}
+                {% if user.address %}
+                    <div class="col-12 d-flex pt-3">
+                    <div class="fw-semibold me-2">Address :</div><div>{{user.address}}</div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+	</div>
+</div>
+<!-- Modal -->
+<div class="modal fade profile-page" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">Edit profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="position-relative">
+                        <img id="coverPreview" class="cover-img rounded" src="{% if user.cover %}{{user.cover.url}}{% else %}{% static 'images/profilecover.jpg' %}{% endif %}" alt="user cover">
+                        <div class="position-absolute user-info top-0 w-100 h-100  d-flex ps-2 z-2">
+                            <div class="d-flex align-items-center">
+                                <div class="user-img  bg-white rounded-circle position-relative">
+                                    <img id="profilePreview" class="user-image" src="{% if user.image %}{{user.image.url}}{% else %}{% static 'images/order-easy.png' %}{% endif %}" alt="user photo">
+                                    <button class="bottom-0 end-0 position-absolute rounded-circle p-2 lh-1 button-2">
+                                        <label  for="id_image"><i class="fa-solid fa-edit"></i></label>
+                                        <input type="file" id="id_image" name="image" style="display: none;">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="position-absolute z-3 edit-btn rounded-circle p-2 lh-1 button-2">
+                            <label for="id_cover"><i class="fa-solid fa-edit"></i></label>
+                            <input type="file" id="id_cover" name="cover" style="display: none;">
+                        </button>
+                    </div>
+                    <div class="row mx-0 pt-3">
+                        <div class="form-group floating_label col-md-6">
+                            <label class="ms-2" for="id_first_name">First Name:</label>
+                            {{ form.first_name|add_class:"form-control" }}
+                        </div>
+                        <div class="form-group floating_label col-md-6">
+                            <label class="ms-2" for="id_last_name">Last Name:</label>
+                            {{ form.last_name|add_class:"form-control" }}
+                        </div>
+                        <div class="form-group floating_label col-md-6">
+                            <label class="ms-2" for="id_email">Email:</label>
+                            {{ form.email|add_class:"form-control" }}
+                        </div>
+                        <div class="form-group floating_label col-md-6">
+                            <label class="ms-2" for="id_mobile">Mobile:</label>
+                            {{ form.mobile|add_class:"form-control" }}
+                        </div>
+                        <div class="form-group floating_label col-md-6">
+                            <label class="ms-2" for="id_gender">Gender:</label>
+                            {{ form.gender|add_class:"form-control" }}
+                        </div>
+                        <div class="form-group floating_label col-md-6">
+                            <label class="ms-2" for="id_dob">Date of birth:</label>
+                            {{ form.dob|add_class:"form-control" }}
+                        </div>
+                        <div class="form-group floating_label col-md-6">
+                            <label class="ms-2" for="id_country">Country:</label>
+                            {{ form.country|add_class:"form-control" }}
+                        </div>
+                        <div class="form-group floating_label col-md-6">
+                            <label class="ms-2" for="id_state">State:</label>
+                            {{ form.state|add_class:"form-control" }}
+                        </div>
+                        <div class="form-group floating_label col-md-6">
+                            <label class="ms-2" for="id_city">City:</label>
+                            {{ form.city|add_class:"form-control" }}
+                        </div>
+                        <div class="form-group floating_label col-md-6">
+                            <label class="ms-2" for="id_postcode">Postcode:</label>
+                            {{ form.postcode|add_class:"form-control" }}
+                        </div>
+                        <div class="form-group floating_label col-12">
+                            <label class="ms-2" for="id_address">Address:</label>
+                            {{ form.address|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="px-3 text-end">
+                        <button   type="button" class="btn border border-dange   lh-lg me-2" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                        <button type="submit" class="btn button-2 lh-lg">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script_js %}
+<script>
+    $(document).ready(function() {
+        $('#id_image').change(function(event) {
+            readImage(event, '#profilePreview');
+        });
+
+        $('#id_cover').change(function(event) {
+            readImage(event, '#coverPreview');
+        });
+
+        function readImage(event, previewId) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $(previewId).attr('src', e.target.result); 
+                };
+                reader.readAsDataURL(file); 
+            }
+        }
+    });
+</script>
+
+{% endblock %}

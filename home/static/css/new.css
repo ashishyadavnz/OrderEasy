@@ -363,7 +363,7 @@ header {
 /*------------- button end --------*/
 .bag i {
     background-color: white;
-    width: 40px;
+    width: 155px;
     height: 40px;
     align-items: center;
     justify-content: center;
@@ -2702,12 +2702,7 @@ form.checkout-form {
     padding: 30px;
     border-radius: 10px;
 }
-[type=radio] {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+
 /* IMAGE STYLES */
 [type=radio] + img {
   cursor: pointer;

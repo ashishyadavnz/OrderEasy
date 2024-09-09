@@ -186,7 +186,7 @@ class CustomUserAdmin(ListAdminMixin, UserAdmin):
     fieldsets = [
         (None, {'fields': ('email', 'username', 'mobile', 'first_name', 'last_name', 'password', 'status')}),
         ('Personal info', {
-            'fields': ('referrer', 'country', 'state', 'city', 'gender', 'role', 'dob', 'image', 'address', 'postcode', 'identifier', 'otp', 'guest', 'source'),
+            'fields': ('referrer', 'country', 'state', 'city', 'gender', 'role', 'dob', 'image','cover', 'address', 'postcode', 'identifier', 'otp', 'guest', 'source'),
         }),
         ('Permissions', {
             'classes': ('collapse',),

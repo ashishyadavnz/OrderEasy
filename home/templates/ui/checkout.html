@@ -3,6 +3,18 @@
 {% load static %}
 {% block content %}
 
+<style>
+    input[type="radio"] {
+    display: inline-block;
+    visibility: visible;
+    margin-right: 5px;
+
+}
+.payment-method label {
+    margin-right: 10px;
+}
+
+</style>
 <div class="menu-layer">
     <!-- loader start-->
     <div class="page-loader">
@@ -142,6 +154,22 @@
                             <option value="Pickup" {% if order.otype == "Pickup" %}selected{% endif %}>Pickup</option>
                             <option value="Schedule" {% if order.otype == "Schedule" %}selected{% endif %}>Schedule</option>
                         </select>
+                        <h4 class="two">Payment Method</h4>
+                        <div class="payment-method">
+                            <label>
+                                Pay with Cash
+                            </label>
+                                <input type="radio" name="payment_method" value="Cash" {% if order.payment_method == "Cash" or not order.payment_method %}checked{% endif %}>
+                            <!-- <label>
+                                <input type="radio" name="payment_method" value="Card" {% if order.payment_method == "Card" %}checked{% endif %}>
+                                Pay with Card
+                            </label>
+                            <label>
+                                <input type="radio" name="payment_method" value="Other" {% if order.payment_method == "Other" %}checked{% endif %}>
+                                Other
+                            </label> -->
+                        </div>
+
                         <button type="submit" name="place_order" class="button-price">Place Order</button>
                         <!-- <input type="text" name="street" placeholder="Street">
                         <div class="row">
@@ -207,6 +235,7 @@
                             </div>
                         </div> -->
                         <!-- <button class="button-price">Send</button> -->
+                         
                     </form>
                 </div>
             </div>
