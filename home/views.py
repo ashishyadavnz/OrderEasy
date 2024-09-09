@@ -130,6 +130,8 @@ def checkout(request):
             otype = request.POST['otype']
             address = request.POST['address']
             instructions = request.POST.get('instructions')
+            payment_method = request.POST.get('payment_method', 'Cash') 
+
             odr = Order.objects.get(id=odrid)
             if not odr.user:
                 user = User.objects.filter(username=phone).last()
@@ -146,6 +148,7 @@ def checkout(request):
             odr.address = address
             odr.instruction = instructions
             odr.status = 'Active'
+            odr.payment_method = payment_method
             odr.save()
             
             # email send to owner

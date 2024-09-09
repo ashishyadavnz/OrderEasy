@@ -2702,12 +2702,7 @@ form.checkout-form {
     padding: 30px;
     border-radius: 10px;
 }
-[type=radio] {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+
 /* IMAGE STYLES */
 [type=radio] + img {
   cursor: pointer;

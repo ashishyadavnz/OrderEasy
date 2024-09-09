@@ -205,6 +205,12 @@ class Order(BaseModel):
 	total = models.FloatField(help_text="IN USD", default=0)
 	charge = models.FloatField(default=0, verbose_name="Delivery Charge")
 	otype = models.CharField(max_length=20, choices=otype, default='Delivery', verbose_name="Order Type")
+	PAYMENT_METHOD_CHOICES = [
+		('Cash', 'Cash'),
+		('Card', 'Card'),
+		('Other', 'Other'),
+	]
+	payment_method = models.CharField(max_length=10, choices=PAYMENT_METHOD_CHOICES, default='Cash')
 
 	class Meta:
 		verbose_name_plural = '08. Order'
