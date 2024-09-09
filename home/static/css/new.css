@@ -72,7 +72,7 @@ h1{
 }
 h2{
     line-height: 58px;
-    font-size: 48px;
+    font-size: 30px;
     margin: 0;
     color: #363636;
 }
@@ -1368,10 +1368,10 @@ ul.paragraph li i {
     border-radius: 15px;
 }
 .banner-wilmington h6 {
-    font-size: 18px;
+    font-size: 30px;
     margin: 0;
     font-weight: bold;
-    padding-left: 15px;
+    /* padding-left: 15px; */
 }
 /*-------- restaurant logos-card    --------*/
 
@@ -2583,7 +2583,7 @@ li.hide-button h6 i{
     padding-left: 20px;
 }
 .counter-container h3{
-    font-size: 48px;
+    font-size: 30px;
     font-weight: bold;
 }
 .counter-food {
@@ -2591,7 +2591,8 @@ li.hide-button h6 i{
     align-items: center;
 }
 .price span {
-    color: #CFCFCF;
+    /* color: #CFCFCF; */
+    color: #1a1717;
     /* padding-top: 20px; */
     display: block;
 }
@@ -2613,7 +2614,8 @@ li.hide-button h6 i{
     justify-content: space-between;
 }
 .totel-price span{
-     color: #cfcfcf;
+     /* color: #cfcfcf; */
+     color: #1a1717;
      font-size: 18px;
 }
 .totel-price h5{
@@ -2645,6 +2647,8 @@ form.checkout-form input[type="password"]{
     border-radius: 10px;
     margin-top: 20px;
     outline: none;
+    /* color: #CFCFCF; */
+    color: #1a1717;
     border: 1px solid #CFCFCF;
 }
 form.checkout-form textarea {
@@ -2654,6 +2658,8 @@ form.checkout-form textarea {
     border-radius: 10px;
     margin-top: 20px;
     outline: none;
+    /* color: #CFCFCF; */
+    color: #1a1717;
     border: 1px solid #CFCFCF;
 }
 form.checkout-form input[type="text"]::placeholder,
@@ -2661,14 +2667,20 @@ form.checkout-form input[type="number"]::placeholder,
 form.checkout-form input[type="password"]::placeholder,
 form.checkout-form textarea::placeholder
 {
-    color: #CFCFCF;
+    /* color: #CFCFCF; */
+    color: #1a1717;
 }
 form.checkout-form .nice-select {
     width: 100%;
     height: 60px;
     margin-top: 10px;
     background-color: #FCFCFC;
-    border: 1px solid #CFCFCF;;
+     /* color: #CFCFCF; */
+     color: #1a1717;
+     border: 1px solid #CFCFCF;
+}
+form.checkout-form .nice-select option::placeholder {
+     color: #1a1717;
 }
 form.checkout-form ul.list {
     width: 100%;
@@ -2680,7 +2692,8 @@ form.checkout-form .nice-select:after{
 }
 
 form.checkout-form span{
-    color: #CFCFCF;
+    /* color: #CFCFCF; */
+    color: #1a1717;;
     font-size: 14px;
     display: block;
     padding-top: 10px;

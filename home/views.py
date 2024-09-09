@@ -16,6 +16,7 @@ from django.utils.html import strip_tags
 from django.core.mail import EmailMessage
 from django.db.models import Sum,Avg
 from .forms import ProfileForm
+import threading
 
 
 
@@ -144,44 +145,36 @@ def checkout(request):
             odr.instruction = instructions
             odr.status = 'Active'
             odr.save()
-            restaurant_owner_email = odr.restaurant.email
-            subject_owner = f"New Order from {first_name} {last_name}"
-            context_owner = {
+            
+            # email send to owner
+            message = loader.render_to_string('email/order_owner.html', {
                 'restaurant_owner': odr.restaurant.owner,
                 'order': odr,
                 'cart_items': request.session.get('cart_items', [])
-            }
-            html_message_owner = render_to_string('ui/order_owner.html', context_owner)
-            plain_message_owner = strip_tags(html_message_owner) 
-            email_owner = EmailMessage(
-                subject_owner,
-                html_message_owner,
-                settings.EMAIL_HOST_USER,
-                [restaurant_owner_email]
-            )
-            email_owner.content_subtype = "html" 
-            email_owner.send(fail_silently=False)
-            print(email_owner,"email for owenr") 
-            subject_customer = "Order Confirmation"
-            context_customer = {
+            })
+            to_email = odr.restaurant.email
+            subject = f"New Order Received from {first_name} {last_name}"
+            threading.Thread(
+                target=custom_emailmessage,
+                args=(subject, message, to_email, True)
+            ).start()
+            
+            # email send to customer
+            message = loader.render_to_string('email/order_confirm.html', {
                 'first_name': first_name,
                 'order': odr,
-            }
-            html_message_customer = render_to_string('ui/order_confirm.html', context_customer)
-            plain_message_customer = strip_tags(html_message_customer)
-            email_customer = EmailMessage(
-                subject_customer,
-                html_message_customer,
-                settings.EMAIL_HOST_USER,
-                [email]
-            )
-            email_customer.content_subtype = "html" 
-            email_customer.send(fail_silently=False)
+                'url': request.META.get('HTTP_REFERER')
+            })
+            subject = "Order Confirmation"
+            threading.Thread(
+                target=custom_emailmessage,
+                args=(subject, message, email, True)
+            ).start()
 
-
+            # push notification send to owner
             devices = FCMDevice.objects.filter(user=odr.user)
-            title = f'Order Created'
-            body = f'{first_name} {last_name} has generated order in your restaurent. Order id is {odr.orderid}.'
+            title = f'Order Received'
+            body = f'New Order Received from {first_name} {last_name}. Order id is {odr.orderid}.'
             devices.send_message(
                 Message(notification=Notification(title=title, body=body, image=settings.EASYLOGO),data={})
             )

@@ -1,14 +1,18 @@
+{% load static %}
 <div style="font-family: Arial, sans-serif; color: #333; background-color: #fdf4e3; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
     <div style="text-align: center; margin-bottom: 20px;">
-        <img src="home/static/images/order-easy.png" alt="OrderEasy" style="max-width: 150px;">
+        <img src="{% static 'images/order-easy.png' %}" alt="OrderEasy" style="max-width: 150px;">
     </div>
     
-    <h1 style="color: #F29F05; text-align: center; font-size: 24px;">New Order Received!</h1>
-    <p style="font-size: 18px;"><strong>Customer:</strong> {{ order.fname }} {{ order.lname }}</p>
-    <p style="font-size: 18px;"><strong>Order Type:</strong> {{ order.otype }}</p>
+    <h1 style="color: #F29F05; text-align: center; font-size: 24px;">Hi {{ restaurant_name }}, You have received an order!</h1>
+
+    <h2 style="color: #F29F05; font-size: 20px; border-bottom: 2px solid #F29F05; padding-bottom: 5px;">Customer Details</h2>
+    <p style="font-size: 18px;"><strong>Customer Name:</strong> {{ order.fname }} {{ order.lname }}</p>
     <p style="font-size: 18px;"><strong>Address:</strong> {{ order.address }}</p>
-    
-    <h2 style="color: #F29F05; font-size: 20px; border-bottom: 2px solid #F29F05; padding-bottom: 5px;">Items Ordered:</h2>
+
+    <h2 style="color: #F29F05; font-size: 20px; border-bottom: 2px solid #F29F05; padding-bottom: 5px;">Order Details</h2>
+    <p style="font-size: 18px;"><strong>Order ID:</strong> {{ order.orderid }}</p>
+    <p style="font-size: 18px;"><strong>Order Type:</strong> {{ order.otype }}</p>
     
     <table style="width: 100%; border-collapse: collapse; font-size: 16px; margin-top: 10px;">
         <thead>
@@ -32,4 +36,11 @@
     <div style="text-align: center; margin-top: 20px;">
         <p style="font-size: 18px;"><strong>Total Price:</strong> <span style="color: #d9534f;">NZ${{ order.total|floatformat:2 }}</span></p>
     </div>
+
+    <h2 style="color: #F29F05; font-size: 20px; border-bottom: 2px solid #F29F05; padding-bottom: 5px;">Payment Details</h2>
+    <p style="font-size: 18px;"><strong>Payment Method:</strong> Cash</p>
+    <p style="font-size: 18px;"><strong>Payment Status:</strong> Unpaid</p>
+
+    <h2 style="color: #F29F05; font-size: 20px; border-bottom: 2px solid #F29F05; padding-bottom: 5px;">Delivery Details</h2>
+    <p style="font-size: 18px;"><strong>Delivery Address:</strong> {{ order.address }}</p>
 </div>
