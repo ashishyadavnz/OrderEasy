@@ -16,6 +16,9 @@ urlpatterns = [
         path('login/', views.login, name='login'),
         path("notify/", views.index, name="index"),
         path('logout/', views.user_logout, name='logout'),
+        path('forgot-password/', views.forgot_password, name='forgot_password'),
+        path('verify-otp/<int:user_id>/', views.verify_otp, name='verify_otp'),
+        path('reset-password/<int:user_id>/', views.reset_password, name='reset_password'),
         path('<slug:slug>/submit-feedback/', views.submit_feedback, name='submit_feedback'),
    
 ]

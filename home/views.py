@@ -14,6 +14,12 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
 from django.core.mail import EmailMessage
+from django.utils.crypto import get_random_string
+from datetime import timedelta
+from random import randint
+from django.contrib.auth.hashers import make_password
+
+
 
 
 
@@ -291,6 +297,64 @@ def login(request):
 
     return render(request, 'ui/login.html')
 
+def forgot_password(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        mobile = request.POST['mobile']
+
+        try:
+            user = User.objects.get(username=username, mobile=mobile)
+            otp = randint(100000, 999999)
+            user.otp = otp
+            user.otp_sent_at = timezone.now()
+            user.save()
+            send_mail(
+                'Password Reset OTP',
+                f'Your OTP for password reset is {otp}. It is valid for 10 minutes.',
+                settings.EMAIL_HOST_USER,
+                [user.email],
+                fail_silently=False,
+            )
+            messages.success(request, 'OTP has been sent to your email.')
+            return redirect('home:verify_otp', user_id=user.id)
+        except User.DoesNotExist:
+            messages.error(request, 'No account found with the provided username and mobile number.')
+            return redirect('home:forgot_password')
+
+    return render(request, 'ui/forgot_password.html')
+
+
+def verify_otp(request, user_id):
+    user = User.objects.get(id=user_id)
+
+    if request.method == 'POST':
+        entered_otp = request.POST['otp']
+        time_difference = timezone.now() - user.otp_sent_at
+        if user.otp == int(entered_otp) and time_difference <= timedelta(minutes=10):
+            return redirect('home:reset_password', user_id=user.id)
+        else:
+            messages.error(request, 'Invalid or expired OTP.')
+            return redirect('home:verify_otp', user_id=user.id)
+
+    return render(request, 'ui/verify_otp.html', {'user': user})
+
+def reset_password(request, user_id):
+    user = User.objects.get(id=user_id)
+
+    if request.method == 'POST':
+        password = request.POST['password']
+        password_confirm = request.POST['password_confirm']
+
+        if password == password_confirm:
+            user.password = make_password(password)
+            user.save()
+            messages.success(request, 'Password reset successfully. You can now log in.')
+            return redirect('home:login')
+        else:
+            messages.error(request, 'Passwords do not match.')
+            return redirect('home:reset_password', user_id=user.id)
+
+    return render(request, 'ui/reset_password.html', {'user': user})
 
 def user_logout(request):
     logout(request)
