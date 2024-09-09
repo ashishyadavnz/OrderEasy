@@ -148,7 +148,7 @@ def checkout(request):
             odr.address = address
             odr.instruction = instructions
             odr.status = 'Active'
-            odr.payment_method = payment_method
+            odr.pmethod = payment_method
             odr.save()
             
             # email send to owner
