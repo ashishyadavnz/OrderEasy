@@ -94,7 +94,7 @@
 								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
 									<a href="{% url  'home:contact'  %}">Contact</a>
 								</li>
-								{% if request.user %}
+								{% if request.user.is_authenticated %}
 									<li class="navbar-dropdown {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
 										<a href="{% url  'home:profile'  %}">Profile</a>
 									</li>
@@ -198,7 +198,7 @@
 							<li class="navbar-dropdown">
 								<a href="{% url  'home:contact'  %}">Contact</a>
 							</li>
-							{% if request.user %}
+							{% if request.user.is_authenticated %}
 								<hr>
 								<li class="navbar-dropdown">
 									<a href="{% url  'home:profile'  %}">Profile</a>
@@ -385,7 +385,7 @@
 						</li>
 						{% endcomment %}
 						<li><a href="{% url  'home:contact'  %}">Contact</a></li>
-						{% if request.user %}
+						{% if request.user.is_authenticated %}
 							<li><a href="{% url  'home:profile'  %}">Profile</a></li>
 						{% endif %}
 					</ul>
