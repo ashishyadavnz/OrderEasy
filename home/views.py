@@ -33,7 +33,8 @@ def home(request):
     posts = Post.objects.all()
     testimonials = Testimonial.objects.all()
     # cuisines = Cuisine.objects.filter(menu_cuisine__restaurant__in=restaurants).distinct()
-    cuisines = Cuisine.objects.filter(fooditems_cuisine__isnull=False).distinct()
+    # cuisines = Cuisine.objects.filter(fooditems_cuisine__isnull=False).distinct()
+    cuisines = Cuisine.objects.all()
     if request.user.is_authenticated:
         orders = Order.objects.filter(timestamp__date=today.date())
         sum = orders.aggregate(Sum('total'))['total__sum'] or 0
@@ -174,6 +175,8 @@ def checkout(request):
                 'order': odr,
                 'url': request.META.get('HTTP_REFERER')
             })
+            to_email = odr.email
+            print(to_email)
             subject = "Order Confirmation"
             threading.Thread(
                 target=custom_emailmessage,
