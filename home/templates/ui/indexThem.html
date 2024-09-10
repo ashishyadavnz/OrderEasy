@@ -14,12 +14,21 @@
 							in your  home</h1>
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
 						<div class="nice-select-one">
-							<select class="nice-select Advice">
+							<form id="location-form" method="post" action="{% url "restaurant:restaurant" %}">
+								{% csrf_token %}
+								<input type="text" id="location-input" name="location" class="form-control-2" placeholder="Enter your address...">
+								<input type="hidden" id="address" name="address">
+								<input type="hidden" id="latitude" name="latitude">
+								<input type="hidden" id="longitude" name="longitude">
+								<button type="submit" class="d-none">Submit</button>
+							</form>
+							{% comment %} <select class="nice-select Advice">
 								{% for rs in restaurants  %}  
 								<option> {{rs.title}}</option>
 								{% endfor %}
-							</select>
-						<a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a>
+							</select> 
+							<a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a>
+							{% endcomment %}
 						</div>
 					</div>
 				</div>
@@ -407,3 +416,27 @@
 
 </div>
 {% endblock %}
+{% block script_js %}
+<script>
+	function initAutocomplete() {
+		var input = document.getElementById('location-input');
+		var autocomplete = new google.maps.places.Autocomplete(input);
+		autocomplete.setFields(['address_components', 'geometry', 'name']);
+		autocomplete.addListener('place_changed', function () {
+			var place = autocomplete.getPlace();
+			console.log("Selected Place: ", place);
+			var address = place.name;
+			var latitude = place.geometry.location.lat();
+			var longitude = place.geometry.location.lng();
+			document.getElementById('address').value = address;
+            document.getElementById('latitude').value = latitude;
+            document.getElementById('longitude').value = longitude;
+            document.getElementById('location-form').submit();
+			//var restaurantUrl =`{% url "restaurant:restaurant" %}?address=${encodeURIComponent(address)}&lat=${latitude}&lng=${longitude}`
+            //window.location.href = restaurantUrl;
+		});
+	}
+	google.maps.event.addDomListener(window, 'load', initAutocomplete);
+</script>
+{% endblock %}
+

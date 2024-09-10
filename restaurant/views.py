@@ -18,11 +18,32 @@ def restaurant(request, cuisine_slug=None):
         return redirect('restaurant:my_restaurant')
     restaurants = Restaurant.objects.filter(status='Active')
     cat = Category.objects.all()
+    user_address = request.session.get('user_address',None)
     if cuisine_slug:
         cuisine = get_object_or_404(Cuisine, slug=cuisine_slug)
         fooditems = FoodItem.objects.filter(cuisine=cuisine)
         restaurants = restaurants.filter(fooditems_restaurant__in=fooditems).distinct()
-    return render(request, 'ui/restaurant.html', {'restaurants': restaurants,'cat':cat})
+    if request.method == 'POST':
+        address = request.POST.get('address')
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+        if address and latitude and longitude:
+            request.session['user_address'] = {'add':address,
+                                            'lat':latitude,
+                                            'long':longitude}
+            return redirect('restaurant:restaurant')
+    if user_address:
+        R = 6371
+        user_lat = float(user_address['lat'])
+        user_long = float(user_address['long'])
+        restaurants = restaurants.annotate(
+            distance=R * ACos(
+                Cos(Radians(user_lat)) * Cos(Radians(F('latitude'))) *
+                Cos(Radians(F('longitude')) - Radians(user_long)) +
+                Sin(Radians(user_lat)) * Sin(Radians(F('latitude')))
+            )
+        ).filter(distance__lte=15).order_by('distance').distinct()
+    return render(request, 'ui/restaurant.html', {'restaurants': restaurants,'cat':cat,'user_address':user_address})
   
 def generate_time_slots(start_time, end_time, interval=60):
     slots = []
