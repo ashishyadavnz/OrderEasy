@@ -10,9 +10,9 @@
 			<div class="row align-items-center mx-0 pt-5">
 				<div class="col-lg-6" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
 					<div class="restaurant">
-						<h1>The Best restaurants
-							in your  home</h1>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+						<h3>Hungry? </h3>
+						<p>Order from best restaurant in your city</p>
+						<p>Enter Your Address</p>
 						<div class="nice-select-one">
 							<form id="location-form" method="post" action="{% url "restaurant:restaurant" %}">
 								{% csrf_token %}
@@ -39,7 +39,7 @@
 							<img alt="img" src="https://bslthemes.com/html/quickeat/assets/img/photo-2.jpg">
 							<div>
 								<p>Restaurant of the Month</p>
-								<h6 class="lh-sm">The Wilmington</h6>
+								<h6 class="lh-sm">Marina Bar & Eatery</h6>
 								<div>
 									<i class="fa-solid fa-star"></i>
 									<i class="fa-solid fa-star"></i>
@@ -52,7 +52,7 @@
 						<div class="wilmington location-restaurant">
 							<i class="fa-solid fa-location-dot"></i>
 							<div>
-								<h6 class="lh-sm">12 Restaurant</h6>
+								<h6 class="lh-sm">Restaurant</h6>
 								<p>In Your city</p>
 							</div>
 						</div>
@@ -110,28 +110,28 @@
 		<div class="container">
 			<div class="hading" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
 				<h2>How it works</h2>
-				<p>Magna sit amet purus gravida quis blandit turpis cursus. Venenatis tellus in<br> metus vulputate eu scelerisque felis.</p>
+				<!-- <p>Magna sit amet purus gravida quis blandit turpis cursus. Venenatis tellus in<br> metus vulputate eu scelerisque felis.</p> -->
 			</div>
 			<div class="row mx-0">
 				<div class="col-lg-4 col-md-6 col-sm-12" data-aos="flip-up"  data-aos-delay="200" data-aos-duration="300">
 					<div class="work-card">
 						<img class="w-100" alt="img" src="{% static 'images/illustration-1.png' %}">
 						<h4><span>01</span>  Select Restaurant</h4>
-						<p>Non enim praesent elementum facilisis leo vel fringilla. Lectus proin nibh nisl condimentum id. Quis varius quam quisque id diam vel.</p>
+						<!-- <p>Non enim praesent elementum facilisis leo vel fringilla. Lectus proin nibh nisl condimentum id. Quis varius quam quisque id diam vel.</p> -->
 					</div>
 				</div>
 				<div class="col-lg-4 col-md-6 col-sm-12" data-aos="flip-up"  data-aos-delay="300" data-aos-duration="400">
 					<div class="work-card">
 						<img class="w-100" alt="img" src="{% static 'images/illustration-2.png' %}">
 						<h4><span>02</span>  Select menu</h4>
-						<p>Eu mi bibendum neque egestas congue quisque. Nulla facilisi morbi tempus iaculis urna id volutpat lacus. Odio ut sem nulla pharetra diam sit amet.</p>
+						<!-- <p>Eu mi bibendum neque egestas congue quisque. Nulla facilisi morbi tempus iaculis urna id volutpat lacus. Odio ut sem nulla pharetra diam sit amet.</p> -->
 					</div>
 				</div>
 				<div class="col-lg-4 col-md-6 col-sm-12" data-aos="flip-up"  data-aos-delay="400" data-aos-duration="500">
 					<div class="work-card">
 						<img class="w-100" alt="img" src="{% static 'images/illustration-3.png' %}">
 						<h4><span>03</span>  Wait for delivery</h4>
-						<p>Nunc lobortis mattis aliquam faucibus. Nibh ipsum consequat nisl vel pretium lectus quam id leo. A scelerisque purus semper eget. Tincidunt arcu non.</p>
+						<!-- <p>Nunc lobortis mattis aliquam faucibus. Nibh ipsum consequat nisl vel pretium lectus quam id leo. A scelerisque purus semper eget. Tincidunt arcu non.</p> -->
 					</div>
 				</div>
 			</div>
@@ -145,8 +145,8 @@
 				<div class="row align-items-center mx-0">
 					<div class="col-lg-6" data-aos="flip-up"  data-aos-delay="200" data-aos-duration="300">
 						<div class="city-restaurants">
-							<h2>12 Best Restaurants in Your City</h2>
-							<p>Magna sit amet purus gravida quis blandit turpis cursus. Venenatis tellus in metus vulputate.</p>
+							<h2>Restaurants in Your City</h2>
+							<p>Check the restaurants near you.</p>
 						</div>
 					</div>
 					{% for restaurant in restaurants|slice:":3" %}
@@ -194,9 +194,8 @@
 				</div>
 				<div class="col-lg-6 offset-lg-1" data-aos="fade-up" data-aos-delay="300" data-aos-duration="400">
 					<div class="food-content-section">
-						<h2>Food from your favorite restaurants
-								to your table</h2>
-								<p>Pretium lectus quam id leo in vitae turpis massa sed. Lorem donec massa sapien faucibus et molestie. Vitae elementum curabitur vitae nunc.</p>
+						<h2>Food from your favorite restaurants to your table</h2>
+								<p>Order Easy, a New Zealand-owned company, provides a wide selection of budget-friendly takeaway meals. Their secure online ordering system makes it quick and simple to get your food, all while ensuring you receive the best prices available.</p>
 								<a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a>
 					</div>
 				</div>
@@ -204,7 +203,7 @@
 		</div>
 	</section>
 	<!-- counters-section -->
-	<section class="counters-section">
+	<!-- <section class="counters-section">
 		<div class="container">
 			<div class="row align-items-center mx-0">
 					<div class="col-lg-3 col-md-6 col-sm-12" data-aos="flip-up"  data-aos-delay="200" data-aos-duration="300">
@@ -236,9 +235,9 @@
 				</div>
 			</div>
 		</div>
-	</section>
+	</section> -->
 	<!-- reviews-sections -->
-	<section class="reviews-sections gap">
+	<!-- <section class="reviews-sections gap">
 		<div class="container">
 			<div class="row align-items-center mx-0">
 				<div class="col-md-6" data-aos="fade-up" data-aos-delay="200" data-aos-duration="300">
@@ -279,9 +278,9 @@
 				</div>
 			</div>
 		</div>
-	</section>
+	</section> -->
 	<!-- join-partnership -->
-	<section class="join-partnership gap" style="background-color: #363636;">
+	<!-- <section class="join-partnership gap" style="background-color: #363636;">
 		<div class="container">
 			<h2>Want to Join Partnership?</h2>
 			<div class="row mx-0">
@@ -305,9 +304,9 @@
 				</div>
 			</div>
 		</div>
-	</section>
+	</section> -->
 	<!-- news-section -->
-	<section class="news-section gap">
+	<!-- <section class="news-section gap">
 		<div class="container">
 			<h2>Latest news and	events</h2>
 			<div class="row mx-0">
@@ -374,9 +373,9 @@
 				{% endfor %}
 			</div>
 		</div>
-	</section>
+	</section> -->
 	<!-- subscribe-section -->
-	<section class="subscribe-section gap" style="background:#fcfcfc">
+	<!-- <section class="subscribe-section gap" style="background:#fcfcfc">
 		<div class="container">
 			<div class="row align-items-center mx-0">
 				<div class="col-lg-6" data-aos="flip-up"  data-aos-delay="200" data-aos-duration="300">
@@ -396,7 +395,7 @@
 				</div>
 			</div>
 		</div>
-	</section>
+	</section> -->
 	<!-- footer -->
 	
   <!-- bslthemes.com buttons html begin -->

@@ -57,53 +57,53 @@
 						</div>
 					</div>
 				</div>
-				<div id="web" class="d-flex justify-content-between align-items-center" >
-					<div id="navbar-container" class="d-flex align-items-center ">
-						<nav class="navbar">
-							<ul class="navbar-links">
-								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'home-page' %}active{% endif %}">
-									<a href="{% url 'home:home-page' %}">Home</a>
+				<div id="navbar-container" class="d-flex align-items-center ">
+					<nav class="navbar">
+						<ul class="navbar-links">
+							<li class="navbar-dropdown {% if request.resolver_match.url_name == 'home-page' %}active{% endif %}">
+								<a href="{% url 'home:home-page' %}">Home</a>
+							</li>
+							{% if request.user and request.user.role == 'Owner' %}
+								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'my_restaurant' %}active{% endif %}">
+									<a href="{% url 'restaurant:my_restaurant' %}">My Restaurants</a>
 								</li>
-								{% if request.user and request.user.role == 'Owner' %}
-									<li class="navbar-dropdown {% if request.resolver_match.url_name == 'my_restaurant' %}active{% endif %}">
-										<a href="{% url 'restaurant:my_restaurant' %}">My Restaurants</a>
-									</li>
-								{% else %}
-									<li class="navbar-dropdown {% if request.resolver_match.url_name == 'restaurant' %}active{% endif %}">
-										<a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
-									</li>
-								{% endif %}
-								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'blog_page' %}active{% endif %}">
+							{% else %}
+								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'restaurant' %}active{% endif %}">
+									<a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
+								</li>
+							{% endif %}
+							<li class="navbar-dropdown {% if request.resolver_match.url_name == 'blog_page' %}active{% endif %}">
+								<a href="{% url 'blog:blog_page' %}">Blog</a>
+							</li>
+							<li class="navbar-dropdown {% if request.resolver_match.url_name == 'about-page' %}active{% endif %}">
+								<a href="{% url 'home:about-page' %}">About Us</a>
+							</li>
+							
+							<!-- <li class="navbar-dropdown">
+								<a href="JavaScript:void(0)">Pages</a>
+								<div class="dropdown">
 									<a href="{% url 'blog:blog_page' %}">Blog</a>
+									<a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a>
+									<a href="{% url 'blog:service' %}">Services</a> 
+									<a href="{% url 'home:faq' %}">FAQ</a>
+									<a href="{% url  'home:pricing-table'  %}">Pricing Table</a>
+									<a href="{% url  'home:become-partner'  %}">Become A Partner</a>
+									<a href="{% url  'home:page-not-found'  %}">404</a>
+								</div>
+							</li> -->
+							<li class="navbar-dropdown {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
+								<a href="{% url  'home:contact'  %}">Contact</a>
+							</li>
+							{% if request.user.is_authenticated %}
+								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+									<a href="{% url  'home:profile'  %}">Profile</a>
 								</li>
-								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'about-page' %}active{% endif %}">
-									<a href="{% url 'home:about-page' %}">About Us</a>
-								</li>
-								
-								<!-- <li class="navbar-dropdown">
-									<a href="JavaScript:void(0)">Pages</a>
-									<div class="dropdown">
-										<a href="{% url 'blog:blog_page' %}">Blog</a>
-										<a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a>
-										<a href="{% url 'blog:service' %}">Services</a> 
-										<a href="{% url 'home:faq' %}">FAQ</a>
-										<a href="{% url  'home:pricing-table'  %}">Pricing Table</a>
-										<a href="{% url  'home:become-partner'  %}">Become A Partner</a>
-										<a href="{% url  'home:page-not-found'  %}">404</a>
-									</div>
-								</li> -->
-								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
-									<a href="{% url  'home:contact'  %}">Contact</a>
-								</li>
-								{% if request.user.is_authenticated %}
-									<li class="navbar-dropdown {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
-										<a href="{% url  'home:profile'  %}">Profile</a>
-									</li>
-								{% endif %}
-								
-							</ul>
-						</nav>
-					</div>
+							{% endif %}
+							
+						</ul>
+					</nav>
+				</div>
+				<div id="web" class="d-flex justify-content-between align-items-center" >
 					<div class="d-flex align-items-center ">
 						{% if user_address %}
 						<div class="d-flex align-items-center">
@@ -427,9 +427,9 @@
 						</a>
 						<h2>The Best Restaurants
 							in Your Home</h2>
-						<p>Vitae congue mauris rhoncus aenean. Enim nulla
+						<!-- <p>Vitae congue mauris rhoncus aenean. Enim nulla
 							aliquet porttitor lacus luctus accumsan
-							tortor posuere. Tempus egestas sed sed risus pretium quam.</p>
+							tortor posuere. Tempus egestas sed sed risus pretium quam.</p> -->
 					</div>
 				</div>
 				<div class="col-lg-3 col-md-6 col-sm-12">
@@ -438,12 +438,12 @@
 						<ul class="footer-menu">
 							<li><a href="{% url 'home:home-page' %}">home<i class="fa-solid fa-arrow-right"></i></a>
 							</li>
-							<li><a href="{% url 'home:about-page' %}">about us<i
+							<li><a href="{% url 'home:about-page' %}">About us<i
 										class="fa-solid fa-arrow-right"></i></a></li>
 							<li><a href="{% url 'restaurant:restaurant' %}">Restaurants<i
 										class="fa-solid fa-arrow-right"></i></a></li>
 							<li><a href="{% url  'home:contact'  %}">Contact<i class="fa-solid fa-arrow-right"></i></a>
-							<li><a href="{% url 'home:faq' %}">FAQ's<i class="fa-solid fa-arrow-right"></i></a>
+							<!-- <li><a href="{% url 'home:faq' %}">FAQ's<i class="fa-solid fa-arrow-right"></i></a> -->
 							</li>
 						</ul>
 					</div>
@@ -457,7 +457,7 @@
 								United States</p>
 						</div> -->
 						<a href="mailto:ordereasynz@gmail.com"><i class="fa-solid fa-envelope"></i>ordereasynz@gmail.com</a>
-						<a href="callto:02040007241"><i class="fa-solid fa-phone"></i>02040007241</a>
+						<a href="callto:+64212477475"><i class="fa-solid fa-phone"></i>+64212477475</a>
 					</div>
 					<ul class="social-media">
 						<li><a href="javascript:void(0)"><i class="fa-brands fa-facebook-f"></i></a></li>
