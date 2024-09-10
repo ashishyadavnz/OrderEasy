@@ -1,7 +1,7 @@
 {% load static %}
 <div style="font-family: Arial, sans-serif; color: #333; background-color: #fdf4e3; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
     <div style="text-align: center; margin-bottom: 20px;">
-        <img src="{% static 'images/order-easy.png' %}" alt="OrderEasy" style="max-width: 150px;">
+        <img src="https://testing.ordereasy.co.nz/static/images/order-easy.png" alt="OrderEasy" style="max-width: 150px;">
     </div>
     
     <h1 style="color: #F29F05; text-align: center; font-size: 24px;">Hi {{ restaurant_name }}, You have received an order!</h1>
@@ -13,6 +13,7 @@
     <h2 style="color: #F29F05; font-size: 20px; border-bottom: 2px solid #F29F05; padding-bottom: 5px;">Order Details</h2>
     <p style="font-size: 18px;"><strong>Order ID:</strong> {{ order.orderid }}</p>
     <p style="font-size: 18px;"><strong>Order Type:</strong> {{ order.otype }}</p>
+    {% if order.instruction %}<p style="font-size: 18px;"><strong>Special Instructions:</strong> {{ order.instruction }}</p>{% endif %}
     
     <table style="width: 100%; border-collapse: collapse; font-size: 16px; margin-top: 10px;">
         <thead>
