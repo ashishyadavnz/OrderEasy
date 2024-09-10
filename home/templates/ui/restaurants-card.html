@@ -673,48 +673,47 @@
 <script>
 	function displayDistances() {
 		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function(position) {
+			navigator.geolocation.getCurrentPosition(function (position) {
 				const userLat = position.coords.latitude;
-				const userLon = position.coords.longitude;	
-				document.querySelectorAll('.restaurant-card').forEach(function(card) {
+				const userLon = position.coords.longitude;
+				document.querySelectorAll('.restaurant-card').forEach(function (card) {
 					const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
 					const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
-					const restaurantVip = card.getAttribute('data-vip'); 
-	                console.log(typeof restaurantVip, "dfdsfds"); 
-					console.log( restaurantVip); 
-
+					const restaurantVip = card.getAttribute('data-vip');
+	
 					const distance = calculateDistance(userLat, userLon, restaurantLat, restaurantLon);
 					card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
-	                
+	
 					let deliveryCharge = 0;
-					if (distance > 7) {
-						if (restaurantVip =="True") {
-							deliveryCharge = 15 + distance;
-						}else {
-							deliveryCharge = distance ;
-						}
-					}
-					card.setAttribute('data-delivery-charge', deliveryCharge.toFixed(2));
 					const totalAmountSpan = document.querySelector("#cart-total-amount");
 					let cart = JSON.parse(localStorage.getItem('cart')) || [];
 					let totalAmount = 0;
 					cart.forEach(item => {
 						totalAmount += item.price * item.quantity;
 					});
+					if (totalAmount < 30) {
+						deliveryCharge = distance * 1; 
+					} else if (distance > 7) {
+						if (restaurantVip === "True") {
+							deliveryCharge = 15 + distance;
+						} else {
+							deliveryCharge = distance;
+						}
+					}
+					card.setAttribute('data-delivery-charge', deliveryCharge.toFixed(2));
 					totalAmount += deliveryCharge;
 					$('#cart-items .dcharge').text(`Delivery Charge: NZ$${deliveryCharge.toFixed(2)}`);
 					$(`#cart-items .dtotal`).text(`Total: NZ$${totalAmount.toFixed(2)}`);
-					totalAmountSpan.textContent = `NZ$${totalAmount.toFixed(2)}`; 
+					totalAmountSpan.textContent = `NZ$${totalAmount.toFixed(2)}`;
 				});
 			});
 		} else {
 			console.error("Geolocation is not supported by this browser.");
 		}
-		
 	}
 	
 	document.addEventListener('DOMContentLoaded', displayDistances);
-	
+		
 </script>
 <script>
 	document.addEventListener('DOMContentLoaded', function() {
