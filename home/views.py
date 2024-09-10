@@ -20,6 +20,9 @@ from random import randint
 from django.contrib.auth.hashers import make_password
 from django.db.models import Sum,Avg
 from .forms import ProfileForm
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+
 import threading
 
 
@@ -500,3 +503,18 @@ def profile(request):
         return render (request , 'ui/profile.html',{'user':request.user,'form':form})
     else:
        return HttpResponse('you are not authorized to access this page')
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important to keep the user logged in
+            messages.success(request, 'Your password was updated successfully!')
+            return redirect('home:profile')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(user=request.user)
+    
+    return render(request, 'ui/profile.html', {'form': form})
