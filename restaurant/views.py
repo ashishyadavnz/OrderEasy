@@ -42,7 +42,7 @@ def restaurant(request, cuisine_slug=None):
                 Cos(Radians(F('longitude')) - Radians(user_long)) +
                 Sin(Radians(user_lat)) * Sin(Radians(F('latitude')))
             )
-        ).filter(distance__lte=15).order_by('distance').distinct()
+        ).order_by('distance').distinct()
     return render(request, 'ui/restaurant.html', {'restaurants': restaurants,'cat':cat,'user_address':user_address})
   
 def generate_time_slots(start_time, end_time, interval=60):
@@ -57,6 +57,7 @@ def restaurantCard(request, slug, category=None):
     restaurant = Restaurant.objects.get(slug=slug)
     categories = Category.objects.filter(status='Active')
     fooditems = FoodItem.objects.filter(restaurant=restaurant, status="Active")
+    user_address = request.session.get('user_address',None)
     if category:
         fooditems = fooditems.filter(category__slug=category)
     start_time = datetime.datetime.combine(datetime.datetime.today(), restaurant.start) if restaurant.start else None
@@ -94,7 +95,8 @@ def restaurantCard(request, slug, category=None):
         'restaurant': restaurant,
         'category': categories,
         'fooditems': fooditems,
-        'time_slots': time_slots
+        'time_slots': time_slots,
+        'user_address':user_address
     }
     return render(request, 'ui/restaurants-card.html', context)
   

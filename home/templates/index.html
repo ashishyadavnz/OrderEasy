@@ -107,17 +107,17 @@
 					<div class="d-flex align-items-center ">
 						{% if user_address %}
 						<div class="d-flex align-items-center">
-							<div class="mx-3 px-3 fs-3 border rounded-3 d-flex align-items-center ">
-								<i class="fa-solid fa-location-dot me-2"></i>
+							<div class="mx-3 px-5 fs-4 border border-warning	 rounded-3 d-flex align-items-center ">
+								<i class="fa-solid fa-location-dot me-2 text-danger"></i>
 								<span>{{user_address.add}}</span>
 							</div>
 						</div>
 						{% endif %}
 						{% if request.user and request.user.role == 'Owner' %}
 						{% else %}
-							<div class="extras bag">
+							<div class="extras bag p">
 								<a href="javascript:void(0)" id="desktop-menu" class="menu-btn p-2">
-									<i class="fa-solid fa-bag-shopping">&nbsp;(<span id="cart-total-amount"></span>)</i>
+									<i class="fa-solid fa-bag-shopping px-2">&nbsp;( <span id="cart-total-amount"></span> )</i>
 								</a>							
 								<!-- Cart Section -->
 								<div id="cart-section" class="cart-sidebar">

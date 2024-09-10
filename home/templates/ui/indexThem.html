@@ -14,13 +14,13 @@
 						<p>Order from best restaurant in your city</p>
 						<p>Enter Your Address</p>
 						<div class="nice-select-one">
-							<form id="location-form" method="post" action="{% url "restaurant:restaurant" %}">
+							<form class="d-flex align-items-center w-md-80" id="location-form" method="post" action="{% url "restaurant:restaurant" %}">
 								{% csrf_token %}
-								<input type="text" id="location-input" name="location" class="form-control-2" placeholder="Enter your address...">
+								<input required type="text" id="location-input" name="location" class="form-control" placeholder="Enter your address...">
 								<input type="hidden" id="address" name="address">
 								<input type="hidden" id="latitude" name="latitude">
 								<input type="hidden" id="longitude" name="longitude">
-								<button type="submit" class="d-none">Submit</button>
+								<button type="submit" class="btn  button-2 ms-2 lh-lg">Search</button>
 							</form>
 							{% comment %} <select class="nice-select Advice">
 								{% for rs in restaurants  %}  
@@ -430,9 +430,8 @@
 			document.getElementById('address').value = address;
             document.getElementById('latitude').value = latitude;
             document.getElementById('longitude').value = longitude;
-            document.getElementById('location-form').submit();
-			//var restaurantUrl =`{% url "restaurant:restaurant" %}?address=${encodeURIComponent(address)}&lat=${latitude}&lng=${longitude}`
-            //window.location.href = restaurantUrl;
+            //document.getElementById('location-form').submit();
+			
 		});
 	}
 	google.maps.event.addDomListener(window, 'load', initAutocomplete);
