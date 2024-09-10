@@ -105,14 +105,14 @@
                             <div class="d-flex align-items-center">
                                 <div class="user-img  bg-white rounded-circle position-relative">
                                     <img id="profilePreview" class="user-image" src="{% if user.image %}{{user.image.url}}{% else %}{% static 'images/order-easy.png' %}{% endif %}" alt="user photo">
-                                    <button class="bottom-0 end-0 position-absolute rounded-circle p-2 lh-1 button-2">
+                                    <button type="button" class="bottom-0 end-0 position-absolute rounded-circle p-2 lh-1 button-2">
                                         <label  for="id_image"><i class="fa-solid fa-edit"></i></label>
                                         <input type="file" id="id_image" name="image" style="display: none;">
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <button class="position-absolute z-3 edit-btn rounded-circle p-2 lh-1 button-2">
+                        <button type="button" class="position-absolute z-3 edit-btn rounded-circle p-2 lh-1 button-2">
                             <label for="id_cover"><i class="fa-solid fa-edit"></i></label>
                             <input type="file" id="id_cover" name="cover" style="display: none;">
                         </button>
