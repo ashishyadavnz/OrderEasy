@@ -508,6 +508,12 @@ border: 1px solid #ccc;
 border-radius: 4px;
 transition: border-color 0.3s ease;
 }
+.form-control-2{
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+}
 .form-control:focus {
 border-color: #F29F05;
 }

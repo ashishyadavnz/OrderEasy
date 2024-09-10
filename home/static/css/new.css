@@ -363,7 +363,7 @@ header {
 /*------------- button end --------*/
 .bag i {
     background-color: white;
-    width: 155px;
+    /* width: 155px; */
     height: 40px;
     align-items: center;
     justify-content: center;
