@@ -21,6 +21,7 @@ urlpatterns = [
         path('reset-password/<int:user_id>/', views.reset_password, name='reset_password'),
         path('<slug:slug>/submit-feedback/', views.submit_feedback, name='submit_feedback'),
         path('profile/', views.profile, name='profile'),
+        path('change-password/', views.change_password, name='change_password'),
         path('<str:slug>/', views.page_detail, name='page_detail'),
         path('', views.home, name='home-page'),   
 ]
