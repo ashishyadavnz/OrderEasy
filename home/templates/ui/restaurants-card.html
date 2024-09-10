@@ -172,11 +172,11 @@
 													<b><span class="text-danger">Closed</span></b>
 												{% endif %}
 											</span>
-											{% if restaurant.lowest_price %}
+											{% comment %} {% if restaurant.lowest_price %}
 											<p><strong>Delivery starts from:</strong> NZ${{ restaurant.lowest_price }}</p>
 											{% else %}
 											<p><strong>Delivery starts from:</strong>0NZ$</p>
-											{% endif %}
+											{% endif %} {% endcomment %}
 											<p class="distance">Distance: Calculating...</p>
 										</div>
 										</div>
@@ -695,11 +695,9 @@
 						}
 					}
 					card.setAttribute('data-delivery-charge', deliveryCharge.toFixed(2));
-
 					const totalAmountSpan = document.querySelector("#cart-total-amount");
 					let cart = JSON.parse(localStorage.getItem('cart')) || [];
 					let totalAmount = 0;
-
 					cart.forEach(item => {
 						totalAmount += item.price * item.quantity;
 					});

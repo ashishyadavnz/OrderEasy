@@ -107,9 +107,12 @@
 						{% if request.user and request.user.role == 'Owner' %}
 						{% else %}
 							<div class="extras bag">
+								{% if request.resolver_match.url_name == 'restaurant-card' %}
 								<a href="javascript:void(0)" id="desktop-menu" class="menu-btn p-2">
 									<i class="fa-solid fa-bag-shopping">&nbsp;(<span id="cart-total-amount"></span>)</i>
-								</a>							
+								</a>
+								{% endif %}
+						
 								<!-- Cart Section -->
 								<div id="cart-section" class="cart-sidebar">
 									<div class="cart-header">

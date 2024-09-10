@@ -9,11 +9,13 @@
     
     <ul style="font-size: 16px; padding-left: 20px;">
         <li style="margin-bottom: 10px;"><strong>Order ID:</strong> {{ order.orderid }}</li>
+        <li style="margin-bottom: 10px;"><strong>Restaurant Name:</strong> {{ order.restaurant.title }}</li>
+        <li style="margin-bottom: 10px;"><strong>Order Type:</strong> {{ order.otype }}</li>
         <li style="margin-bottom: 10px;"><strong>Total Paid Amount:</strong> <span style="color: #d9534f;">${{ order.total|floatformat:2 }}</span></li>
         <li style="margin-bottom: 10px;"><strong>Delivery Address:</strong> {{ order.address }}</li>
+
     </ul>
 
-    <p style="font-size: 16px; color: #555;">We will notify you once your order is on the way.</p>
 
     <p style="font-size: 16px; text-align: center; margin-top: 20px;">Thank you for choosing ORDER EASY!</p>
 

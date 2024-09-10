@@ -64,6 +64,18 @@ def restaurantCard(request, slug, category=None):
             cd.user = user
             cd.time = time
             cd.save()
+       
+            owner_email = restaurant.email
+            owner_subject = "New Table Reservation at Your Restaurant"
+            owner_message = f"Dear {restaurant.owner.username},\n\nYou have received a new table reservation.\n\nReservation Details:\nName: {cd.name}\nPhone: {cd.phone}\nEmail: {cd.email}\nDate: {cd.date}\nTime: {cd.time}\nNumber of People: {cd.member}\n\nThank you!"
+            custom_emailmessage(owner_subject, owner_message, owner_email)
+
+            # Email to the customer
+            customer_email = cd.email
+            customer_subject = "Table Reservation Confirmation"
+            customer_message = f"Dear {cd.name},\n\nThank you for your reservation at {restaurant.title}.\n\nReservation Details:\nDate: {cd.date}\nTime: {cd.time}\nNumber of People: {cd.member}\n\nWe look forward to hosting you!\n\nBest regards,\n{restaurant.title} Team"
+            custom_emailmessage(customer_subject, customer_message, customer_email)
+
             messages.success(request, "Your table reservation has been successfully made!")
             return redirect('restaurant:restaurant-card', slug=slug)
         else:

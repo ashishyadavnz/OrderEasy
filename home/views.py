@@ -174,6 +174,8 @@ def checkout(request):
                 'order': odr,
                 'url': request.META.get('HTTP_REFERER')
             })
+            to_email = odr.email
+            print(to_email)
             subject = "Order Confirmation"
             threading.Thread(
                 target=custom_emailmessage,
