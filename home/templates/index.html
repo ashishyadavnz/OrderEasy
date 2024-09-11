@@ -106,12 +106,26 @@
 				<div id="web" class="d-flex justify-content-between align-items-center" >
 					<div class="d-flex align-items-center ">
 						{% if user_address %}
-						<div class="d-flex align-items-center">
+						<!-- <div class="d-flex align-items-center">
 							<div class="mx-3 px-5 fs-4 border border-warning	 rounded-3 d-flex align-items-center ">
 								<i class="fa-solid fa-location-dot me-2 text-danger"></i>
 								<span>{{user_address.add}}</span>
 							</div>
-						</div>
+						</div> -->
+						<form class="d-flex align-items-center w-md-80" id="location-form-2" method="post" action="{% url 'restaurant:restaurant' %}">
+							{% csrf_token %}
+							<!-- <div class="d-flex align-items-center"> -->
+								<div class="input-group">
+									<span class="input-group-text mt-2 bg-white" id="basic-addon1">
+										<i class="fa-solid fa-location-dot text-danger"></i>
+									</span>
+									<input required type="text" id="location-input-2" name="location" value="{{ user_address.add }}" class="form-control me-5 mt-2" placeholder="Enter your address...">
+								</div>
+							<!-- </div> -->
+							<input type="hidden" id="address-2" name="address">
+							<input type="hidden" id="latitude-2" name="latitude">
+							<input type="hidden" id="longitude-2" name="longitude">
+						</form>
 						{% endif %}
 						{% if request.user and request.user.role == 'Owner' %}
 						{% else %}
@@ -157,9 +171,9 @@
 						
 						<div class="bag">
 							{% if user.is_authenticated %}
-								<a href="{% url 'home:logout' %}" class="button button-2">Logout</a>
+								<a href="{% url 'home:logout' %}" class="button button-2 text-nowrap">Logout</a>
 							{% else %}
-								<a href="{% url 'home:login' %}" class="button button-2">Sign In</a>
+								<a href="{% url 'home:login' %}" class="button button-2 text-nowrap">Sign In</a>
 							{% endif %}
 						</div>
 					</div>
@@ -589,13 +603,19 @@
 			Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * 
 			Math.sin(dLon / 2) * Math.sin(dLon / 2); 
 		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-		return R * c; 
+		return R * c; ''
 	}
 	function displayDistances() {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function(position) {
-				const userLat = position.coords.latitude;
-				const userLon = position.coords.longitude;
+				let userLat = position.coords.latitude;
+				let userLon = position.coords.longitude;
+				const userAddress = {{ user_address|default:"null" |safe }};
+				console.log("userAddress:", userAddress);
+				if(userAddress){
+					userLat = userAddress.lat
+					userLon = userAddress.long;
+				}
 				console.log(userLat, userLon, "aaaaa")
 				document.querySelectorAll('.restaurant-card').forEach(function(card) {
 					const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
