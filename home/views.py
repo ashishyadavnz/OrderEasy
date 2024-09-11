@@ -157,7 +157,6 @@ def checkout(request):
             odr.pmethod = payment_method
             odr.save()
             
-            # email send to owner
             message = loader.render_to_string('email/order_owner.html', {
                 'restaurant_owner': odr.restaurant.owner,
                 'order': odr,

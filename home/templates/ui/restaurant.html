@@ -113,7 +113,9 @@
 										{% else %}
 										<p><strong>Delivery starts from:</strong>  NZ$ 0</p>
 										{% endif %} {% endcomment %}
-										<p class="distance">Distance: Calculating...</p> 
+										<p class="distance">
+											Distance: Calculating...
+										</p> 
 									</div>
 								</div>
 							</div>
@@ -167,4 +169,31 @@
     <div class="bsl-popup__content bsl-popup__content-help"></div>
   </div>
 </div>
+{% endblock %}
+{% block script_js %}
+<script>
+	function initAutocomplete() {
+		var input = document.getElementById('location-input-2');
+		var autocomplete = new google.maps.places.Autocomplete(input);
+		autocomplete.setFields(['address_components', 'geometry', 'name']);
+		autocomplete.addListener('place_changed', function () {
+			var place = autocomplete.getPlace();
+			console.log("Selected Place: ", place);
+			var address = place.name;
+			var latitude = place.geometry.location.lat();
+			var longitude = place.geometry.location.lng();
+			console.log( address,"dsfdsf");
+			console.log(latitude,"dsfdsf");
+			console.log(longitude,"dsfdsf");
+			console.log(place,"dsfdsf");
+			console.log(place.formatted_address,"dsfdsf");
+			document.getElementById('address-2').value = address;
+            document.getElementById('latitude-2').value = latitude;
+            document.getElementById('longitude-2').value = longitude;
+            document.getElementById('location-form-2').submit();
+			
+		});
+	}
+	google.maps.event.addDomListener(window, 'load', initAutocomplete);
+</script>
 {% endblock %}
