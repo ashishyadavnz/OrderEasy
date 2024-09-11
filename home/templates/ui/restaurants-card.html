@@ -11,6 +11,7 @@
 		background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');
 	}
 </style>
+
 <div class="menu-layer">
   <div class="cart-overlay">
 	<div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: none;">
@@ -678,8 +679,14 @@
 	function displayDistances() {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function (position) {
-				const userLat = position.coords.latitude;
-				const userLon = position.coords.longitude;
+				let userLat =  position.coords.latitude;
+				let userLon =  position.coords.longitude;
+				const userAddress = {{ user_address|default:"null" |safe }};
+				console.log("userAddress:", userAddress);
+				if(userAddress){
+					userLat = userAddress.lat
+					userLon = userAddress.long;
+				}
 				document.querySelectorAll('.restaurant-card').forEach(function (card) {
 					const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
 					const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
@@ -1028,6 +1035,25 @@ window.onclick = function(event) {
 	}
 	google.maps.event.addDomListener(window, 'load', initAutocomplete);
 </script>
+<!-- <script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const modalBackdrop = document.getElementById('cart-backdrop');
+		const menuButton = document.getElementById('desktop-menu');
+	
+		if (menuButton) {
+			menuButton.addEventListener('click', function() {
+				if (modalBackdrop.classList.contains('show')) {
+					modalBackdrop.classList.remove('show');
+					modalBackdrop.style.display = 'none'; 
+				} else {
+					modalBackdrop.classList.add('show');
+					modalBackdrop.style.display = 'block'; 
+				}
+			});
+		}
+	});
+	</script> -->
+	
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 {% endblock %}
