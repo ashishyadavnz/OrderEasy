@@ -140,6 +140,7 @@ def checkout(request):
             odr = Order.objects.get(id=odrid)
             if not odr.user:
                 user = User.objects.filter(username=phone).last()
+                print(user)
                 if not user:
                     user = User.objects.create_user(username=phone, password=str(first_name)[:3]+"@123", email=email, mobile=int(phone))
                     user.guest = True
@@ -173,7 +174,8 @@ def checkout(request):
             message = loader.render_to_string('email/order_confirm.html', {
                 'first_name': first_name,
                 'order': odr,
-                'url': request.META.get('HTTP_REFERER')
+                'url': request.META.get('HTTP_REFERER'),
+                'cart_items': request.session.get('cart_items', [])
             })
             to_email = odr.email
             print(to_email)
