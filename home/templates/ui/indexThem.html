@@ -63,18 +63,59 @@
 	</section>
 	{% if request.user and request.user.role == 'Owner'  %}
 	{% else %}
+	  <!-- <section>
+			<div id="order_cat" class="carousel slide" data-bs-ride="carousel">
+				<div class="container">
+					<h4>Order now your favourite food &amp; drinks</h4>
+					<div class="carousel-inner">
+						{% for cuisine in cuisines %}
+						{% if forloop.counter0|divisibleby:5 %}
+						<div class="carousel-item {% if forloop.first %}active{% endif %}">
+							<div class="row mx-0">
+								{% endif %}
+								<div class="col-md-2 m-3">
+									<div class="item" >
+										<a href="{% url 'restaurant:restaurants-cuisine' cuisine.slug %}">
+											<div class="img-wrap">
+												{% if cuisine.image %}
+												<img src="{{ cuisine.image.url }}" alt="{{ cuisine.title }}" style="width: 70px; height: 70px; border-radius: 50%;">
+												{% else %}
+												<img src="/path/to/default/image.svg" alt="Default Image">
+												{% endif %}
+											</div>
+											<h5>{{ cuisine.title }}</h5>
+										</a>
+									</div>
+								</div>
+								{% if forloop.counter|divisibleby:5 or forloop.last %}
+							</div>
+						</div>
+						{% endif %}
+						{% endfor %}
+					</div>
+					<a class="carousel-control-prev" href="#order_cat" role="button" data-bs-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Previous</span>
+					</a>
+					<a class="carousel-control-next" href="#order_cat" role="button" data-bs-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Next</span>
+					</a>
+				</div>
+			</div>
+		</section> -->
     <section>
-		<div id="order_cat" class="carousel slide" data-bs-ride="carousel">
+		<div id="order_cat" >
 			<div class="container">
-				<h3>Order now your favourite food &amp; drinks</h3>
-				<div class="carousel-inner">
+				<h4>Order now your favourite food &amp; drinks</h4>
+				<div >
 					{% for cuisine in cuisines %}
-					{% if forloop.counter0|divisibleby:5 %}
-					<div class="carousel-item {% if forloop.first %}active{% endif %}">
-						<div class="row mx-0">
-							{% endif %}
+					<!-- {% if forloop.counter0|divisibleby:5 %} -->
+					<div >
+						<div class="row ">
+							<!-- {% endif %} -->
 							<div class="col-md-2 m-3">
-								<div class="item">
+								<div class="item" >
 									<a href="{% url 'restaurant:restaurants-cuisine' cuisine.slug %}">
 										<div class="img-wrap">
 											{% if cuisine.image %}
@@ -83,24 +124,16 @@
 											<img src="/path/to/default/image.svg" alt="Default Image">
 											{% endif %}
 										</div>
-										<h4>{{ cuisine.title }}</h4>
+										<p>{{ cuisine.title }}</p>
 									</a>
 								</div>
 							</div>
-							{% if forloop.counter|divisibleby:5 or forloop.last %}
+							<!-- {% if forloop.counter|divisibleby:5 or forloop.last %} -->
 						</div>
 					</div>
-					{% endif %}
+					<!-- {% endif %} -->
 					{% endfor %}
 				</div>
-				<a class="carousel-control-prev" href="#order_cat" role="button" data-bs-slide="prev">
-					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-					<span class="visually-hidden">Previous</span>
-				</a>
-				<a class="carousel-control-next" href="#order_cat" role="button" data-bs-slide="next">
-					<span class="carousel-control-next-icon" aria-hidden="true"></span>
-					<span class="visually-hidden">Next</span>
-				</a>
 			</div>
 		</div>
 	</section>
@@ -195,7 +228,7 @@
 				<div class="col-lg-6 offset-lg-1" data-aos="fade-up" data-aos-delay="300" data-aos-duration="400">
 					<div class="food-content-section">
 						<h2>Food from your favorite restaurants to your table</h2>
-								<p>Order Easy, a New Zealand-owned company, provides a wide selection of budget-friendly takeaway meals. Their secure online ordering system makes it quick and simple to get your food, all while ensuring you receive the best prices available.</p>
+								<p>Order Easy, a New Zealand-owned company, provides a wide selection of budget-friendly takeaway meals. Our secure online ordering system makes it quick and simple to get your food, all while ensuring you receive the best prices available.</p>
 								<a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a>
 					</div>
 				</div>
