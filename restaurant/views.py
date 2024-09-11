@@ -242,8 +242,7 @@ def add_to_cart(request):
         quantity = int(request.POST.get('quantity'))
         order_type = request.POST.get('order_type', 'Delivery')
         restaurant_id = request.POST.get('restaurant_id')  
-  # Fetch order type as well
-
+  
         cart = request.session.get('cart', [])
         existing_item = next((item for item in cart if item['id'] == menu_id), None)
         if existing_item:
@@ -258,7 +257,7 @@ def add_to_cart(request):
                 'image': menu_image,
                 'quantity': quantity,
                 'restaurant_id': restaurant_id, 
-                 ' order_type': order_type, 
+                ' order_type': order_type, 
 
             })
 
