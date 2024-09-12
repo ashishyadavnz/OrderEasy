@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from django.db.models import F
 from django.db.models.functions import ACos, Cos, Radians, Sin
 from home.forms import *
+from django.views.decorators.csrf import csrf_exempt
 import pytz
 
 # Create your views here.
@@ -230,3 +231,39 @@ def validate_voucher(request):
             return JsonResponse({'status': 'error', 'message': 'Invalid voucher code.'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+@csrf_exempt
+def add_to_cart(request):
+    if request.method == 'POST':
+        menu_id = request.POST.get('menu_id')
+        menu_title = request.POST.get('menu_title')
+        menu_price = float(request.POST.get('menu_price'))
+        menu_image = request.POST.get('menu_image')
+        quantity = int(request.POST.get('quantity'))
+        order_type = request.POST.get('order_type', 'Delivery')
+        restaurant_id = request.POST.get('restaurant_id')  
+  # Fetch order type as well
+
+        cart = request.session.get('cart', [])
+        existing_item = next((item for item in cart if item['id'] == menu_id), None)
+        if existing_item:
+            existing_item['quantity'] += quantity  
+            if existing_item['quantity'] <= 0:  
+                cart.remove(existing_item)
+        else:
+            cart.append({
+                'id': menu_id,
+                'title': menu_title,
+                'price': menu_price,
+                'image': menu_image,
+                'quantity': quantity,
+                'restaurant_id': restaurant_id, 
+                 ' order_type': order_type, 
+
+            })
+
+        request.session['cart'] = cart
+        request.session.modified = True
+        return JsonResponse({'status': 'success', 'cart_items': cart})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})

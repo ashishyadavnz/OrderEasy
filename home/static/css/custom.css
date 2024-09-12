@@ -1148,3 +1148,22 @@ border: 1px solid #CFCFCF;
     top: 10px;
     right: 10px;
 }
+.cart-backdrop {
+    display: none; 
+    --bs-backdrop-zindex: 1050;
+    --bs-backdrop-bg: #000;
+    --bs-backdrop-opacity: 0.5;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 600;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bs-backdrop-bg);
+}
+
+.cart-backdrop.show {
+    display: block;
+    opacity: var(--bs-backdrop-opacity);
+
+}

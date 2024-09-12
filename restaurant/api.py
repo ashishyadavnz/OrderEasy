@@ -66,6 +66,6 @@ class CartViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.filter(status='Active').order_by("-id")
     serializer_class = OrderSerializer
-    filterset_fields = ['voucher','cart','name','email','phone','otype','status']
+    filterset_fields = ['voucher','email','phone','otype','status']
     search_fields=['voucher__name','cart__fooditem__title','name','email','phone']
     http_method_names = ['get', 'post', 'patch']
