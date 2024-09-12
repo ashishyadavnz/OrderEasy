@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
@@ -524,6 +524,8 @@ def change_password(request):
     return render(request, 'ui/profile.html', {'form': form})
 
 def myorder(request):
+    if request.user.role != 'Customer':
+        return HttpResponseForbidden("You are not allowed to access this page.")
     orders_list = Order.objects.filter(user=request.user).order_by('-id')
     paginator = Paginator(orders_list, 6) 
     page_number = request.GET.get('page') 
