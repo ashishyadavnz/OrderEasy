@@ -10,7 +10,24 @@
 		padding-bottom: 30px !important;
 		background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');
 	}
+	.cart-drop.show {
+		opacity: var(--bs-backdrop-opacity);
+	}
+	.cart-drop {
+		--bs-backdrop-zindex: 1050;
+		--bs-backdrop-bg: #000;
+		--bs-backdrop-opacity: 0.5;
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 500;
+		width: 100vw;
+		height: 100vh;
+		background-color: var(--bs-backdrop-bg);
+		display:none;
+	}
 </style>
+<div class="cart-drop fade show"></div>
 
 <div class="menu-layer">
   <div class="cart-overlay">
@@ -544,11 +561,11 @@
 													<div class="cart-actions">
 														<input type="number" class="qty-input" value="1" min="1" hidden>
 														<input type="hidden" class="carditem{{item.id}}">
-														{% comment %} {% if restaurant.start|is_restaurant_open:restaurant.end %} {% endcomment %}
+														{% if restaurant.start|is_restaurant_open:restaurant.end %}
 														<button class="btn add-to-cart" style="background-color:#F29F05; color: white;" data-id="{{ item.id }}" data-title="{{ item.title }}" data-image="{% if item.image %}{{ item.image.url }}{% endif %}" data-price="{{ item.price }}">Add to Cart</button>
-                                                        {% comment %} {% else %} {% endcomment %}
-														{% comment %} <button class="btn btn-secondary " data-id="{{ item.id }}" data-title="{{ item.title }}" data-image="{% if item.image %}{{ item.image.url }}{% endif %}" data-price="{{ item.price }}" disabled>Closed</button> {% endcomment %}
-														{% comment %} {% endif %} {% endcomment %}
+                                                        {% else %}
+														<button class="btn btn-secondary " data-id="{{ item.id }}" data-title="{{ item.title }}" data-image="{% if item.image %}{{ item.image.url }}{% endif %}" data-price="{{ item.price }}" disabled>Closed</button>
+														{% endif %}
 														<button class="btn btn-danger decrease-qty d-none" data-id="{{ item.id }}">-</button>
 														<span class="item-quantity d-none" data-id="{{ item.id }}" style="margin-left: 10px;">Qty: 0</span> 
 														<button class="btn btn-danger increase-qty d-none" data-id="{{ item.id }}">+</button>
@@ -781,11 +798,11 @@
             const quantityInput = this.closest('.card-body').querySelector('.qty-input');
             const quantity = parseInt(quantityInput.value);
             const existingItem = cart.find(item => item.id === menuId);
-             if (existingItem) {
-                 existingItem.quantity += quantity;
-             } else {
-                 cart.push({ id: menuId, title: menuTitle, price: menuPrice, image: menuImage, quantity });
-             }
+            // if (existingItem) {
+            //     existingItem.quantity += quantity;
+            // } else {
+            //     cart.push({ id: menuId, title: menuTitle, price: menuPrice, image: menuImage, quantity });
+            // }
 			$.ajax({
 			url: '{% url "restaurant:add_to_cart" %}',
 			method: 'POST',
