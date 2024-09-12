@@ -229,6 +229,10 @@ def add_to_cart(request):
         order_type = request.POST['order_type']
         rdistance = request.POST['rdistance']
         cart = request.session.get('cart', [])
+        discount = request.session.get('discount', None)
+        voucher = None
+        if discount:
+            voucher = discount
         if len(cart) > 0:
             if restaurant_id != cart[0]['restaurant']:
                 return JsonResponse({'status': 'rchange', 'message': 'Restaurant changed.'})
@@ -237,10 +241,6 @@ def add_to_cart(request):
                 items['quantity'] += 1
             else:
                 item_obj = FoodItem.objects.get(id=item_id)
-                discount = request.session.get('discount', None)
-                voucher = None
-                if discount:
-                    voucher = discount
                 cart.append({
                     'item_id': item_id,
                     'title': item_obj.title,
@@ -254,10 +254,6 @@ def add_to_cart(request):
                 })
         else:
             item_obj = FoodItem.objects.get(id=item_id)
-            discount = request.session.get('discount', None)
-            voucher = None
-            if discount:
-                voucher = discount
             cart.append({
                 'item_id': item_id,
                 'title': item_obj.title,
@@ -279,6 +275,10 @@ def add_to_cart(request):
             voucher = discount
         return JsonResponse({'status': 'success', 'cart': cart, 'type':cart[0]['order_type'] if len(cart)>0 else 'Delivery', 'distance':cart[0]['rdistance'] if len(cart)>0 else 0, 'voucher':voucher})
     if request.method == 'PATCH':
+        discount = request.session.get('discount', None)
+        voucher = None
+        if discount:
+            voucher = discount
         patch_data = QueryDict(request.body)
         item_id = patch_data.get('item_id')
         patch_type = patch_data.get('type')

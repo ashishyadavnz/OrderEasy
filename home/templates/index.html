@@ -104,7 +104,7 @@
 									<a href="{% url 'home:myorder' %}">My Orders</a>
 								</li>
 							{% endif %}
-
+							
 						</ul>
 					</nav>
 				</div>
@@ -438,34 +438,6 @@
 		</div>
 		{% endif %}
 	</header>
-	<div id="cart-section" class="cart-sidebar">
-		<div class="cart-header">
-			<h2>My Cart</h2>
-			<button id="close-cart" class="btn btn-info">Close</button>
-		</div>
-		<form id="cart-form" method="POST" action="{% url 'home:checkout' %}">
-			{% csrf_token %}
-			<div id="cart-content">
-				<div id="cart-items"></div>
-				<input type="hidden" id="order-type-input" name="order_type" value="Delivery">                                
-				<input type="hidden" id="restaurent-input" name="restaurent_id">                                
-				<input type="hidden" id="dcharge" name="charge">      
-				<input type="hidden" id="voucher_id" name="voucher_id">                          
-				<div class="omc-sv">
-					<div class="voucher-code voucher-section mt-4">
-						<input type="text" name="VoucherCode" id="voucher-code"
-							class="form-control om-voucher-code" placeholder="Enter voucher code" data-sid="1166">
-						<button class="btn add-voucher" id="apply-voucher">Add</button>
-					</div>
-				</div>
-				<input type="hidden" name="cart_data" id="cart-data">    
-				<div class="cart-footer">
-					<p id="total-amount"></p>
-					<button type="submit" id="checkout" name="cart_checkout" class="btn btn-success">Checkout</button>
-				</div>
-			</div>
-		</form>
-	</div>
 	{% block content %}
 
 	{% endblock %}
@@ -590,10 +562,9 @@
 			var cart = res['cart'];
 			cartsection.find('.cart-items .cart-item').remove();
 			for (let i = 0; i < cart.length; i++) {
-				cartsection.find('input[name="order_type"]').val(cart[i]['order_type']);
-				cartsection.find('input[name="restaurent_id"]').val(cart[i]['restaurent_id']);
-				cartsection.find('input[name="cart_data"]').val(cart[i]['cart']);
-				cartsection.find('input[name="voucher_id"]').val(cart[i]['voucher_id']);
+				cartsection.find('input[name="order_type"]').val(cart[0]['order_type']);
+				cartsection.find('input[name="restaurent_id"]').val(cart[0]['restaurant']);
+				cartsection.find('input[name="cart_data"]').val(cart[0]['cart']);
 				var html = `
 					<div class="cart-item" data-id="{{item.id}}"><div class="container">
 						<div class="row">
@@ -869,16 +840,6 @@
 				}
 			});
 		}		
-	</script>
-	<script>
-		document.getElementById('desktop-menu').addEventListener('click', function() {
-			var cartDiv = document.querySelector('.cart-drop');
-			cartDiv.style.display = 'block'; 
-		});
-		document.getElementById('close-cart').addEventListener('click', function() {
-			var cartDiv = document.querySelector('.cart-drop');
-			cartDiv.style.display = 'none'; 
-		});
 	</script>
 	
 
