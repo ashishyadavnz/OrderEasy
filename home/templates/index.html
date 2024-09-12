@@ -137,7 +137,7 @@
 							<div class="extras bag">
 								{% if request.resolver_match.url_name == 'restaurant-card' %}
 								<a href="javascript:void(0)" id="desktop-menu" class="menu-btn p-2">
-									<i class="fa-solid fa-bag-shopping px-2">&nbsp;(<span id="cart-total-amount"></span>)</i>
+									<i class="fa-solid fa-bag-shopping px-2">&nbsp;(<span id="cart-total-amount">NZ$ 0</span>)</i>
 								</a>
 								{% endif %}
 								
@@ -633,6 +633,7 @@
 				</div>`
 				$('#cart-section').find(".price-div").before(voucher_html);
 			}
+			$("#cart-total-amount").text('NZ$ '+final)
 		}
 	</script>
 	<script>
