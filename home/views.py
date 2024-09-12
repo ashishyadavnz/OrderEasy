@@ -513,7 +513,7 @@ def change_password(request):
         form = PasswordChangeForm(user=request.user, data=request.POST)
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user)  # Important to keep the user logged in
+            update_session_auth_hash(request, user)  
             messages.success(request, 'Your password was updated successfully!')
             return redirect('home:profile')
         else:
@@ -522,3 +522,9 @@ def change_password(request):
         form = PasswordChangeForm(user=request.user)
     
     return render(request, 'ui/profile.html', {'form': form})
+
+# @login_required
+def myorder(request):
+    # Fetch orders only for the logged-in user
+    orders = Order.objects.filter(user=request.user).order_by('-id')  # Orders in reverse chronological order
+    return render(request, 'ui/myorder.html', {'orders': orders})

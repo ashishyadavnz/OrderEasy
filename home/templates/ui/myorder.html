@@ -1,0 +1,43 @@
+{% extends "index.html" %}
+{% load custom_filter %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <h2>My Orders</h2>
+
+    {% if orders %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Restaurant</th>
+                    <th>Total</th>
+                    <th>Order Type</th>
+                    <th>Payment Method</th>
+                    <th>Time</th>
+                    <th>Address</th>
+                    <th>Instructions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.orderid }}</td>
+                    <td>{{ order.restaurant.name }}</td>
+                    <td>{{ order.total }}</td>
+                    <td>{{ order.get_otype_display }}</td>
+                    <td>{{ order.get_pmethod_display }}</td>
+                    <td>{{ order.time }}</td>
+                    <td>{{ order.address }}</td>
+                    <td>{{ order.instruction }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You have no previous orders.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

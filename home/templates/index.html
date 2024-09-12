@@ -99,7 +99,12 @@
 									<a href="{% url  'home:profile'  %}">Profile</a>
 								</li>
 							{% endif %}
-							
+							{% if request.user.is_authenticated %}
+								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+									<a href="{% url 'home:myorder' %}">My Orders</a>
+								</li>
+							{% endif %}
+
 						</ul>
 					</nav>
 				</div>
