@@ -10,6 +10,7 @@ from django.db.models import F
 from django.db.models.functions import ACos, Cos, Radians, Sin
 from home.forms import *
 from django.views.decorators.csrf import csrf_exempt
+from django.http import QueryDict
 import pytz
 
 # Create your views here.
@@ -55,6 +56,7 @@ def generate_time_slots(start_time, end_time, interval=60):
     return slots
 
 def restaurantCard(request, slug, category=None):
+    # request.session.clear()
     restaurant = Restaurant.objects.get(slug=slug)
     categories = Category.objects.filter(status='Active')
     fooditems = FoodItem.objects.filter(restaurant=restaurant, status="Active")
@@ -204,66 +206,91 @@ def delete_food_item(request,restro, slug):
 
 def validate_voucher(request):
     if request.method == 'POST':
-        voucher_code = request.POST.get('voucher_code')
-        total_amount = float(request.POST.get('total_amount'))
-
-        if 'applied_vouchers' in request.session and voucher_code in request.session['applied_vouchers']:
-            return JsonResponse({'status': 'error', 'message': 'This voucher has already been used.'})
-
-
-        try:
-            voucher = Voucher.objects.get(name=voucher_code)
+        code = request.POST.get('voucher_code')
+        total = float(request.POST.get('total_amount'))
+        voucher = Voucher.objects.filter(name=code).last()
+        if voucher:
             auckland_tz = pytz.timezone('Pacific/Auckland')
             if voucher.validity < timezone.now().astimezone(auckland_tz):
                 return JsonResponse({'status': 'error', 'message': 'Voucher has expired.'})
-
-            if total_amount < voucher.payment:
+            if total < voucher.payment:
                 return JsonResponse({'status': 'error', 'message': f'Order total must be at least ${voucher.payment} to apply this voucher.'})
-             
-            if 'applied_vouchers' not in request.session:
-                request.session['applied_vouchers'] = []
-            request.session['applied_vouchers'].append(voucher_code)
-            request.session.modified = True
-
-            return JsonResponse({'status': 'success', 'discount': voucher.discount, 'id':voucher.id})
-        
-        except Voucher.DoesNotExist:
+            total = total - voucher.discount
+            request.session['discount'] = {"total":total, "name":voucher.name, "discount":voucher.discount, 'id':voucher.id}
+            return JsonResponse({'status': 'success', 'discount': voucher.discount, 'id':voucher.id, 'total': total})
+        else:
             return JsonResponse({'status': 'error', 'message': 'Invalid voucher code.'})
-
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
 @csrf_exempt
 def add_to_cart(request):
     if request.method == 'POST':
-        menu_id = request.POST.get('menu_id')
-        menu_title = request.POST.get('menu_title')
-        menu_price = float(request.POST.get('menu_price'))
-        menu_image = request.POST.get('menu_image')
-        quantity = int(request.POST.get('quantity'))
-        order_type = request.POST.get('order_type', 'Delivery')
-        restaurant_id = request.POST.get('restaurant_id')  
-  # Fetch order type as well
-
+        item_id = request.POST['item_id']
+        restaurant_id = request.POST['restaurant_id']
+        order_type = request.POST['order_type']
+        rdistance = request.POST['rdistance']
         cart = request.session.get('cart', [])
-        existing_item = next((item for item in cart if item['id'] == menu_id), None)
-        if existing_item:
-            existing_item['quantity'] += quantity  
-            if existing_item['quantity'] <= 0:  
-                cart.remove(existing_item)
+        if len(cart) > 0:
+            if restaurant_id != cart[0]['restaurant']:
+                return JsonResponse({'status': 'rchange', 'message': 'Restaurant changed.'})
+            items = next((i for i in cart if i['item_id'] == item_id), None)
+            if items:
+                items['quantity'] += 1
+            else:
+                item_obj = FoodItem.objects.get(id=item_id)
+                discount = request.session.get('discount', None)
+                voucher = None
+                if discount:
+                    voucher = discount
+                cart.append({
+                    'item_id': item_id,
+                    'title': item_obj.title,
+                    'price': item_obj.price,
+                    'image': item_obj.image.url if item_obj.image.url else None,
+                    'quantity': 1,
+                    'restaurant': restaurant_id, 
+                    'order_type': order_type,
+                    'voucher': voucher,
+                    'rdistance': rdistance,
+                })
         else:
+            item_obj = FoodItem.objects.get(id=item_id)
+            discount = request.session.get('discount', None)
+            voucher = None
+            if discount:
+                voucher = discount
             cart.append({
-                'id': menu_id,
-                'title': menu_title,
-                'price': menu_price,
-                'image': menu_image,
-                'quantity': quantity,
-                'restaurant_id': restaurant_id, 
-                 ' order_type': order_type, 
-
+                'item_id': item_id,
+                'title': item_obj.title,
+                'price': item_obj.price,
+                'image': item_obj.image.url if item_obj.image.url else None,
+                'quantity': 1,
+                'restaurant': restaurant_id, 
+                'order_type': order_type,
+                'voucher': voucher,
+                'rdistance': rdistance,
             })
-
         request.session['cart'] = cart
-        request.session.modified = True
-        return JsonResponse({'status': 'success', 'cart_items': cart})
-
+        return JsonResponse({'status': 'success', 'cart': cart, 'type':order_type, 'distance':rdistance, 'voucher':voucher})
+    if request.method == 'GET':
+        cart = request.session.get('cart', [])
+        discount = request.session.get('discount', None)
+        voucher = None
+        if discount:
+            voucher = discount
+        return JsonResponse({'status': 'success', 'cart': cart, 'type':cart[0]['order_type'] if len(cart)>0 else 'Delivery', 'distance':cart[0]['rdistance'] if len(cart)>0 else 0, 'voucher':voucher})
+    if request.method == 'PATCH':
+        patch_data = QueryDict(request.body)
+        item_id = patch_data.get('item_id')
+        patch_type = patch_data.get('type')
+        cart = request.session.get('cart', [])
+        items = next((i for i in cart if i['item_id'] == item_id), None)
+        if items:
+            if patch_type == 'decrease':
+                items['quantity'] -= 1
+                if items['quantity'] <= 0:
+                    cart = [i for i in cart if i['item_id'] != item_id]
+            else:
+                items['quantity'] += 1
+        request.session['cart'] = cart
+        return JsonResponse({'status': 'success', 'cart': cart, 'type':cart[0]['order_type'] if len(cart)>0 else 'Delivery', 'distance':cart[0]['rdistance'] if len(cart)>0 else 0, 'voucher':voucher})
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
