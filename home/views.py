@@ -22,7 +22,7 @@ from django.db.models import Sum,Avg
 from .forms import ProfileForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-
+from django.core.paginator import Paginator
 import threading
 
 
@@ -523,8 +523,9 @@ def change_password(request):
     
     return render(request, 'ui/profile.html', {'form': form})
 
-# @login_required
 def myorder(request):
-    # Fetch orders only for the logged-in user
-    orders = Order.objects.filter(user=request.user).order_by('-id')  # Orders in reverse chronological order
-    return render(request, 'ui/myorder.html', {'orders': orders})
+    orders_list = Order.objects.filter(user=request.user).order_by('-id')
+    paginator = Paginator(orders_list, 6) 
+    page_number = request.GET.get('page') 
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'ui/myorder.html', {'page_obj': page_obj})
