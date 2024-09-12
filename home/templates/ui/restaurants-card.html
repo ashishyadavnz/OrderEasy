@@ -27,7 +27,6 @@
 		display:none;
 	}
 </style>
-<div class="cart-drop fade show"></div>
 
 <div class="menu-layer">
   <div class="cart-overlay">
@@ -732,7 +731,6 @@
 			success: function(res) {
 				cartupdate(res);
 			}
-			showToast();
 		});
 	})
 </script>
@@ -761,7 +759,7 @@
 		var item_id = $(this).data("id");
 		$.ajax({
 			url: '{% url "restaurant:add_to_cart" %}',
-			method: 'PATCH',
+			method: 'PATCH', 
 			contentType: 'application/x-www-form-urlencoded',
 			data: {
 				csrfmiddlewaretoken: '{{ csrf_token }}',

@@ -67,11 +67,11 @@
 	</section>
 	<!-- best-restaurants -->
 	<section class="best-restaurants gap">
-		<div class="container">
+		<div class="container-fluid px-md-4 px-2">
 			<div class="row mx-0">
 				{% if restaurants %}
 					{% for restaurant in restaurants %}
-						<div class="restaurant-card col-lg-6  mb-3" 
+						<div class="restaurant-card col-lg-4  mb-3" 
 							data-latitude="{{ restaurant.latitude }}" 
 							data-longitude="{{ restaurant.longitude }}"
 							data-id="{{ restaurant.id }}"
@@ -114,9 +114,9 @@
 										{% else %}
 										<p><strong>Delivery starts from:</strong>  NZ$ 0</p>
 										{% endif %} {% endcomment %}
-										<p class="distance">
+										{% comment %} <p class="distance">
 											Distance: Calculating...
-										</p> 
+										</p>  {% endcomment %}
 									</div>
 								</div>
 							</div>
