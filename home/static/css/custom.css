@@ -1167,3 +1167,48 @@ border: 1px solid #CFCFCF;
     opacity: var(--bs-backdrop-opacity);
 
 }
+.custom-order-card {
+    background: url('/static/images/background-3.png') 
+    no-repeat center center/cover;
+    border: 1px solid var(--theme-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.custom-order-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.custom-order-card .card-body {
+        padding: 40px;
+        border:2px solid wheat ;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 500px;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.custom-order-card .card-footer {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 0 0 10px 10px;
+    padding: 10px 20px;
+}
+
+.custom-order-card .card-text {
+    animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+

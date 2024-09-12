@@ -10,7 +10,24 @@
 		padding-bottom: 30px !important;
 		background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');
 	}
+	.cart-drop.show {
+		opacity: var(--bs-backdrop-opacity);
+	}
+	.cart-drop {
+		--bs-backdrop-zindex: 1050;
+		--bs-backdrop-bg: #000;
+		--bs-backdrop-opacity: 0.5;
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 500;
+		width: 100vw;
+		height: 100vh;
+		background-color: var(--bs-backdrop-bg);
+		display:none;
+	}
 </style>
+<div class="cart-drop fade show"></div>
 
 <div class="menu-layer">
   <div class="cart-overlay">
@@ -129,6 +146,8 @@
 											<button class="book-table-btn" id="openModal" data-bs-toggle="modal" data-bs-target="#exampleModal2">More Info</button>
 											<button type="button" id="bookTableButton" class="book-table-btn mx-1" data-bs-toggle="modal" data-bs-target="#booktable">Book A Table</button>
 											<button class="feedback-btn book-table-btn" id="openFeedbackModal">Feedback</button>
+											<button class="book-table-btn" id="openModal" data-bs-toggle="modal" data-bs-target="#exampleModal-3" hidden>More Info</button>
+
 										</div>
 									</div>
 								</div>
@@ -150,6 +169,25 @@
 								</div>
 								<button type="submit" class="btn-submit-feedback">Submit Feedback</button>
 							  </form>
+							</div>
+						</div>
+						<div class="modal fade" id="exampleModal-3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body ">
+									<div class="modal-content p-3 ">
+										<h4>Do you want to delete prvious order </h4>
+										<div class="modal-actions text-center">
+										  <button id="confirmDeleteBtn" class="btn btn-danger">Yes</button>
+										  <button id="cancelDeleteBtn" class="btn btn-secondary">No</button>
+										</div>	
+										
+									</div>
+								</div>
+							</div>
 							</div>
 						</div>
 						<!-- The Modal -->
@@ -898,7 +936,7 @@
 				'restaurant_id': document.getElementById('restaurent-input').value,
 			},
 			success: function(response) {
-				updateCartDisplay(response.cart_items); // Pass the cart items from response
+				updateCartDisplay(response.cart_items);
 				showToast();
 			},
 			error: function(xhr, status, error) {
@@ -975,86 +1013,86 @@
         }
     });
 
-    function showToast() {
-        const toastContainer = document.getElementById('toast-container');
-        toastContainer.style.display = 'block';
-        setTimeout(() => {
-            toastContainer.style.display = 'none';
-        }, 2000);
-    }
+		function showToast() {
+			const toastContainer = document.getElementById('toast-container');
+			toastContainer.style.display = 'block';
+			setTimeout(() => {
+				toastContainer.style.display = 'none';
+			}, 2000);
+		}
 	
 
-    function updateCartDisplay(cartItems = null) {
-    const cartIcon = document.querySelector("#desktop-menu i");
-    const totalAmountSpan = document.querySelector("#cart-total-amount");
-    const cartContent = document.querySelector("#cart-content #cart-items");
-    cartContent.innerHTML = "";
+		function updateCartDisplay(cartItems = null) {
+		const cartIcon = document.querySelector("#desktop-menu i");
+		const totalAmountSpan = document.querySelector("#cart-total-amount");
+		const cartContent = document.querySelector("#cart-content #cart-items");
+		cartContent.innerHTML = "";
 
-    let totalAmount = 0;
-    const items = cartItems || cart; 
-    items.forEach(item => {
-        totalAmount += item.price * item.quantity;
+		let totalAmount = 0;
+		const items = cartItems || cart; 
+		items.forEach(item => {
+			totalAmount += item.price * item.quantity;
 
-        const cartItem = document.createElement("div");
-        cartItem.classList.add("cart-item");
-        cartItem.setAttribute('data-id', item.id);
-        cartItem.innerHTML = `
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3">
-                        <img src="${item.image}" alt="${item.title}" class="cart-item-image" loading="lazy">
-                    </div>
-                    <div class="col-md-5 pt-2" style="text-align: center;">
-                        <p style="font-size:20px"><strong>${item.title}</strong></p>
-                    </div>
-                    <div class="col-md-2 pt-2" style="text-align: center;">
-                        <p style="font-size:20px"><strong>NZ$${item.price} x <span class="cart-item-quantity">${item.quantity}</span></strong></p>
-                    </div>
-                    <div class="col-md-2 float-right">
-                        <a class="btn decrease-qty" data-id="${item.id}">-</a>
-                        <a class="btn increase-qty me-2" data-id="${item.id}">+</a>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        cartContent.appendChild(cartItem);
-        
-        const itemQtySpan = document.querySelector(`.item-quantity[data-id='${item.id}']`);
-        if (itemQtySpan) {
-            itemQtySpan.textContent = `Qty: ${item.quantity}`;
-        }
-    });
+			const cartItem = document.createElement("div");
+			cartItem.classList.add("cart-item");
+			cartItem.setAttribute('data-id', item.id);
+			cartItem.innerHTML = `
+				<div class="container">
+					<div class="row">
+						<div class="col-md-3">
+							<img src="${item.image}" alt="${item.title}" class="cart-item-image" loading="lazy">
+						</div>
+						<div class="col-md-5 pt-2" style="text-align: center;">
+							<p style="font-size:20px"><strong>${item.title}</strong></p>
+						</div>
+						<div class="col-md-2 pt-2" style="text-align: center;">
+							<p style="font-size:20px"><strong>NZ$${item.price} x <span class="cart-item-quantity">${item.quantity}</span></strong></p>
+						</div>
+						<div class="col-md-2 float-right">
+							<a class="btn decrease-qty" data-id="${item.id}">-</a>
+							<a class="btn increase-qty me-2" data-id="${item.id}">+</a>
+						</div>
+					</div>
+				</div>
+			`;
+			
+			cartContent.appendChild(cartItem);
+			
+			const itemQtySpan = document.querySelector(`.item-quantity[data-id='${item.id}']`);
+			if (itemQtySpan) {
+				itemQtySpan.textContent = `Qty: ${item.quantity}`;
+			}
+		});
 
-    let dcharge = 0;
-    if (orderType === 'Delivery') {
-        const selectedRestaurantCard = document.querySelector('.restaurant-card');
-        const deliveryCharge = parseFloat(selectedRestaurantCard.getAttribute('data-delivery-charge')) || 0;
-        totalAmount += deliveryCharge;
-        dcharge = deliveryCharge;
-        const deliveryChargeItem = document.createElement("div");
-        deliveryChargeItem.classList.add("cart-item");
-        deliveryChargeItem.innerHTML = `<p class="dcharge">Delivery Charge: NZ$${deliveryCharge.toFixed(2)}</p>`;
-        cartContent.appendChild(deliveryChargeItem);
-    }
+		let dcharge = 0;
+		if (orderType === 'Delivery') {
+			const selectedRestaurantCard = document.querySelector('.restaurant-card');
+			const deliveryCharge = parseFloat(selectedRestaurantCard.getAttribute('data-delivery-charge')) || 0;
+			totalAmount += deliveryCharge;
+			dcharge = deliveryCharge;
+			const deliveryChargeItem = document.createElement("div");
+			deliveryChargeItem.classList.add("cart-item");
+			deliveryChargeItem.innerHTML = `<p class="dcharge">Delivery Charge: NZ$${deliveryCharge.toFixed(2)}</p>`;
+			cartContent.appendChild(deliveryChargeItem);
+		}
 
-    const totalAmountItem = document.createElement("div");
-    totalAmountItem.classList.add("cart-item");
-    totalAmountItem.innerHTML = `<p class="dtotal">Total: NZ$${totalAmount.toFixed(2)}</p>`;
-    cartContent.appendChild(totalAmountItem);
+		const totalAmountItem = document.createElement("div");
+		totalAmountItem.classList.add("cart-item");
+		totalAmountItem.innerHTML = `<p class="dtotal">Total: NZ$${totalAmount.toFixed(2)}</p>`;
+		cartContent.appendChild(totalAmountItem);
 
-    const cartDataInput = document.getElementById('cart-data');
-    cartDataInput.value = JSON.stringify(items);
-    const cartDataOrder = document.getElementById('order-type-input');
-    cartDataOrder.value = orderType;
-    const restaurentInput = document.getElementById('restaurent-input');
-    restaurentInput.value = "{{restaurant.id}}";
-    const dchargeInput = document.getElementById('dcharge');
-    dchargeInput.value = dcharge;
-    const checkoutButton = document.getElementById('checkout');
-    checkoutButton.style.display = items.length > 0 ? 'block' : 'none';
-    totalAmountSpan.textContent = ` NZ$ ${totalAmount.toFixed(2)} `;
-}
+		const cartDataInput = document.getElementById('cart-data');
+		cartDataInput.value = JSON.stringify(items);
+		const cartDataOrder = document.getElementById('order-type-input');
+		cartDataOrder.value = orderType;
+		const restaurentInput = document.getElementById('restaurent-input');
+		restaurentInput.value = "{{restaurant.id}}";
+		const dchargeInput = document.getElementById('dcharge');
+		dchargeInput.value = dcharge;
+		const checkoutButton = document.getElementById('checkout');
+		checkoutButton.style.display = items.length > 0 ? 'block' : 'none';
+		totalAmountSpan.textContent = ` NZ$ ${totalAmount.toFixed(2)} `;
+	}
 
 
     document.querySelector("#desktop-menu").addEventListener("click", function() {
@@ -1071,7 +1109,7 @@
 
 	updateCartDisplay();
 
-});
+	});
 </script>
 add voucher function
  <script>
