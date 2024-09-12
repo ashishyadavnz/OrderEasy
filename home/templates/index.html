@@ -135,43 +135,10 @@
 						{% if request.user and request.user.role == 'Owner' %}
 						{% else %}
 							<div class="extras bag">
-								{% if request.resolver_match.url_name == 'restaurant-card' %}
 								<a href="javascript:void(0)" id="desktop-menu" class="menu-btn p-2">
 									<i class="fa-solid fa-bag-shopping px-2">&nbsp;(<span id="cart-total-amount"></span>)</i>
 								</a>
-								{% endif %}
-								
-								
 								<!-- Cart Section -->
-								<div id="cart-section" class="cart-sidebar">
-									<div class="cart-header">
-										<h2>My Cart</h2>
-										<button id="close-cart" class="btn btn-info">Close</button>
-									</div>
-									<form id="cart-form" method="POST" action="{% url 'home:checkout' %}">
-										{% csrf_token %}
-										<div id="cart-content">
-											<div class="cart-items"></div>
-											<input type="hidden" id="order-type-input" name="order_type" value="Delivery">                                
-											<input type="hidden" id="restaurent-input" name="restaurent_id">                                
-											<input type="hidden" id="dcharge" name="charge">      
-											<input type="hidden" id="voucher_id" name="voucher_id">                          
-											<div class="omc-sv">
-												<div class="voucher-code voucher-section mt-4">
-													<input type="text" name="VoucherCode" id="voucher-code"
-														class="form-control om-voucher-code" placeholder="Enter voucher code" data-sid="1166">
-													<button class="btn add-voucher" id="apply-voucher">Add</button>
-												</div>
-											</div>
-											<input type="hidden" name="cart_data" id="cart-data">    
-											<div class="cart-footer">
-												<p id="total-amount"></p>
-												<button type="submit" id="checkout" name="cart_checkout" class="btn btn-success">Checkout</button>
-											</div>
-										</div>
-									</form>
-								</div>
-
 								<!-- <a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a> -->
 							</div>
 						{% endif %}
@@ -438,6 +405,35 @@
 		</div>
 		{% endif %}
 	</header>
+	<div id="cart-section" class="cart-sidebar">
+		<div class="cart-header">
+			<h2>My Cart</h2>
+			<button id="close-cart" class="btn btn-info">Close</button>
+		</div>
+		<form id="cart-form" method="POST" action="{% url 'home:checkout' %}">
+			{% csrf_token %}
+			<div id="cart-content">
+				<div class="cart-items"></div>
+				<input type="hidden" id="order-type-input" name="order_type" value="Delivery">                                
+				<input type="hidden" id="restaurent-input" name="restaurent_id">                                
+				<input type="hidden" id="dcharge" name="charge">      
+				<input type="hidden" id="voucher_id" name="voucher_id">                          
+				<div class="omc-sv">
+					<div class="voucher-code voucher-section mt-4">
+						<input type="text" name="VoucherCode" id="voucher-code"
+							class="form-control om-voucher-code" placeholder="Enter voucher code" data-sid="1166">
+						<button class="btn add-voucher" id="apply-voucher">Add</button>
+					</div>
+				</div>
+				<input type="hidden" name="cart_data" id="cart-data">    
+				<div class="cart-footer">
+					<p id="total-amount"></p>
+					<button type="submit" id="checkout" name="cart_checkout" class="btn btn-success">Checkout</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
 	{% block content %}
 
 	{% endblock %}
