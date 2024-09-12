@@ -27,6 +27,10 @@
                         {% if order.instruction %}
                         <p class="card-text"><strong>Instructions:</strong> {{ order.instruction }}</p> 
                         {% endif %}
+                        {% if order.timestamp %}
+                        <p class="card-text"><strong>Order Date:</strong> {{ order.timestamp|date:"F j, Y" }}</p> 
+                        {% endif %}
+
                     </div>
                 </div>
             </div>
