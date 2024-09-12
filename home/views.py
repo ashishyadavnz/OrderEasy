@@ -191,8 +191,7 @@ def checkout(request):
             devices.send_message(
                 Message(notification=Notification(title=title, body=body, image=settings.EASYLOGO),data={})
             )
-            del request.session['order']
-            del request.session['cart_items']
+            request.session.clear()
             messages.success(request, "Your order is placed successfully.")
             return redirect('restaurant:restaurant')
     oid = request.session.get('order', None)
