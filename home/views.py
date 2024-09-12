@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
@@ -22,7 +22,7 @@ from django.db.models import Sum,Avg
 from .forms import ProfileForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-
+from django.core.paginator import Paginator
 import threading
 
 
@@ -513,7 +513,7 @@ def change_password(request):
         form = PasswordChangeForm(user=request.user, data=request.POST)
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user)  # Important to keep the user logged in
+            update_session_auth_hash(request, user)  
             messages.success(request, 'Your password was updated successfully!')
             return redirect('home:profile')
         else:
@@ -522,3 +522,12 @@ def change_password(request):
         form = PasswordChangeForm(user=request.user)
     
     return render(request, 'ui/profile.html', {'form': form})
+
+def myorder(request):
+    if request.user.role != 'Customer':
+        return HttpResponseForbidden("You are not allowed to access this page.")
+    orders_list = Order.objects.filter(user=request.user).order_by('-id')
+    paginator = Paginator(orders_list, 6) 
+    page_number = request.GET.get('page') 
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'ui/myorder.html', {'page_obj': page_obj})
