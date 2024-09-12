@@ -115,7 +115,7 @@ def checkout(request):
             request.session['order_type'] = cart_items
             for item in cart_items:
                 try:
-                    food_item = FoodItem.objects.get(id=item['id'])
+                    food_item = FoodItem.objects.get(id=item['item_id'])
                     cart_item = Cart(
                         order=order,
                         fooditem=food_item,
