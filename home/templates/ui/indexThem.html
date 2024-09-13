@@ -105,37 +105,38 @@
 			</div>
 		</section> -->
     <section>
-		<div id="order_cat" >
-			<div class="container">
+		<div id="order_cat">
+			<div class="container-fluid px-md-5 px-4">
 				<h4>Order now your favourite food &amp; drinks</h4>
-				<div >
-					{% for cuisine in cuisines %}
-					<!-- {% if forloop.counter0|divisibleby:5 %} -->
-					<div >
-						<div class="row ">
-							<!-- {% endif %} -->
-							<div class="col-md-2 m-3">
-								<div class="item" >
-									<a href="{% url 'restaurant:restaurants-cuisine' cuisine.slug %}">
-										<div class="img-wrap">
-											{% if cuisine.image %}
-											<img src="{{ cuisine.image.url }}" alt="{{ cuisine.title }}" style="width: 70px; height: 70px; border-radius: 50%;">
-											{% else %}
-											<img src="/path/to/default/image.svg" alt="Default Image">
-											{% endif %}
-										</div>
-										<p>{{ cuisine.title }}</p>
-									</a>
-								</div>
+				<div>
+					<div class="row">
+						{% for cuisine in cuisines %}
+						{% if forloop.counter0|divisibleby:11 %}
+						</div><div class="row">
+						{% endif %}
+						<div class="col-md-1 text-center">
+							<div class="item">
+								<a href="{% url 'restaurant:restaurants-cuisine' cuisine.slug %}">
+									<div class="img-wrap">
+										{% if cuisine.image %}
+										<img src="{{ cuisine.image.url }}" alt="{{ cuisine.title }}" style="width: 70px; height: 70px; border-radius: 50%;">
+										{% else %}
+										<img src="/path/to/default/image.svg" alt="Default Image">
+										{% endif %}
+									</div>
+									<p>{{ cuisine.title }}</p>
+								</a>
 							</div>
-							<!-- {% if forloop.counter|divisibleby:5 or forloop.last %} -->
 						</div>
+						{% if forloop.last %}
+						</div>
+						{% endif %}
+						{% endfor %}
 					</div>
-					<!-- {% endif %} -->
-					{% endfor %}
 				</div>
 			</div>
 		</div>
+		
 	</section>
 	{% endif %}
 	

@@ -10,25 +10,8 @@
 		padding-bottom: 30px !important;
 		background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');
 	}
-	.cart-drop.show {
-		opacity: var(--bs-backdrop-opacity);
-	}
-	.cart-drop {
-		--bs-backdrop-zindex: 1050;
-		--bs-backdrop-bg: #000;
-		--bs-backdrop-opacity: 0.5;
-		position: fixed;
-		top: 0;
-		left: 0;
-		z-index: 500;
-		width: 100vw;
-		height: 100vh;
-		background-color: var(--bs-backdrop-bg);
-		display:none;
-	}
+	
 </style>
-<div class="cart-drop fade show"></div>
-
 <div class="menu-layer">
   <div class="cart-overlay">
 	<div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: none;">
@@ -561,15 +544,18 @@
 													<div class="cart-actions">
 														<input type="number" class="qty-input" value="1" min="1" hidden>
 														<input type="hidden" class="carditem{{item.id}}">
+														
 														{% if restaurant.start|is_restaurant_open:restaurant.end %}
 														<button class="btn add-to-cart" style="background-color:#F29F05; color: white;" data-id="{{ item.id }}" data-title="{{ item.title }}" data-image="{% if item.image %}{{ item.image.url }}{% endif %}" data-price="{{ item.price }}">Add to Cart</button>
-                                                        {% else %}
-														<button class="btn btn-secondary " data-id="{{ item.id }}" data-title="{{ item.title }}" data-image="{% if item.image %}{{ item.image.url }}{% endif %}" data-price="{{ item.price }}" disabled>Closed</button>
+														{% else %}
+														<button class="btn btn-secondary " disabled>Closed</button>
 														{% endif %}
+														
 														<button class="btn btn-danger decrease-qty d-none" data-id="{{ item.id }}">-</button>
 														<span class="item-quantity d-none" data-id="{{ item.id }}" style="margin-left: 10px;">Qty: 0</span> 
 														<button class="btn btn-danger increase-qty d-none" data-id="{{ item.id }}">+</button>
-													</div>          
+													</div>
+															  
 												</div>
 											</div>
 										</div>
@@ -718,7 +704,7 @@
 		var item_id = $(this).data("id");
 		var otype = localStorage.getItem('order_type');
 		var rdistance = localStorage.getItem('rdistance{{restaurant.id}}');
-		console.log(rdistance, "rdistance")
+	
 		$.ajax({
 			url: '{% url "restaurant:add_to_cart" %}',
 			method: 'POST',
@@ -726,14 +712,19 @@
 				csrfmiddlewaretoken: '{{ csrf_token }}',
 				'item_id': item_id,
 				'restaurant_id': "{{restaurant.id}}",
-				'order_type':  otype ? otype : 'Delivery',
-				'rdistance':  rdistance ? rdistance : 0,
+				'order_type': otype ? otype : 'Delivery',
+				'rdistance': rdistance ? rdistance : 0,
 			},
 			success: function(res) {
 				cartupdate(res);
+				var itemCard = $(".carditem" + item_id);
+				itemCard.siblings('.add-to-cart').hide();
+				itemCard.siblings('.decrease-qty, .increase-qty, .item-quantity').removeClass('d-none');
+				itemCard.siblings('.item-quantity').text('Qty: 1');
 			}
 		});
-	})
+	});
+	
 </script>
 <script>
 	$("#cart-section").on("click", ".increase-qty", function() {
@@ -750,14 +741,17 @@
 			},
 			success: function(res) {
 				cartupdate(res);
+				var itemCard = $(".carditem" + item_id);
+				var newQuantity = parseInt(itemCard.siblings('.item-quantity').text().split('Qty: ')[1]) + 1;
+				itemCard.siblings('.item-quantity').text('Qty: ' + newQuantity);
 			}
 		})
 	});
 </script>
 <script>
 	$("#cart-section").on("click", ".decrease-qty", function() {
-		console.log("hyyy")
 		var item_id = $(this).data("id");
+	
 		$.ajax({
 			url: '{% url "restaurant:add_to_cart" %}',
 			method: 'PATCH',
@@ -769,10 +763,71 @@
 			},
 			success: function(res) {
 				cartupdate(res);
+				var itemCard = $(".carditem" + item_id);
+				var newQuantity = parseInt(itemCard.siblings('.item-quantity').text().split('Qty: ')[1]) - 1;
+				if (newQuantity > 0) {
+					itemCard.siblings('.item-quantity').text('Qty: ' + newQuantity);
+				} else {
+					itemCard.siblings('.add-to-cart').show();
+					itemCard.siblings('.decrease-qty, .increase-qty, .item-quantity').addClass('d-none');
+				}
+
 			}
-		})
+		});
 	});
+	
 </script>
+<script>
+	$(".increase-qty").on("click", function() {
+    var item_id = $(this).data("id");
+
+    $.ajax({
+        url: '{% url "restaurant:add_to_cart" %}',
+        method: 'PATCH',
+        contentType: 'application/x-www-form-urlencoded',
+        data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            'item_id': item_id,
+            'type': "increase"
+        },
+        success: function(res) {
+            cartupdate(res);
+            var itemCard = $(".carditem" + item_id);
+            var newQuantity = parseInt(itemCard.siblings('.item-quantity').text().split('Qty: ')[1]) + 1;
+            itemCard.siblings('.item-quantity').text('Qty: ' + newQuantity);
+        }
+    });
+});
+
+</script>
+<script>
+	$(".decrease-qty").on("click", function() {
+    var item_id = $(this).data("id");
+
+    $.ajax({
+        url: '{% url "restaurant:add_to_cart" %}',
+        method: 'PATCH',
+        contentType: 'application/x-www-form-urlencoded',
+        data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            'item_id': item_id,
+            'type': "decrease"
+        },
+        success: function(res) {
+            cartupdate(res);
+            var itemCard = $(".carditem" + item_id);
+            var newQuantity = parseInt(itemCard.siblings('.item-quantity').text().split('Qty: ')[1]) - 1;
+            if (newQuantity > 0) {
+                itemCard.siblings('.item-quantity').text('Qty: ' + newQuantity);
+            } else {
+                itemCard.siblings('.add-to-cart').show();
+                itemCard.siblings('.decrease-qty, .increase-qty, .item-quantity').addClass('d-none');
+            }
+        }
+    });
+});
+</script>
+
 <script>
 	$(".switch-wrap").on("click", ".switch-ot", function() {
 		var option = $(this).data("id");
@@ -1153,59 +1208,16 @@ add voucher function
 });
 
  </script>
-<script>
-	
-	document.addEventListener('DOMContentLoaded', function() {
-		flatpickr("#BookingDate", {
-			dateFormat: "Y-m-d",
-			minDate: "today",
-		});
-	});
-</script>
 
-<script>
-var feedbackModal = document.getElementById("feedbackModal");
-var feedbackBtn = document.getElementById("openFeedbackModal");
-var feedbackClose = document.getElementById("closeFeedbackModal");
-feedbackBtn.onclick = function() {
-  feedbackModal.style.display = "block";
-}
-feedbackClose.onclick = function() {
-  feedbackModal.style.display = "none";
-}
-window.onclick = function(event) {
-  if (event.target == feedbackModal) {
-    feedbackModal.style.display = "none";
-  }
-}
 
-</script>
+
 <script>
     const phoneInput = document.getElementById('phone');
     phoneInput.addEventListener('input', function (e) {
         this.value = this.value.replace(/e|\./g, '');
     });
 </script>
-<script>
-	function initAutocomplete() {
-		var input = document.getElementById('location-input-2');
-		var autocomplete = new google.maps.places.Autocomplete(input);
-		autocomplete.setFields(['address_components', 'geometry', 'name']);
-		autocomplete.addListener('place_changed', function () {
-			var place = autocomplete.getPlace();
-			console.log("Selected Place: ", place);
-			var address = place.name;
-			var latitude = place.geometry.location.lat();
-			var longitude = place.geometry.location.lng();
-			document.getElementById('address-2').value = address;
-            document.getElementById('latitude-2').value = latitude;
-            document.getElementById('longitude-2').value = longitude;
-            document.getElementById('location-form-2').submit();
-			
-		});
-	}
-	google.maps.event.addDomListener(window, 'load', initAutocomplete);
-</script>
+
 <script>
 	document.addEventListener('DOMContentLoaded', function() {
 		const modalBackdrop = document.getElementById('cart-backdrop');
@@ -1225,6 +1237,51 @@ window.onclick = function(event) {
 	});
 	</script>
 	 {% endcomment %} -->
+	 <script>
+		var feedbackModal = document.getElementById("feedbackModal");
+		var feedbackBtn = document.getElementById("openFeedbackModal");
+		var feedbackClose = document.getElementById("closeFeedbackModal");
+		feedbackBtn.onclick = function() {
+		  feedbackModal.style.display = "block";
+		}
+		feedbackClose.onclick = function() {
+		  feedbackModal.style.display = "none";
+		}
+		window.onclick = function(event) {
+		  if (event.target == feedbackModal) {
+			feedbackModal.style.display = "none";
+		  }
+		}
+		
+		</script>
+	 <script>
+		function initAutocomplete() {
+			var input = document.getElementById('location-input-2');
+			var autocomplete = new google.maps.places.Autocomplete(input);
+			autocomplete.setFields(['address_components', 'geometry', 'name']);
+			autocomplete.addListener('place_changed', function () {
+				var place = autocomplete.getPlace();
+				console.log("Selected Place: ", place);
+				var address = place.name;
+				var latitude = place.geometry.location.lat();
+				var longitude = place.geometry.location.lng();
+				document.getElementById('address-2').value = address;
+				document.getElementById('latitude-2').value = latitude;
+				document.getElementById('longitude-2').value = longitude;
+				document.getElementById('location-form-2').submit();
+				
+			});
+		}
+		google.maps.event.addDomListener(window, 'load', initAutocomplete);
+	</script>
+	 <script>
+		document.addEventListener('DOMContentLoaded', function() {
+			flatpickr("#BookingDate", {
+				dateFormat: "Y-m-d",
+				minDate: "today",
+			});
+		});
+	</script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 {% endblock %}
