@@ -223,6 +223,7 @@ def validate_voucher(request):
 
 @csrf_exempt
 def add_to_cart(request):
+    # request.session.clear()
     if request.method == 'POST':
         item_id = request.POST['item_id']
         restaurant_id = request.POST['restaurant_id']
