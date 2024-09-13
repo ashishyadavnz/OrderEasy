@@ -104,46 +104,45 @@
 				</div>
 			</div>
 		</section> -->
-    <section class="mb-4">
-		<div class="container-fluid px-md-5 px-4">
-			<h4 class="mx-5 my-4">Order now your favourite food &amp; drinks</h4>
-			<div id="order_cat">
-				<div class="d-flex justify-content-center">
-					<div class="row justify-content-center">
-						{% for cuisine in cuisines %}
-						{% if forloop.counter0|divisibleby:11 %}
-					</div>
-					<div class="row justify-content-center">
-						{% endif %}
-						<div class="col-md-1 text-center mb-3">
-							<div class="item">
-								<a href="{% url 'restaurant:restaurants-cuisine' cuisine.slug %}">
-									<div class="img-wrap">
-										{% if cuisine.image %}
-										<img src="{{ cuisine.image.url }}" alt="{{ cuisine.title }}" style="width: 70px; height: 70px; border-radius: 50%;">
-										{% else %}
-										<img src="/path/to/default/image.svg" alt="Default Image">
-										{% endif %}
+		<section class="mb-4">
+			<div class="container-fluid px-md-5 px-4 ms-5">
+				<div id="order_cat">
+					<h4 class="ms-4 my-3">Order now your favourite food &amp; drinks</h4>
+						<div>
+							<div class="row">
+								{% for cuisine in cuisines %}
+								{% if forloop.counter0|divisibleby:11 %}
+							</div>
+							<div class="row mx-4">
+							{% endif %}
+								<div class="col-md-1 text-center">
+									<div class="item">
+										<a href="{% url 'restaurant:restaurants-cuisine' cuisine.slug %}">
+											<div class="img-wrap">
+												{% if cuisine.image %}
+												<img src="{{ cuisine.image.url }}" alt="{{ cuisine.title }}" style="width: 70px; height: 70px; border-radius: 50%;">
+												{% else %}
+												<img src="/path/to/default/image.svg" alt="Default Image">
+												{% endif %}
+											</div>
+											<p>{{ cuisine.title }}</p>
+										</a>
 									</div>
-									<p>{{ cuisine.title }}</p>
-								</a>
+								</div>
+								{% if forloop.last %}
+								</div>
+								{% endif %}
+								{% endfor %}
 							</div>
 						</div>
-						{% if forloop.last %}
 					</div>
-					{% endif %}
-					{% endfor %}
 				</div>
-			</div>
-		</div>
-		
-		
-	</section>
-	{% endif %}
+		</section>
+		{% endif %}
 	
 	<section class="works-section gap no-top ">
 		<div class="container">
-			<div class="hading my-2" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
+			<div class="hading my-3" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
 				<h2>How it works</h2>
 				<!-- <p>Magna sit amet purus gravida quis blandit turpis cursus. Venenatis tellus in<br> metus vulputate eu scelerisque felis.</p> -->
 			</div>
