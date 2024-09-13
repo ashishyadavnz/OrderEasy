@@ -195,9 +195,9 @@
 												{% endif %}
 											</span>
 											{% comment %} {% if restaurant.lowest_price %}
-											<p><strong>Delivery starts from:</strong> NZ${{ restaurant.lowest_price }}</p>
+											<p><strong>Delivery starts from:</strong> ${{ restaurant.lowest_price }}</p>
 											{% else %}
-											<p><strong>Delivery starts from:</strong>0NZ$</p>
+											<p><strong>Delivery starts from:</strong>0$</p>
 											{% endif %} {% endcomment %}
 											<p class="distance">Distance: Calculating...</p>
 										</div>
@@ -349,7 +349,7 @@
 														</div>
 													</div>
 													<div class="price">
-														<h2>NZ${{ menu.price }}</h2>
+														<h2>${{ menu.price }}</h2>
 														<div class="qty-input">
 															<button class="qty-count qty-count--minus" data-action="minus" type="button">-</button>
 															<input class="product-qty" type="number" name="product-qty" min="0" value="1">
@@ -394,7 +394,7 @@
 														</div>
 													</div>
 													<div class="price">
-														<h2>NZ${{ menu.price }}</h2>
+														<h2>${{ menu.price }}</h2>
 														<div class="qty-input">
 															<button class="qty-count qty-count--minus" data-action="minus" type="button">-</button>
 															<input class="product-qty" type="number" name="product-qty" min="0" value="1">
@@ -440,7 +440,7 @@
 														</div>
 													</div>
 													<div class="price">
-														<h2>NZ${{ menu.price }}</h2>
+														<h2>${{ menu.price }}</h2>
 														<div class="qty-input">
 															<button class="qty-count qty-count--minus" data-action="minus" type="button">-</button>
 															<input class="product-qty" type="number" name="product-qty" min="0" value="1">
@@ -532,7 +532,7 @@
 												<div class="card-body">
 													<h5 class="card-title">{{ item.title }}</h5>
 													<p class="card-text">
-														<strong>Price:</strong> NZ${{ item.price }}<br>
+														<strong>Price:</strong> ${{ item.price }}<br>
 														<strong>Available:</strong> {% if item.available %}Yes{% else %}No{% endif %}<br>
 														{% if item.start %}
 															<strong>Start Time:</strong> {{ item.start|date:"H:i" }}<br>
@@ -546,9 +546,9 @@
 														<input type="hidden" class="carditem{{item.id}}">
 														
 														{% if restaurant.start|is_restaurant_open:restaurant.end %}
-														<button class="btn add-to-cart" style="background-color:#F29F05; color: white;" data-id="{{ item.id }}" data-title="{{ item.title }}" data-image="{% if item.image %}{{ item.image.url }}{% endif %}" data-price="{{ item.price }}">Add to Cart</button>
-														{% else %}
 														<button class="btn btn-secondary " disabled>Closed</button>
+														{% else %}
+														<button class="btn add-to-cart" style="background-color:#F29F05; color: white;" data-id="{{ item.id }}" data-title="{{ item.title }}" data-image="{% if item.image %}{{ item.image.url }}{% endif %}" data-price="{{ item.price }}">Add to Cart</button>
 														{% endif %}
 														
 														<button class="btn btn-danger decrease-qty d-none" data-id="{{ item.id }}">-</button>
@@ -872,10 +872,10 @@
 					$("#voucher-code").attr("disabled", true);
 					$("#voucher_id").val(res['id']);
 					var voucher = `<div class="cart-item">
-						<p class="dcharge">Voucher Charge: - NZ<span>${res['discount']}</span></p>
+						<p class="dcharge">Voucher Charge: - <span>${res['discount']}</span></p>
 					</div>`
 					$('#cart-section').find(".price-div").before(voucher);
-					alert(`Voucher applied! You saved NZ$${res['discount']}.`);
+					alert(`Voucher applied! You saved $${res['discount']}.`);
 				} else {
 					alert(data.message);
 				}

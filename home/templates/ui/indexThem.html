@@ -104,17 +104,18 @@
 				</div>
 			</div>
 		</section> -->
-    <section>
+    <section class="mb-4">
 		<div id="order_cat">
 			<div class="container-fluid px-md-5 px-4">
-				<h4>Order now your favourite food &amp; drinks</h4>
-				<div>
-					<div class="row">
+				<h4 class="mx-5 my-4">Order now your favourite food &amp; drinks</h4>
+				<div class="d-flex justify-content-center">
+					<div class="row justify-content-center">
 						{% for cuisine in cuisines %}
 						{% if forloop.counter0|divisibleby:11 %}
-						</div><div class="row">
+					</div>
+					<div class="row justify-content-center">
 						{% endif %}
-						<div class="col-md-1 text-center">
+						<div class="col-md-1 text-center mb-3">
 							<div class="item">
 								<a href="{% url 'restaurant:restaurants-cuisine' cuisine.slug %}">
 									<div class="img-wrap">
@@ -129,20 +130,20 @@
 							</div>
 						</div>
 						{% if forloop.last %}
-						</div>
-						{% endif %}
-						{% endfor %}
 					</div>
+					{% endif %}
+					{% endfor %}
 				</div>
 			</div>
 		</div>
 		
+		
 	</section>
 	{% endif %}
 	
-	<section class="works-section gap no-top">
+	<section class="works-section gap no-top ">
 		<div class="container">
-			<div class="hading" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
+			<div class="hading my-2" data-aos="fade-up"  data-aos-delay="200" data-aos-duration="300">
 				<h2>How it works</h2>
 				<!-- <p>Magna sit amet purus gravida quis blandit turpis cursus. Venenatis tellus in<br> metus vulputate eu scelerisque felis.</p> -->
 			</div>
