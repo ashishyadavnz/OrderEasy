@@ -155,7 +155,7 @@
 						{% else %}
 							<div class="extras bag">
 								<a href="javascript:void(0)" id="desktop-menu" class="menu-btn p-2">
-									<i class="fa-solid fa-bag-shopping px-2">&nbsp;(<span id="cart-total-amount">NZ$ 0</span>)</i>
+									<i class="fa-solid fa-bag-shopping px-2">&nbsp;<span id="cart-total-amount">$ 0</span></i>
 								</a>
 								<!-- Cart Section -->
 								<!-- <a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a> -->
@@ -258,11 +258,11 @@
 												src="https://bslthemes.com/html/quickeat/assets/img/dish-6.png">
 											<h4>Pasta, kiwi and sauce chilli</h4>
 										</div>
-										<h3>NZ$39</h3>
+										<h3>$39</h3>
 									</div>
 									<div class="price">
 										<div>
-											<h2>NZ$39</h2>
+											<h2>$39</h2>
 											<span>Sum</span>
 										</div>
 										<div>
@@ -286,11 +286,11 @@
 												src="https://bslthemes.com/html/quickeat/assets/img/dish-7.png">
 											<h4>Rice with shrimps and kiwi</h4>
 										</div>
-										<h3>NZ$49</h3>
+										<h3>$49</h3>
 									</div>
 									<div class="price">
 										<div>
-											<h2>NZ$49</h2>
+											<h2>$49</h2>
 											<span>Sum</span>
 										</div>
 										<div>
@@ -309,11 +309,11 @@
 							</ul>
 							<div class="totel-price">
 								<span>Total order:</span>
-								<h5>NZ$137</h5>
+								<h5>$137</h5>
 							</div>
 							<div class="totel-price">
 								<span>To pay:</span>
-								<h2>NZ$137</h2>
+								<h2>$137</h2>
 							</div>
 							<button class="button-price">Checkout</button>
 
@@ -629,10 +629,10 @@
 			cartsection.find('input[name="charge"]').val(deliveryCharge);
 			final = totalAmount + deliveryCharge;
 			var dcharge_html = `<div class="cart-item">
-				<p class="dcharge">Delivery Charge: NZ<span>${deliveryCharge}</span></p>
+				<p class="dcharge">Delivery Charge: <span>$${deliveryCharge}</span></p>
 			</div>`
 			var total_html = `<div class="cart-item price-div">
-				<p class="dtotal">Total: NZ<span>${final}</span></p>
+				<p class="dtotal">Total: <span>$${final}</span></p>
 				</div>`
 			cartsection.find('.cart-items').append(dcharge_html);
 			cartsection.find('.cart-items').append(total_html);
@@ -645,11 +645,11 @@
 				$("#voucher-code").val(voucher['name']);
 				$("#voucher_id").val(voucher['id']);
 				var voucher_html = `<div class="cart-item">
-					<p class="dcharge">Voucher Charge: - NZ<span>${voucher['discount']}</span></p>
+					<p class="dcharge">Voucher Charge: - <span>${voucher['discount']}</span></p>
 				</div>`
 				$('#cart-section').find(".price-div").before(voucher_html);
 			}
-			$("#cart-total-amount").text('NZ$ '+final)
+			$("#cart-total-amount").text('$ ' + parseFloat(final).toFixed(2));
 		}
 	</script>
 	<script>
