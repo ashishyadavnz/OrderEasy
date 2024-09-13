@@ -24,6 +24,25 @@
 	<link rel="stylesheet" href="{% static 'css/new.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOIeek1UEdajdMKU3z2s5IVapM3teenR0&libraries=places"></script>
+
+<style>
+	.cart-drop.show {
+		opacity: var(--bs-backdrop-opacity);
+	}
+	.cart-drop {
+		--bs-backdrop-zindex: 1050;
+		--bs-backdrop-bg: #000;
+		--bs-backdrop-opacity: 0.5;
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 500;
+		width: 100vw;
+		height: 100vh;
+		background-color: var(--bs-backdrop-bg);
+		display:none;
+	}
+</style>
 </head>
 
 <body style="word-wrap: break-word;">
@@ -405,6 +424,7 @@
 		</div>
 		{% endif %}
 	</header>
+	<div class="cart-drop fade show"></div>
 	<div id="cart-section" class="cart-sidebar">
 		<div class="cart-header">
 			<h2>My Cart</h2>
@@ -837,7 +857,16 @@
 			});
 		}		
 	</script>
-	
+	<script>
+		document.getElementById('desktop-menu').addEventListener('click', function() {
+			var cartDiv = document.querySelector('.cart-drop');
+			cartDiv.style.display = 'block'; 
+		});
+		document.getElementById('close-cart').addEventListener('click', function() {
+			var cartDiv = document.querySelector('.cart-drop');
+			cartDiv.style.display = 'none'; 
+		});
+	</script>
 
 </body>
 </html>
