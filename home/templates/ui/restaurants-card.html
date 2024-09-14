@@ -546,9 +546,9 @@
 														<input type="hidden" class="carditem{{item.id}}">
 														
 														{% if restaurant.start|is_restaurant_open:restaurant.end %}
-														<button class="btn btn-secondary " disabled>Closed</button>
-														{% else %}
 														<button class="btn add-to-cart" style="background-color:#F29F05; color: white;" data-id="{{ item.id }}" data-title="{{ item.title }}" data-image="{% if item.image %}{{ item.image.url }}{% endif %}" data-price="{{ item.price }}">Add to Cart</button>
+														{% else %}
+														<button class="btn btn-secondary " disabled>Closed</button>
 														{% endif %}
 														
 														<button class="btn btn-danger decrease-qty d-none" data-id="{{ item.id }}">-</button>
