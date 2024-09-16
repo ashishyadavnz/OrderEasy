@@ -1,3 +1,4 @@
+from turtle import distance
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect,HttpResponse
 from django.contrib import messages
@@ -11,6 +12,8 @@ from django.db.models.functions import ACos, Cos, Radians, Sin
 from home.forms import *
 from django.views.decorators.csrf import csrf_exempt
 from django.http import QueryDict
+from math import radians, sin, cos, sqrt, atan2
+
 import pytz
 
 # Create your views here.
@@ -29,6 +32,17 @@ def restaurant(request, cuisine_slug=None):
         address = request.POST.get('address')
         latitude = request.POST.get('latitude')
         longitude = request.POST.get('longitude')
+
+        cart = request.session.get('cart', [])
+        if address and latitude and longitude:
+            request.session['user_address'] = {'add': address, 'lat': latitude, 'long': longitude}
+            for item in cart:
+                res = Restaurant.objects.get(id=item['restaurant'])
+                item['rdistance'] = haversine(lat1=res.latitude, lon1=res.longitude, lat2=float(latitude), lon2=float(longitude))
+            print(cart, "cart")
+            request.session['cart'] = cart
+            return redirect('restaurant:restaurant')
+        
         if address and latitude and longitude:
             request.session['user_address'] = {'add':address,
                                             'lat':latitude,
@@ -46,7 +60,19 @@ def restaurant(request, cuisine_slug=None):
             )
         ).order_by('distance').distinct()
     return render(request, 'ui/restaurant.html', {'restaurants': restaurants,'cat':cat,'user_address':user_address})
-  
+
+# def calculate_distance(lat1, lon1, lat2, lon2):
+
+#     R = 6371  
+#     lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
+
+#     dlat = lat2 - lat1
+#     dlon = lon2 - lon1
+#     a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
+#     c = 2 * atan2(sqrt(a), sqrt(1 - a))
+#     distance = R * c
+#     return distance
+
 def generate_time_slots(start_time, end_time, interval=60):
     slots = []
     current_time = start_time
@@ -299,6 +325,6 @@ def add_to_cart(request):
 def clear_cart(request):
     if request.method == 'POST':
         # Clear the session's cart
-        request.session['cart'] = []
+        request.session.clear()
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
