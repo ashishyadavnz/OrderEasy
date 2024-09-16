@@ -579,6 +579,7 @@
 			cartsection.find('.cart-items .cart-item').remove();
 			$('.add-to-cart').show();
 			$('.decrease-qty, .increase-qty, .item-quantity').addClass('d-none');
+			$("#cart-total-amount").text('$ 0');
 			for (let i = 0; i < cart.length; i++) {
 				var itemCard = $(".carditem" + cart[i].item_id);
 				if (itemCard) {
@@ -639,10 +640,10 @@
 			} else {
 				deliveryCharge = 0;
 			}
-			cartsection.find('input[name="charge"]').val(deliveryCharge);
-			final = totalAmount + deliveryCharge;
+			cartsection.find('input[name="charge"]').val(deliveryCharge.toFixed(2)); 
+			final = (totalAmount + deliveryCharge).toFixed(2);
 			var dcharge_html = `<div class="cart-item">
-				<p class="dcharge">Delivery Charge: <span>$${deliveryCharge}</span></p>
+				<p class="dcharge">Delivery Charge: <span>$${deliveryCharge.toFixed(2)}</span></p>
 			</div>`
 			var total_html = `<div class="cart-item price-div">
 				<p class="dtotal">Total: <span>$${final}</span></p>
@@ -889,7 +890,7 @@
 				document.querySelectorAll('.restaurant-card').forEach(function(card) {
 					const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
 					const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
-					const restaurantID = parseInt(card.getAttribute('data-id'));
+					const restaurantID = parseInt(card.getAttribute('data-id')) || "{{restaurant.id}}";
 					console.log(userLat, userLon, "bbbb")
 					const distance = calculateDistance(userLat, userLon, restaurantLat, restaurantLon);
 					localStorage.setItem('rdistance'+restaurantID, distance.toFixed(2))

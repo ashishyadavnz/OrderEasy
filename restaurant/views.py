@@ -295,3 +295,10 @@ def add_to_cart(request):
         request.session['cart'] = cart
         return JsonResponse({'status': 'success', 'cart': cart, 'type':cart[0]['order_type'] if len(cart)>0 else 'Delivery', 'distance':cart[0]['rdistance'] if len(cart)>0 else 0, 'voucher':voucher})
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+def clear_cart(request):
+    if request.method == 'POST':
+        # Clear the session's cart
+        request.session['cart'] = []
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
