@@ -577,7 +577,20 @@
 			var cartsection = $('#cart-section');
 			var cart = res['cart'];
 			cartsection.find('.cart-items .cart-item').remove();
+			$('.add-to-cart').show();
+			$('.decrease-qty, .increase-qty, .item-quantity').addClass('d-none');
 			for (let i = 0; i < cart.length; i++) {
+				var itemCard = $(".carditem" + cart[i].item_id);
+				if (itemCard) {
+					if (cart[i].quantity > 0) {
+						itemCard.siblings('.add-to-cart').hide();
+						itemCard.siblings('.decrease-qty, .increase-qty, .item-quantity').removeClass('d-none');
+					} else {
+						itemCard.siblings('.add-to-cart').show();
+						itemCard.siblings('.decrease-qty, .increase-qty, .item-quantity').addClass('d-none');
+					}
+					itemCard.siblings('.item-quantity').text('Qty: ' + cart[i].quantity);
+				}
 				cartsection.find('input[name="order_type"]').val(cart[0]['order_type']);
 				cartsection.find('input[name="restaurent_id"]').val(cart[0]['restaurant']);
 				cartsection.find('input[name="cart_data"]').val(cart[0]['cart']);
@@ -663,6 +676,139 @@
 				}
 			});
 		};
+	</script>
+	<script>
+		$("#cart-section").on("click", ".increase-qty", function() {
+			var item_id = $(this).data("id");
+			$.ajax({
+				url: '{% url "restaurant:add_to_cart" %}',
+				method: 'PATCH',
+				contentType: 'application/x-www-form-urlencoded',
+				data: {
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+					'item_id': item_id,
+					'type': "increase"
+				},
+				success: function(res) {
+					cartupdate(res);
+				}
+			})
+		});
+	</script>
+	<script>
+		$("#cart-section").on("click", ".decrease-qty", function() {
+			var item_id = $(this).data("id");
+		
+			$.ajax({
+				url: '{% url "restaurant:add_to_cart" %}',
+				method: 'PATCH',
+				contentType: 'application/x-www-form-urlencoded',
+				data: {
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+					'item_id': item_id,
+					'type': "decrease"
+				},
+				success: function(res) {
+					cartupdate(res);
+				}
+			});
+		});
+		
+	</script>
+	<script>
+		$(".increase-qty").on("click", function() {
+		var item_id = $(this).data("id");
+	
+		$.ajax({
+			url: '{% url "restaurant:add_to_cart" %}',
+			method: 'PATCH',
+			contentType: 'application/x-www-form-urlencoded',
+			data: {
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				'item_id': item_id,
+				'type': "increase"
+			},
+			success: function(res) {
+				cartupdate(res);
+			}
+		});
+	});
+	
+	</script>
+	<script>
+		$(".decrease-qty").on("click", function() {
+		var item_id = $(this).data("id");
+	
+		$.ajax({
+			url: '{% url "restaurant:add_to_cart" %}',
+			method: 'PATCH',
+			contentType: 'application/x-www-form-urlencoded',
+			data: {
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				'item_id': item_id,
+				'type': "decrease"
+			},
+			success: function(res) {
+				cartupdate(res);
+			}
+		});
+	});
+	</script>
+	
+	<script>
+		$(".switch-wrap").on("click", ".switch-ot", function() {
+			var option = $(this).data("id");
+			if (option == 'Delivery') {
+				$("#delivery-option").addClass('active');
+				$("#pickup-option").removeClass('active');
+			} else {
+				$("#delivery-option").removeClass('active');
+				$("#pickup-option").addClass('active');
+			}
+			var otype = localStorage.setItem('order_type', option);
+		});
+	</script>
+	<script>
+		function showToast() {
+			const toastContainer = document.getElementById('toast-container');
+			toastContainer.style.display = 'block';
+			setTimeout(() => {
+				toastContainer.style.display = 'none';
+			}, 2000);
+		}
+	</script>
+	<script>
+		$("#apply-voucher").on("click", function(e) {
+			e.preventDefault();
+			let code = $(this).parent().find("input").val();
+			let total = $(this).parent().parent().parent().find(".dtotal span").text();
+			$.ajax({
+				url: '{% url "restaurant:validate_voucher" %}',
+				method: 'POST',
+				contentType: 'application/x-www-form-urlencoded',
+				data: {
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+					'voucher_code': code,
+					'total_amount': total
+				},
+				success: function(res) {
+					if (res['status'] === 'success') {
+						total = parseInt(res['total']);
+						$('#cart-section').find(".dtotal").find('span').text(total);
+						$("#apply-voucher").attr("disabled", true);
+						$("#voucher-code").attr("disabled", true);
+						$("#voucher_id").val(res['id']);
+						var voucher = `<div class="cart-item">
+							<p class="dcharge">Voucher Charge: - <span>${res['discount']}</span></p>
+						</div>`
+						$('#cart-section').find(".price-div").before(voucher);
+						alert(`Voucher applied! You saved $${res['discount']}.`);
+					} else {
+						alert(data.message);
+					}
+				}
+			})
+		})
 	</script>
 	<script>
 		$("#desktop-menu").on("click", function() {
