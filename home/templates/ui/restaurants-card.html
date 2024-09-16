@@ -11,7 +11,50 @@
 		background-image: url('https://bslthemes.com/html/quickeat/assets/img/background-1.png');
 	}
 	
+.modal-dialog {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 79vh; 
+}
+
+
+
+.custom-btn-yes {
+    background-color: #28a745; 
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-right: 15px;
+    border-radius: 5px;
+    border: none;
+    transition: background-color 0.3s ease; 
+}
+
+.custom-btn-yes:hover {
+    background-color: #218838; 
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2); 
+}
+
+.custom-btn-no {
+    background-color: #dc3545; 
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-left: 15px; 
+    border-radius: 5px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.custom-btn-no:hover {
+    background-color: #c82333; 
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2); 
+}
+
+	
 </style>
+<div id="cart-message" class="d-flex justify-content-center"></div>
 <div class="menu-layer">
   <div class="cart-overlay">
 	<div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: none;">
@@ -129,8 +172,6 @@
 											<button class="book-table-btn" id="openModal" data-bs-toggle="modal" data-bs-target="#exampleModal2">More Info</button>
 											<button type="button" id="bookTableButton" class="book-table-btn mx-1" data-bs-toggle="modal" data-bs-target="#booktable">Book A Table</button>
 											<button class="feedback-btn book-table-btn" id="openFeedbackModal">Feedback</button>
-											<button class="book-table-btn" id="openModal" data-bs-toggle="modal" data-bs-target="#exampleModal-3" hidden>More Info</button>
-
 										</div>
 									</div>
 								</div>
@@ -154,24 +195,37 @@
 							  </form>
 							</div>
 						</div>
-						<div class="modal fade" id="exampleModal-3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-							<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-								</div>
-								<div class="modal-body ">
-									<div class="modal-content p-3 ">
-										<h4>Do you want to delete prvious order </h4>
-										<div class="modal-actions text-center">
-										  <button id="confirmDeleteBtn" class="btn btn-danger">Yes</button>
-										  <button id="cancelDeleteBtn" class="btn btn-secondary">No</button>
-										</div>	
+						<div class="modal fade exampleModal-3" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"  aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+							<div class="modal-dialog" >
+								<div class="modal-content">
+									<div class="modal-body" style="background-image: url(/static/images/background-1.png);object-fit: cover; ">
+										<div class="modal-content p-3 text-center border-0" style="background-color: transparent;">
+											<h4>Do you want to delete the previous order?</h4>
+											<div class="modal-actions mt-4">
+												<button id="confirmDeleteBtn" class="btn custom-btn-yes">Yes</button>
+												<button id="cancelDeleteBtn" class="btn custom-btn-no">No</button>
+											</div>	
+										</div>
 									</div>
 								</div>
 							</div>
+						</div>
+						<!-- New success modal for item deletion -->
+						<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+							<div class="modal-dialog" >
+								<div class="modal-content" >
+									<div class="modal-body"  style="background-image: url(/static/images/background-1.png); object-fit: cover;" >
+										<div class="modal-content p-3 border-0"  style="background-color: transparent;">
+											<h4 class="text-center pb-2">Your previous items have been deleted successfully.</h4>
+											<div class="modal-actions text-center">
+												<button id="closeSuccessModal" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
+
 						<!-- The Modal -->
 						<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog">
@@ -545,9 +599,9 @@
 														<input type="hidden" class="carditem{{item.id}}">
 														
 														{% if restaurant.start|is_restaurant_open:restaurant.end %}
-														<button class="btn add-to-cart" style="background-color:#F29F05; color: white;" data-id="{{ item.id }}" data-title="{{ item.title }}" data-image="{% if item.image %}{{ item.image.url }}{% endif %}" data-price="{{ item.price }}">Add to Cart</button>
-														{% else %}
 														<button class="btn btn-secondary " disabled>Closed</button>
+														{% else %}
+														<button class="btn add-to-cart" style="background-color:#F29F05; color: white;" data-id="{{ item.id }}" data-title="{{ item.title }}" data-image="{% if item.image %}{{ item.image.url }}{% endif %}" data-price="{{ item.price }}">Add to Cart</button>
 														{% endif %}
 														
 														<button class="btn btn-danger decrease-qty d-none" data-id="{{ item.id }}">-</button>
@@ -715,11 +769,40 @@
 				'rdistance': rdistance ? rdistance : 0,
 			},
 			success: function(res) {
-				cartupdate(res);
+				if (res.status === 'rchange') {
+					$('#staticBackdrop').modal('show');
+					$('#confirmDeleteBtn').on('click', function() {
+						$.ajax({
+							url: '{% url "restaurant:clear_cart" %}', 
+							method: 'POST',
+							data: {
+								csrfmiddlewaretoken: '{{ csrf_token }}',
+							},
+							success: function(response) {
+								if (response.status === 'success') {
+									$('#staticBackdrop').modal('hide');									
+									$('#successModal').modal('show');
+									cartupdate(res);
+								}
+							},
+							error: function() {
+								$("#cart-message").html(`
+									<div class="alert alert-danger alert-dismissible fade show" role="alert">
+										Failed to delete previous items.
+										<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+									</div>
+								`);							}
+						});
+					});
+						$('#cancelDeleteBtn').on('click', function() {
+						$('#staticBackdrop').modal('hide');
+					});
+				} else {
+					cartupdate(res);
+				}
 			}
 		});
 	});
-	
 </script>
 
 
