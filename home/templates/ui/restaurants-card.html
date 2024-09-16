@@ -167,7 +167,6 @@
 										  <button id="confirmDeleteBtn" class="btn btn-danger">Yes</button>
 										  <button id="cancelDeleteBtn" class="btn btn-secondary">No</button>
 										</div>	
-										
 									</div>
 								</div>
 							</div>
@@ -717,171 +716,10 @@
 			},
 			success: function(res) {
 				cartupdate(res);
-				var itemCard = $(".carditem" + item_id);
-				itemCard.siblings('.add-to-cart').hide();
-				itemCard.siblings('.decrease-qty, .increase-qty, .item-quantity').removeClass('d-none');
-				itemCard.siblings('.item-quantity').text('Qty: 1');
 			}
 		});
 	});
 	
-</script>
-<script>
-	$("#cart-section").on("click", ".increase-qty", function() {
-		console.log("hyyy")
-		var item_id = $(this).data("id");
-		$.ajax({
-			url: '{% url "restaurant:add_to_cart" %}',
-			method: 'PATCH',
-			contentType: 'application/x-www-form-urlencoded',
-			data: {
-				csrfmiddlewaretoken: '{{ csrf_token }}',
-				'item_id': item_id,
-				'type': "increase"
-			},
-			success: function(res) {
-				cartupdate(res);
-				var itemCard = $(".carditem" + item_id);
-				var newQuantity = parseInt(itemCard.siblings('.item-quantity').text().split('Qty: ')[1]) + 1;
-				itemCard.siblings('.item-quantity').text('Qty: ' + newQuantity);
-			}
-		})
-	});
-</script>
-<script>
-	$("#cart-section").on("click", ".decrease-qty", function() {
-		var item_id = $(this).data("id");
-	
-		$.ajax({
-			url: '{% url "restaurant:add_to_cart" %}',
-			method: 'PATCH',
-			contentType: 'application/x-www-form-urlencoded',
-			data: {
-				csrfmiddlewaretoken: '{{ csrf_token }}',
-				'item_id': item_id,
-				'type': "decrease"
-			},
-			success: function(res) {
-				cartupdate(res);
-				var itemCard = $(".carditem" + item_id);
-				var newQuantity = parseInt(itemCard.siblings('.item-quantity').text().split('Qty: ')[1]) - 1;
-				if (newQuantity > 0) {
-					itemCard.siblings('.item-quantity').text('Qty: ' + newQuantity);
-				} else {
-					itemCard.siblings('.add-to-cart').show();
-					itemCard.siblings('.decrease-qty, .increase-qty, .item-quantity').addClass('d-none');
-				}
-
-			}
-		});
-	});
-	
-</script>
-<script>
-	$(".increase-qty").on("click", function() {
-    var item_id = $(this).data("id");
-
-    $.ajax({
-        url: '{% url "restaurant:add_to_cart" %}',
-        method: 'PATCH',
-        contentType: 'application/x-www-form-urlencoded',
-        data: {
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-            'item_id': item_id,
-            'type': "increase"
-        },
-        success: function(res) {
-            cartupdate(res);
-            var itemCard = $(".carditem" + item_id);
-            var newQuantity = parseInt(itemCard.siblings('.item-quantity').text().split('Qty: ')[1]) + 1;
-            itemCard.siblings('.item-quantity').text('Qty: ' + newQuantity);
-        }
-    });
-});
-
-</script>
-<script>
-	$(".decrease-qty").on("click", function() {
-    var item_id = $(this).data("id");
-
-    $.ajax({
-        url: '{% url "restaurant:add_to_cart" %}',
-        method: 'PATCH',
-        contentType: 'application/x-www-form-urlencoded',
-        data: {
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-            'item_id': item_id,
-            'type': "decrease"
-        },
-        success: function(res) {
-            cartupdate(res);
-            var itemCard = $(".carditem" + item_id);
-            var newQuantity = parseInt(itemCard.siblings('.item-quantity').text().split('Qty: ')[1]) - 1;
-            if (newQuantity > 0) {
-                itemCard.siblings('.item-quantity').text('Qty: ' + newQuantity);
-            } else {
-                itemCard.siblings('.add-to-cart').show();
-                itemCard.siblings('.decrease-qty, .increase-qty, .item-quantity').addClass('d-none');
-            }
-        }
-    });
-});
-</script>
-
-<script>
-	$(".switch-wrap").on("click", ".switch-ot", function() {
-		var option = $(this).data("id");
-		if (option == 'Delivery') {
-			$("#delivery-option").addClass('active');
-			$("#pickup-option").removeClass('active');
-		} else {
-			$("#delivery-option").removeClass('active');
-			$("#pickup-option").addClass('active');
-		}
-		var otype = localStorage.setItem('order_type', option);
-	});
-</script>
-<script>
-	function showToast() {
-        const toastContainer = document.getElementById('toast-container');
-        toastContainer.style.display = 'block';
-        setTimeout(() => {
-            toastContainer.style.display = 'none';
-        }, 2000);
-    }
-</script>
-<script>
-	$("#apply-voucher").on("click", function(e) {
-		e.preventDefault();
-		let code = $(this).parent().find("input").val();
-		let total = $(this).parent().parent().parent().find(".dtotal span").text();
-		$.ajax({
-			url: '{% url "restaurant:validate_voucher" %}',
-			method: 'POST',
-			contentType: 'application/x-www-form-urlencoded',
-			data: {
-				csrfmiddlewaretoken: '{{ csrf_token }}',
-				'voucher_code': code,
-            	'total_amount': total
-			},
-			success: function(res) {
-				if (res['status'] === 'success') {
-					total = parseInt(res['total']);
-					$('#cart-section').find(".dtotal").find('span').text(total);
-					$("#apply-voucher").attr("disabled", true);
-					$("#voucher-code").attr("disabled", true);
-					$("#voucher_id").val(res['id']);
-					var voucher = `<div class="cart-item">
-						<p class="dcharge">Voucher Charge: - <span>${res['discount']}</span></p>
-					</div>`
-					$('#cart-section').find(".price-div").before(voucher);
-					alert(`Voucher applied! You saved $${res['discount']}.`);
-				} else {
-					alert(data.message);
-				}
-			}
-		})
-	})
 </script>
 
 
@@ -1253,7 +1091,7 @@ add voucher function
 		  }
 		}
 		
-		</script>
+	</script>
 	 <script>
 		function initAutocomplete() {
 			var input = document.getElementById('location-input-2');
