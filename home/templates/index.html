@@ -439,11 +439,11 @@
 				<input type="hidden" id="dcharge" name="charge">      
 				<input type="hidden" id="voucher_id" name="voucher_id">                          
 				<div class="omc-sv">
-					<div class="voucher-code voucher-section mt-4">
+					<!-- <div class="voucher-code voucher-section mt-4">
 						<input type="text" name="VoucherCode" id="voucher-code"
 							class="form-control om-voucher-code" placeholder="Enter voucher code" data-sid="1166">
 						<button class="btn add-voucher" id="apply-voucher">Add</button>
-					</div>
+					</div> -->
 				</div>
 				<input type="hidden" name="cart_data" id="cart-data">    
 				<div class="cart-footer">
@@ -579,7 +579,7 @@
 			cartsection.find('.cart-items .cart-item').remove();
 			$('.add-to-cart').show();
 			$('.decrease-qty, .increase-qty, .item-quantity').addClass('d-none');
-			$("#cart-total-amount").text('$ 0');
+			$("#cart-total-amount").text('$0');
 			for (let i = 0; i < cart.length; i++) {
 				var itemCard = $(".carditem" + cart[i].item_id);
 				if (itemCard) {
@@ -663,7 +663,7 @@
 				</div>`
 				$('#cart-section').find(".price-div").before(voucher_html);
 			}
-			$("#cart-total-amount").text('$ ' + parseFloat(final).toFixed(2));
+			$("#cart-total-amount").text('$' + parseFloat(final).toFixed(2));
 		}
 	</script>
 	<script>
@@ -891,7 +891,6 @@
 					const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
 					const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
 					const restaurantID = parseInt(card.getAttribute('data-id')) || "{{restaurant.id}}";
-					console.log(userLat, userLon, "bbbb")
 					const distance = calculateDistance(userLat, userLon, restaurantLat, restaurantLon);
 					localStorage.setItem('rdistance'+restaurantID, distance.toFixed(2))
 					card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
