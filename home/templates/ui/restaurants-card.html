@@ -130,6 +130,7 @@
 											<button type="button" id="bookTableButton" class="book-table-btn mx-1" data-bs-toggle="modal" data-bs-target="#booktable">Book A Table</button>
 											<button class="feedback-btn book-table-btn" id="openFeedbackModal">Feedback</button>
 										</div>
+										
 									</div>
 								</div>
 							</div>
@@ -234,7 +235,10 @@
 						</div>
 					</div>
 					
-					<div class="col-md-12 d-flex justify-content-end">
+					<div class="col-md-12 align-item-center gap-3 d-flex justify-content-end">
+						<div class="alert alert-danger me-auto" style="display:none" id="deliveryWarn">
+							Delivery is only allowed for 15km distance range
+						</div>
 						<div class="switch-wrap pick_del">
 							<label class="switch">
 								<span id="delivery-option" data-resid="{{restaurant.id}}" class="switch-delivery active switch-ot" data-id="Delivery">
@@ -469,6 +473,13 @@
 			dateFormat: "Y-m-d",
 			minDate: "today",
 		});
+		setTimeout(() => {
+			var resid = "{{restaurant.id}}";
+			var distance = parseFloat(localStorage.getItem('rdistance'+resid));
+			if (distance > 15) {
+				$(".switch-wrap .switch-ot").click();
+			}
+		}, 1000);
 	});
 </script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

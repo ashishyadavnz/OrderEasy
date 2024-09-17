@@ -763,7 +763,10 @@
 				var option = $(this).data("id");
 				var resid = $(this).data("resid");
 				var distance = parseFloat(localStorage.getItem('rdistance'+resid));
-
+				$('#deliveryWarn').hide()
+				if (distance > 15) {
+					$('#deliveryWarn').show()
+				}
 				if (option == 'Delivery' && distance > 15) {
 					$(".popup-overlay").show();
 					$(".popup-message").text("Delivery is not available for distances greater than 15 km.");
