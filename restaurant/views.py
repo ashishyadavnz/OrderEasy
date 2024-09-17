@@ -32,7 +32,6 @@ def restaurant(request, cuisine_slug=None):
         location = request.POST.get('location')
         latitude = request.POST.get('latitude')
         longitude = request.POST.get('longitude')
-        print(location,"location")
         cart = request.session.get('cart', [])
         if location and latitude and longitude:
             request.session['user_address'] = {'add': location, 'display': address, 'lat': latitude, 'long': longitude}
@@ -321,7 +320,12 @@ def add_to_cart(request):
 def clear_cart(request):
     if request.method == 'POST':
         # Clear the session's cart
-        request.session.clear()
+        cart = request.session.get('cart', [])
+        discount = request.session.get('discount', None)
+        if len(cart) > 0:
+            del request.session['cart']
+        if discount:
+            del request.session['discount']
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 
@@ -333,8 +337,11 @@ def update_order_type(request):
         if discount:
             voucher = discount
         order_type = request.POST.get('order_type')
+        resid = request.POST['resid']
         cart = request.session.get('cart', [])
         if cart:
+            if resid != cart[0]['restaurant']:
+                return JsonResponse({'status': 'rchange', 'message': 'Restaurant changed.'})
             for item in cart:
                 item['order_type'] = order_type
         request.session['cart'] = cart
