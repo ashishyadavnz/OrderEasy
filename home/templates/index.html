@@ -577,6 +577,9 @@
 			$('.add-to-cart').show();
 			$('.decrease-qty, .increase-qty, .item-quantity').addClass('d-none');
 			$("#cart-total-amount").text('$0');
+			cartsection.find('input[name="order_type"]').val(cart[0]['order_type']);
+			cartsection.find('input[name="restaurent_id"]').val(cart[0]['restaurant']);
+			cartsection.find('input[name="cart_data"]').val(JSON.stringify(cart));
 			for (let i = 0; i < cart.length; i++) {
 				var itemCard = $(".carditem" + cart[i].item_id);
 				if (itemCard) {
@@ -589,9 +592,6 @@
 					}
 					itemCard.siblings('.item-quantity').text('Qty: ' + cart[i].quantity);
 				}
-				cartsection.find('input[name="order_type"]').val(cart[0]['order_type']);
-            	cartsection.find('input[name="restaurent_id"]').val(cart[0]['restaurant']);
-            	cartsection.find('input[name="cart_data"]').val(cart[0]['cart']);
 				var html = `
 					<div class="cart-item" data-id="{{item.id}}"><div class="container">
 						<div class="row">
