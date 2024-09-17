@@ -531,7 +531,6 @@
 	<script src="{% static 'js/custom.js' %}"></script>
 	<script src="{% static 'js/ownchar.js' %}"></script>
 	<script type="module">
-        // Initialize Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
         import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-messaging.js";
 
@@ -548,7 +547,6 @@
         const app = initializeApp(firebaseConfig);
         const messaging = getMessaging();
 
-        // Get the device token
         getToken(messaging, { vapidKey: 'BHzwzJsxsIu-lTCvdZQfK1eqfCJd1tqDzGySY9DEjX6CwlZA1LB42062q2bv9uH3B2R18H_TVxbGVZl9X0yZjwI' }).then((currentToken) => {
             if (currentToken) {
                 sendTokenToServer(currentToken);
@@ -560,7 +558,6 @@
             console.log('An error occurred while retrieving token: ', err);
         });
 
-        // Register Service Worker for Firebase Messaging
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('js/firebase-messaging-sw.js')
             .then(function(registration) {
@@ -593,8 +590,8 @@
 					itemCard.siblings('.item-quantity').text('Qty: ' + cart[i].quantity);
 				}
 				cartsection.find('input[name="order_type"]').val(cart[0]['order_type']);
-				cartsection.find('input[name="restaurent_id"]').val(cart[0]['restaurant']);
-				cartsection.find('input[name="cart_data"]').val(cart[0]['cart']);
+            	cartsection.find('input[name="restaurent_id"]').val(cart[0]['restaurant']);
+            	cartsection.find('input[name="cart_data"]').val(cart[0]['cart']);
 				var html = `
 					<div class="cart-item" data-id="{{item.id}}"><div class="container">
 						<div class="row">
@@ -621,7 +618,7 @@
 				totalAmount += item.price * item.quantity;
 			});
 			var dist = parseFloat(res['distance']);
-			if (res['type'] == 'Delivery') {
+				if (res['type'] == 'Delivery') {
 				if (totalAmount < 30) {
 					if ("{{restaurant.vip}}" === "True") {
 						deliveryCharge = 15 + dist;
@@ -640,7 +637,7 @@
 			} else {
 				deliveryCharge = 0;
 			}
-			cartsection.find('input[name="charge"]').val(deliveryCharge.toFixed(2)); 
+			cartsection.find('input[name="charge"]').val(deliveryCharge.toFixed(2));
 			final = (totalAmount + deliveryCharge).toFixed(2);
 			var dcharge_html = `<div class="cart-item">
 				<p class="dcharge">Delivery Charge: <span>$${deliveryCharge.toFixed(2)}</span></p>
@@ -767,6 +764,19 @@
 				$("#pickup-option").addClass('active');
 			}
 			var otype = localStorage.setItem('order_type', option);
+			$.ajax({
+			url: '{% url "restaurant:update_order_type" %}', 
+			method: 'POST',
+			data: {
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				'order_type': option
+			},
+			success: function(res) {
+				if (res.status === 'success') {
+					cartupdate(res);
+				}
+			}
+		});
 		});
 	</script>
 	<script>
