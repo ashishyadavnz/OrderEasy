@@ -525,6 +525,10 @@
 		crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+	<script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJyohCbfGZAjBsj2HddGPlY3YjwJ3i1To&callback=initMap&v=weekly"
+      defer
+    ></script>
 	<script src="{% static 'js/fast.js' %}"></script>
 	<script src="{% static 'js/eat.js' %}"></script>
 	<script src="{% static 'js/aos.js' %}"></script>
@@ -550,20 +554,20 @@
         getToken(messaging, { vapidKey: 'BHzwzJsxsIu-lTCvdZQfK1eqfCJd1tqDzGySY9DEjX6CwlZA1LB42062q2bv9uH3B2R18H_TVxbGVZl9X0yZjwI' }).then((currentToken) => {
             if (currentToken) {
                 sendTokenToServer(currentToken);
-                console.log("Token is: ", currentToken);
+                // console.log("Token is: ", currentToken);
             } else {
-                console.log('No registration token available. Request permission to generate one.');
+                // console.log('No registration token available. Request permission to generate one.');
             }
         }).catch((err) => {
-            console.log('An error occurred while retrieving token: ', err);
+            // console.log('An error occurred while retrieving token: ', err);
         });
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('js/firebase-messaging-sw.js')
             .then(function(registration) {
-                console.log('Service Worker registered with scope:', registration.scope);
+                // console.log('Service Worker registered with scope:', registration.scope);
             }).catch(function(err) {
-                console.log('Service Worker registration failed:', err);
+                // console.log('Service Worker registration failed:', err);
             });
         }
     </script>
@@ -863,10 +867,10 @@
 		function trackLocation() {
 			navigator.geolocation.getCurrentPosition(
 				function(position) {
-					console.log("Initial Position: ", position.coords.latitude, position.coords.longitude);
+					// console.log("Initial Position: ", position.coords.latitude, position.coords.longitude);
 				},
 				function(error) {
-					console.error("Error: ", error);
+					// console.error("Error: ", error);
 				},
 				{ enableHighAccuracy: true }
 			);
@@ -876,31 +880,66 @@
 	<script>
 		function calculateMatrixDistance(lat1, lon1, lat2, lon2, useraddress, restaddress, callback) {
             console.log("inside function", lat1, lon1, lat2, lon2, useraddress, restaddress);
-            
-            $.ajax({
-                url: 'https://maps.googleapis.com/maps/api/distancematrix/json',
-                data: {
-                    destinations: restaddress,
-                    origins: useraddress,
-                    units: 'imperial',
-                    key: 'AIzaSyAJyohCbfGZAjBsj2HddGPlY3YjwJ3i1To'
-                },
-                success: function(response) {
-                    console.log('Distance Matrix API Response:', response);
-                    if (response?.rows.length > 0 && response?.status === 'OK') {
-                        let value = response?.rows[0]?.elements[0]?.distance?.value / 1000; // Convert meters to kilometers
-                        callback(value); // Call the callback function with the result
-                    } else {
-                        let fallbackDistance = calculateDistance(lat1, lon1, lat2, lon2);
-                        callback(fallbackDistance);
-                    }
-                },
-                error: function(error) {
-                    console.error('Error with Distance Matrix API:', error);
-                    let fallbackDistance = calculateDistance(lat1, lon1, lat2, lon2);
-                    callback(fallbackDistance);
-                }
-            });
+            const service = new google.maps.DistanceMatrixService();
+			// build request
+			let origin1 = null;
+			let destinationB = null;
+			if (useraddress) {
+				origin1 = useraddress;
+			}
+			else {
+				origin1 = { lat: parseFloat(lat1), lng: parseFloat(lon1) };
+			}
+			// const origin2 = "D-21, Mahalaxmi Nagar Rd, D-Block, Malviya Nagar, Jaipur, Rajasthan 302017";
+			// const destinationA = "302006, Railway, Station Rd, Gopalbari, Jaipur, Rajasthan 302006";
+			if (!restaddress) {
+				destinationB = { lat: parseFloat(lat2), lng: parseFloat(lon2) };
+			}
+			else {
+				destinationB = restaddress;
+			}
+			const request = {
+				origins: [origin1],
+				destinations: [destinationB],
+				travelMode: google.maps.TravelMode.DRIVING,
+				unitSystem: google.maps.UnitSystem.METRIC,
+				avoidHighways: false,
+				avoidTolls: false,
+			};
+			console.log(request, "request")
+			// get distance matrix response
+			service.getDistanceMatrix(request).then((response) => {
+				console.log(response, "response")
+				if (response?.rows.length > 0) {
+					let value = response?.rows[0]?.elements[0]?.distance?.value / 1000; // Convert meters to kilometers
+					console.log(value, "value")
+					callback(value); // Call the callback function with the result
+				}
+			});
+            // $.ajax({
+            //     url: 'https://maps.googleapis.com/maps/api/distancematrix/json',
+            //     data: {
+            //         destinations: restaddress,
+            //         origins: useraddress,
+            //         units: 'metric',
+            //         key: 'AIzaSyAJyohCbfGZAjBsj2HddGPlY3YjwJ3i1To'
+            //     },
+            //     success: function(response) {
+            //         console.log('Distance Matrix API Response:', response);
+            //         if (response?.rows.length > 0 && response?.status === 'OK') {
+            //             let value = response?.rows[0]?.elements[0]?.distance?.value / 1000; // Convert meters to kilometers
+            //             callback(value); // Call the callback function with the result
+            //         } else {
+            //             let fallbackDistance = calculateDistance(lat1, lon1, lat2, lon2);
+            //             callback(fallbackDistance);
+            //         }
+            //     },
+            //     error: function(error) {
+            //         console.error('Error with Distance Matrix API:', error);
+            //         let fallbackDistance = calculateDistance(lat1, lon1, lat2, lon2);
+            //         callback(fallbackDistance);
+            //     }
+            // });
         }
 		function calculateDistance(lat1, lon1, lat2, lon2) {
 			const R = 6371; 
@@ -914,27 +953,21 @@
 			return R * c; ''
 		}
 		function displayDistances() {
-			console.log("hyyy")
 			if (navigator.geolocation) {
-				console.log("hyyy11")
 				navigator.geolocation.getCurrentPosition(function(position) {
-					console.log("hyyy22")
 					let userLat = position.coords.latitude;
 					let userLon = position.coords.longitude;
 					let useraddress = {{ user_address|default:"null" |safe }};
-					console.log("userAddress:", useraddress);
 					if(useraddress){
 						userLat = useraddress.lat
 						userLon = useraddress.long;
 						useraddress = useraddress.add;
 					}
-					console.log(userLat, userLon, useraddress, "aaaaa")
 					document.querySelectorAll('.restaurant-card').forEach(function(card) {
 						const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
 						const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
 						const restaddress = card.getAttribute('data-address');
 						const restaurantID = parseInt(card.getAttribute('data-id'));
-						console.log(userLat, userLon, useraddress, restaddress, "bbbb")
 						calculateMatrixDistance(userLat, userLon, restaurantLat, restaurantLon, useraddress, restaddress, function(distance) {
 							console.log("final distance", distance.toFixed(2) + " km");
 							localStorage.setItem('rdistance'+restaurantID, distance.toFixed(2));
@@ -1041,10 +1074,10 @@
 					'csrfmiddlewaretoken': '{{ csrf_token }}'  // Ensure this token is available in the template context
 				},
 				success: function(response) {
-					console.log('Token saved or retrieved:', response);
+					// console.log('Token saved or retrieved:', response);
 				},
 				error: function(xhr, status, error) {
-					console.error('Error saving token:', xhr.responseText);
+					// console.error('Error saving token:', xhr.responseText);
 				}
 			});
 		}		

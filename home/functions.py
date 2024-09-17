@@ -39,8 +39,8 @@ def matrixdistance(useraddress, restaddress):
 	params = {
 		'origins': useraddress,
 		'destinations': restaddress,
-		# 'units': 'metric',
-		'units': 'imperial',
+		'units': 'metric',
+		# 'units': 'imperial',
 		'key': "AIzaSyAJyohCbfGZAjBsj2HddGPlY3YjwJ3i1To"
 	}
 	response = requests.get(url, params=params)

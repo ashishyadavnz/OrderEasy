@@ -457,15 +457,15 @@
 		autocomplete.setFields(['address_components', 'geometry', 'name']);
 		autocomplete.addListener('place_changed', function () {
 			var place = autocomplete.getPlace();
-			console.log("Selected Place: ", place);
+			// console.log("Selected Place: ", place);
 			var address = place.name;
 			var latitude = place.geometry.location.lat();
 			var longitude = place.geometry.location.lng();
-			console.log( address,"dsfdsf");
-			console.log(latitude,"dsfdsf");
-			console.log(longitude,"dsfdsf");
-			console.log(place,"dsfdsf");
-			console.log(place.formatted_address,"place formatted");
+			// console.log( address,"dsfdsf");
+			// console.log(latitude,"dsfdsf");
+			// console.log(longitude,"dsfdsf");
+			// console.log(place,"dsfdsf");
+			// console.log(place.formatted_address,"place formatted");
 			document.getElementById('address').value = address;
             document.getElementById('latitude').value = latitude;
             document.getElementById('longitude').value = longitude;
