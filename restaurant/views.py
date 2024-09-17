@@ -30,13 +30,12 @@ def restaurant(request, cuisine_slug=None):
     if request.method == 'POST':
         address = request.POST.get('address')
         location = request.POST.get('location')
-        print(location, "location")
         latitude = request.POST.get('latitude')
         longitude = request.POST.get('longitude')
-
+        print(location,"location")
         cart = request.session.get('cart', [])
-        if address and latitude and longitude:
-            request.session['user_address'] = {'add': location, 'lat': latitude, 'long': longitude}
+        if location and latitude and longitude:
+            request.session['user_address'] = {'add': location, 'display': address, 'lat': latitude, 'long': longitude}
             for item in cart:
                 res = Restaurant.objects.get(id=item['restaurant'])
                 try:
@@ -44,9 +43,6 @@ def restaurant(request, cuisine_slug=None):
                 except:
                     item['rdistance'] = haversine(lat1=res.latitude, lon1=res.longitude, lat2=float(latitude), lon2=float(longitude))
             request.session['cart'] = cart
-            request.session['user_address'] = {'add':address,
-                                            'lat':latitude,
-                                            'long':longitude}
             return redirect('restaurant:restaurant')
     if user_address:
         R = 6371
