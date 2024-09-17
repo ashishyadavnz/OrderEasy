@@ -864,46 +864,81 @@
 		trackLocation();
 	</script>
 	<script>
-	function calculateDistance(lat1, lon1, lat2, lon2) {
-		const R = 6371; 
-		const dLat = (lat2 - lat1) * (Math.PI / 180);
-		const dLon = (lon2 - lon1) * (Math.PI / 180);
-		const a = 
-			Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-			Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * 
-			Math.sin(dLon / 2) * Math.sin(dLon / 2); 
-		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-		return R * c; ''
-	}
-	function displayDistances() {
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function(position) {
-				let userLat = position.coords.latitude;
-				let userLon = position.coords.longitude;
-				const userAddress = {{ user_address|default:"null" |safe }};
-				console.log("userAddress:", userAddress);
-				if(userAddress){
-					userLat = userAddress.lat
-					userLon = userAddress.long;
-				}
-				console.log(userLat, userLon, "aaaaa")
-				document.querySelectorAll('.restaurant-card').forEach(function(card) {
-					const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
-					const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
-					const restaurantID = parseInt(card.getAttribute('data-id')) || "{{restaurant.id}}";
-					const distance = calculateDistance(userLat, userLon, restaurantLat, restaurantLon);
-					localStorage.setItem('rdistance'+restaurantID, distance.toFixed(2))
-					card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
-				   
-				});
-			});
-		} else {
-			console.error("Geolocation is not supported by this browser.");
+		function calculateMatrixDistance(lat1, lon1, lat2, lon2, useraddress, restaddress, callback) {
+            console.log("inside function", lat1, lon1, lat2, lon2, useraddress, restaddress);
+            
+            $.ajax({
+                url: 'https://maps.googleapis.com/maps/api/distancematrix/json',
+                data: {
+                    destinations: restaddress,
+                    origins: useraddress,
+                    units: 'imperial',
+                    key: 'AIzaSyAJyohCbfGZAjBsj2HddGPlY3YjwJ3i1To'
+                },
+                success: function(response) {
+                    console.log('Distance Matrix API Response:', response);
+                    if (response?.rows.length > 0) {
+                        let value = response?.rows[0]?.elements[0]?.distance?.value / 1000; // Convert meters to kilometers
+                        callback(value); // Call the callback function with the result
+                    } else {
+                        let fallbackDistance = calculateDistance(lat1, lon1, lat2, lon2);
+                        callback(fallbackDistance);
+                    }
+                },
+                error: function(error) {
+                    console.error('Error with Distance Matrix API:', error);
+                    let fallbackDistance = calculateDistance(lat1, lon1, lat2, lon2);
+                    callback(fallbackDistance);
+                }
+            });
+        }
+		function calculateDistance(lat1, lon1, lat2, lon2) {
+			const R = 6371; 
+			const dLat = (lat2 - lat1) * (Math.PI / 180);
+			const dLon = (lon2 - lon1) * (Math.PI / 180);
+			const a = 
+				Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+				Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * 
+				Math.sin(dLon / 2) * Math.sin(dLon / 2); 
+			const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+			return R * c; ''
 		}
-	}
-	
-	document.addEventListener('DOMContentLoaded', displayDistances);
-</script>
+		function displayDistances() {
+			console.log("hyyy")
+			if (navigator.geolocation) {
+				console.log("hyyy11")
+				navigator.geolocation.getCurrentPosition(function(position) {
+					console.log("hyyy22")
+					let userLat = position.coords.latitude;
+					let userLon = position.coords.longitude;
+					let useraddress = {{ user_address|default:"null" |safe }};
+					console.log("userAddress:", useraddress);
+					if(useraddress){
+						userLat = useraddress.lat
+						userLon = useraddress.long;
+						useraddress = useraddress.add;
+					}
+					console.log(userLat, userLon, useraddress, "aaaaa")
+					document.querySelectorAll('.restaurant-card').forEach(function(card) {
+						const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
+						const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
+						const restaddress = card.getAttribute('data-address');
+						const restaurantID = parseInt(card.getAttribute('data-id'));
+						console.log(userLat, userLon, useraddress, restaddress, "bbbb")
+						calculateMatrixDistance(userLat, userLon, restaurantLat, restaurantLon, useraddress, restaddress, function(distance) {
+							console.log("final distance", distance.toFixed(2) + " km");
+							localStorage.setItem('rdistance'+restaurantID, distance.toFixed(2));
+							card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
+						});
+					});
+				});
+			} else {
+				console.error("Geolocation is not supported by this browser.");
+			}
+		}
+		
+		document.addEventListener('DOMContentLoaded', displayDistances);
+	</script>
 <script>
 	let checkout = document.getElementById('checkout')
 	if(checkout){

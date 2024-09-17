@@ -74,6 +74,7 @@
 						<div class="restaurant-card col-lg-4  mb-3" 
 							data-latitude="{{ restaurant.latitude }}" 
 							data-longitude="{{ restaurant.longitude }}"
+							data-address="{{ restaurant.address }}"
 							data-id="{{ restaurant.id }}"
 							data-aos="flip-up" 
 							data-aos-delay="200" 
@@ -114,9 +115,9 @@
 										{% else %}
 										<p><strong>Delivery starts from:</strong>  NZ$ 0</p>
 										{% endif %} {% endcomment %}
-										{% comment %} <p class="distance">
+										<p class="distance">
 											Distance: Calculating...
-										</p>  {% endcomment %}
+										</p> 
 									</div>
 								</div>
 							</div>
