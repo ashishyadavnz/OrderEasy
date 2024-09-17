@@ -23,7 +23,7 @@
 	<link rel="stylesheet" href="{% static 'css/aos.css' %}">
 	<link rel="stylesheet" href="{% static 'css/new.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOIeek1UEdajdMKU3z2s5IVapM3teenR0&libraries=places"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJyohCbfGZAjBsj2HddGPlY3YjwJ3i1To&libraries=places"></script>
 
 <style>
 	.cart-drop.show {
@@ -525,10 +525,6 @@
 		crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-	<script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJyohCbfGZAjBsj2HddGPlY3YjwJ3i1To&callback=initMap&v=weekly"
-      defer
-    ></script>
 	<script src="{% static 'js/fast.js' %}"></script>
 	<script src="{% static 'js/eat.js' %}"></script>
 	<script src="{% static 'js/aos.js' %}"></script>
@@ -915,7 +911,7 @@
 					console.log(value, "value")
 					callback(value); // Call the callback function with the result
 				}
-			});
+			})
             // $.ajax({
             //     url: 'https://maps.googleapis.com/maps/api/distancematrix/json',
             //     data: {
@@ -970,8 +966,13 @@
 						const restaurantID = parseInt(card.getAttribute('data-id'));
 						calculateMatrixDistance(userLat, userLon, restaurantLat, restaurantLon, useraddress, restaddress, function(distance) {
 							console.log("final distance", distance.toFixed(2) + " km");
-							localStorage.setItem('rdistance'+restaurantID, distance.toFixed(2));
-							card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
+							if (distance.toFixed(2) != "NaN") {
+								localStorage.setItem('rdistance'+restaurantID, distance.toFixed(2));
+								card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
+							}
+							else {
+								card.querySelector('.distance').innerText = '';
+							}
 						});
 					});
 				});
