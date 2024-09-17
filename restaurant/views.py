@@ -1,18 +1,15 @@
-from turtle import distance
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect,HttpResponse
 from django.contrib import messages
 from django.utils.dateparse import parse_date
 from .models import *
 from django.utils import timezone
-from django.db.models import Min
 from datetime import datetime, timedelta
 from django.db.models import F
 from django.db.models.functions import ACos, Cos, Radians, Sin
 from home.forms import *
 from django.views.decorators.csrf import csrf_exempt
 from django.http import QueryDict
-from math import radians, sin, cos, sqrt, atan2
 
 import pytz
 
