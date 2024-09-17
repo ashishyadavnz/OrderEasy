@@ -1,4 +1,3 @@
-from turtle import distance
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect,HttpResponse
 from django.contrib import messages
@@ -38,12 +37,11 @@ def restaurant(request, cuisine_slug=None):
             request.session['user_address'] = {'add': address, 'lat': latitude, 'long': longitude}
             for item in cart:
                 res = Restaurant.objects.get(id=item['restaurant'])
-                item['rdistance'] = haversine(lat1=res.latitude, lon1=res.longitude, lat2=float(latitude), lon2=float(longitude))
-            print(cart, "cart")
+                try:
+                    item['rdistance'] = matrixdistance(useraddress=address, restaddress=res.address)
+                except:
+                    item['rdistance'] = haversine(lat1=res.latitude, lon1=res.longitude, lat2=float(latitude), lon2=float(longitude))
             request.session['cart'] = cart
-            return redirect('restaurant:restaurant')
-        
-        if address and latitude and longitude:
             request.session['user_address'] = {'add':address,
                                             'lat':latitude,
                                             'long':longitude}
@@ -327,4 +325,21 @@ def clear_cart(request):
         # Clear the session's cart
         request.session.clear()
         return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+@csrf_exempt
+def update_order_type(request):
+    if request.method == 'POST':
+        discount = request.session.get('discount', None)
+        voucher = None
+        if discount:
+            voucher = discount
+        order_type = request.POST.get('order_type')
+        cart = request.session.get('cart', [])
+        if cart:
+            for item in cart:
+                item['order_type'] = order_type
+        request.session['cart'] = cart
+        return JsonResponse({'status': 'success', 'cart': cart, 'type':cart[0]['order_type'] if len(cart)>0 else 'Delivery', 'distance':cart[0]['rdistance'] if len(cart)>0 else 0, 'voucher':voucher})
+    
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})

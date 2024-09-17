@@ -34,6 +34,21 @@ def haversine(lat1, lon1, lat2, lon2):
     
     return distance
 
+def matrixdistance(useraddress, restaddress):
+	url = 'https://maps.googleapis.com/maps/api/distancematrix/json'
+	params = {
+		'origins': useraddress,
+		'destinations': restaddress,
+		# 'units': 'metric',
+		'units': 'imperial',
+		'key': "AIzaSyAJyohCbfGZAjBsj2HddGPlY3YjwJ3i1To"
+	}
+	response = requests.get(url, params=params)
+	response_data = response.json()
+	distance_meters = response_data['rows'][0]['elements'][0]['distance']['value']
+	distance_km = distance_meters / 1000
+	return distance_km
+
 def convert_to_dict(self, data):
 	id_value = data.get('id')
 	updated_data = {}
