@@ -478,6 +478,8 @@
 			var distance = parseFloat(localStorage.getItem('rdistance'+resid));
 			if (distance > 15) {
 				$(".switch-wrap .switch-ot").click();
+			} else {
+				document.getElementById("delivery-option").click();
 			}
 		}, 1000);
 	});
