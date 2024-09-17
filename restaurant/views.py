@@ -325,3 +325,20 @@ def clear_cart(request):
         request.session.clear()
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+@csrf_exempt
+def update_order_type(request):
+    if request.method == 'POST':
+        discount = request.session.get('discount', None)
+        voucher = None
+        if discount:
+            voucher = discount
+        order_type = request.POST.get('order_type')
+        cart = request.session.get('cart', [])
+        if cart:
+            for item in cart:
+                item['order_type'] = order_type
+        request.session['cart'] = cart
+        return JsonResponse({'status': 'success', 'cart': cart, 'type':cart[0]['order_type'] if len(cart)>0 else 'Delivery', 'distance':cart[0]['rdistance'] if len(cart)>0 else 0, 'voucher':voucher})
+    
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
