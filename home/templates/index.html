@@ -23,7 +23,7 @@
 	<link rel="stylesheet" href="{% static 'css/aos.css' %}">
 	<link rel="stylesheet" href="{% static 'css/new.css' %}">
 	<link rel="stylesheet" href="{% static 'css/custom.css' %}">
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJyohCbfGZAjBsj2HddGPlY3YjwJ3i1To&libraries=places"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJyohCbfGZAjBsj2HddGPlY3YjwJ3i1Tokk&libraries=places"></script>
 
 	<style>
 		.cart-drop.show {
@@ -963,15 +963,24 @@
 				avoidHighways: false,
 				avoidTolls: false,
 			};
-			console.log(request, "request")
+			let loadDist = false
 			// get distance matrix response
 			service.getDistanceMatrix(request).then((response) => {
 				console.log(response, "response")
+				loadDist = true
 				if (response?.rows.length > 0) {
 						let value = response?.rows[0]?.elements[0]?.distance?.value / 1000; // Convert meters to kilometers
 						callback(value); // Call the callback function with the result
 				}
+			}).catch(e=>{
 			})
+
+			setTimeout(()=>{
+				if(!loadDist){
+					let fallbackDistance = calculateDistance(lat1, lon1, lat2, lon2);
+            		callback(fallbackDistance);
+				}
+			},[3000])
             // $.ajax({
             //     url: 'https://maps.googleapis.com/maps/api/distancematrix/json',
             //     data: {
@@ -1015,16 +1024,16 @@
 					let userLon = position.coords.longitude;
 					let useraddress = {{ user_address|default:"null" |safe }};
 					if(useraddress){
-				userLat = useraddress.lat
-				userLon = useraddress.long;
-				useraddress = useraddress.add;
-			}
+						userLat = useraddress.lat
+						userLon = useraddress.long;
+						useraddress = useraddress.add;
+					}
 					document.querySelectorAll('.restaurant-card').forEach(function(card) {
-				const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
-				const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
-				const restaddress = card.getAttribute('data-address');
-				const restaurantID = parseInt(card.getAttribute('data-id'));
-						calculateMatrixDistance(userLat, userLon, restaurantLat, restaurantLon, useraddress, restaddress, function(distance) {
+					const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
+					const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
+					const restaddress = card.getAttribute('data-address');
+					const restaurantID = parseInt(card.getAttribute('data-id'));
+					calculateMatrixDistance(userLat, userLon, restaurantLat, restaurantLon, useraddress, restaddress, function(distance) {
 					console.log("final distance", distance.toFixed(2) + " km");
 							if (distance.toFixed(2) != "NaN") {
 								localStorage.setItem('rdistance'+restaurantID, distance.toFixed(2));
