@@ -38,8 +38,10 @@ def restaurant(request, cuisine_slug=None):
             request.session['user_address'] = {'add': address, 'lat': latitude, 'long': longitude}
             for item in cart:
                 res = Restaurant.objects.get(id=item['restaurant'])
-                item['rdistance'] = haversine(lat1=res.latitude, lon1=res.longitude, lat2=float(latitude), lon2=float(longitude))
-            print(cart, "cart")
+                try:
+                    item['rdistance'] = matrixdistance(useraddress=address, restaddress=res.address)
+                except:
+                    item['rdistance'] = haversine(lat1=res.latitude, lon1=res.longitude, lat2=float(latitude), lon2=float(longitude))
             request.session['cart'] = cart
             request.session['user_address'] = {'add':address,
                                             'lat':latitude,

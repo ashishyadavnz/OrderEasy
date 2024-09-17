@@ -618,7 +618,7 @@
 				totalAmount += item.price * item.quantity;
 			});
 			var dist = parseFloat(res['distance']);
-				if (res['type'] == 'Delivery') {
+			if (res['type'] == 'Delivery') {
 				if (totalAmount < 30) {
 					if ("{{restaurant.vip}}" === "True") {
 						deliveryCharge = 15 + dist;
@@ -887,7 +887,7 @@
                 },
                 success: function(response) {
                     console.log('Distance Matrix API Response:', response);
-                    if (response?.rows.length > 0) {
+                    if (response?.rows.length > 0 && response?.status === 'OK') {
                         let value = response?.rows[0]?.elements[0]?.distance?.value / 1000; // Convert meters to kilometers
                         callback(value); // Call the callback function with the result
                     } else {
