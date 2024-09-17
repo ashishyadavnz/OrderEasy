@@ -14,7 +14,7 @@
 						<p>Order from best restaurant in your city</p>
 						<p>Enter Your Address</p>
 						<div class="nice-select-one">
-							<form class="d-flex align-items-center w-md-80" id="location-form" method="post" action="{% url "restaurant:restaurant" %}">
+							<form class="d-flex align-items-center w-md-80" id="location-form" method="post" action="{% url 'restaurant:restaurant' %}">
 								{% csrf_token %}
 								<input required type="text" id="location-input" name="location" class="form-control" placeholder="Enter your address...">
 								<input type="hidden" id="address" name="address">

@@ -29,12 +29,14 @@ def restaurant(request, cuisine_slug=None):
         restaurants = restaurants.filter(fooditems_restaurant__in=fooditems).distinct()
     if request.method == 'POST':
         address = request.POST.get('address')
+        location = request.POST.get('location')
+        print(location, "location")
         latitude = request.POST.get('latitude')
         longitude = request.POST.get('longitude')
 
         cart = request.session.get('cart', [])
         if address and latitude and longitude:
-            request.session['user_address'] = {'add': address, 'lat': latitude, 'long': longitude}
+            request.session['user_address'] = {'add': location, 'lat': latitude, 'long': longitude}
             for item in cart:
                 res = Restaurant.objects.get(id=item['restaurant'])
                 try:
