@@ -571,6 +571,7 @@
 	{% endblock %}
 	<script>
 		function cartupdate(res) {
+			localStorage.setItem('distance', res['distance']);
 			var cartsection = $('#cart-section');
 			var cart = res['cart'];
 			cartsection.find('.cart-items .cart-item').remove();
@@ -754,31 +755,77 @@
 	</script>
 	
 	<script>
-		$(".switch-wrap").on("click", ".switch-ot", function() {
-			var option = $(this).data("id");
-			if (option == 'Delivery') {
-				$("#delivery-option").addClass('active');
-				$("#pickup-option").removeClass('active');
-			} else {
-				$("#delivery-option").removeClass('active');
-				$("#pickup-option").addClass('active');
-			}
-			var otype = localStorage.setItem('order_type', option);
-			$.ajax({
-			url: '{% url "restaurant:update_order_type" %}', 
-			method: 'POST',
-			data: {
-				csrfmiddlewaretoken: '{{ csrf_token }}',
-				'order_type': option
-			},
-			success: function(res) {
-				if (res.status === 'success') {
-					cartupdate(res);
+		$(document).ready(function() {
+			$(".switch-wrap").on("click", ".switch-ot", function() {
+				var option = $(this).data("id");
+				var resid = $(this).data("resid");
+				var distance = parseFloat(localStorage.getItem('distance')); 
+	
+				if (option == 'Delivery' && distance > 15) {
+					$(".popup-overlay").show();
+					$(".popup-message").text("Delivery is not available for distances greater than 15 km.");
+					return; 
 				}
-			}
-		});
+	
+				if (option == 'Delivery') {
+					$("#delivery-option").addClass('active');
+					$("#pickup-option").removeClass('active');
+				} else {
+					$("#delivery-option").removeClass('active');
+					$("#pickup-option").addClass('active');
+				}
+	
+				localStorage.setItem('order_type', option);
+	
+				$.ajax({
+					url: '{% url "restaurant:update_order_type" %}', 
+					method: 'POST',
+					data: {
+						csrfmiddlewaretoken: '{{ csrf_token }}',
+						'order_type': option,
+						'resid': resid
+					},
+					success: function(res) {
+						if (res.status === 'rchange') {
+							$('#staticBackdrop').modal('show');
+							$('#confirmDeleteBtn').on('click', function() {
+								$.ajax({
+									url: '{% url "restaurant:clear_cart" %}', 
+									method: 'POST',
+									data: {
+										csrfmiddlewaretoken: '{{ csrf_token }}',
+									},
+									success: function(response) {
+										if (response.status === 'success') {
+											$('#staticBackdrop').modal('hide');									
+											$('#successModal').modal('show');
+											cartupdate(res);
+										}
+									},
+									error: function() {
+										$("#cart-message").html(`
+											<div class="alert alert-danger alert-dismissible fade show" role="alert">
+												Failed to delete previous items.
+												<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+											</div>
+										`);							}
+								});
+							});
+								$('#cancelDeleteBtn').on('click', function() {
+								$('#staticBackdrop').modal('hide');
+							});
+						} else {
+							cartupdate(res);
+						}
+					}
+				});
+			});
+			$(".popup-close").on("click", function() {
+				$(".popup-overlay").hide();
+			});
 		});
 	</script>
+	
 	<script>
 		function showToast() {
 			const toastContainer = document.getElementById('toast-container');
@@ -939,6 +986,10 @@
 							console.log("final distance", distance.toFixed(2) + " km");
 							localStorage.setItem('rdistance'+restaurantID, distance.toFixed(2));
 							card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
+							if (distance.toFixed(2) > 15) {
+								$("#delivery-option").removeClass('active');
+								$("#pickup-option").addClass('active');
+							}
 						});
 					});
 				});

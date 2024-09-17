@@ -336,8 +336,11 @@ def update_order_type(request):
         if discount:
             voucher = discount
         order_type = request.POST.get('order_type')
+        resid = request.POST['resid']
         cart = request.session.get('cart', [])
         if cart:
+            if resid != cart[0]['restaurant']:
+                return JsonResponse({'status': 'rchange', 'message': 'Restaurant changed.'})
             for item in cart:
                 item['order_type'] = order_type
         request.session['cart'] = cart

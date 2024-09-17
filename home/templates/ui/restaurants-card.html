@@ -51,6 +51,34 @@
     background-color: #c82333; 
     box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2); 
 }
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.popup-close {
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 
 	
 </style>
@@ -199,13 +227,20 @@
 		<div class="container">
 			<div class="">
 				<div class="row">
+					<div class="popup-overlay" style="display: none; ">
+						<div class="popup-content py-4" style="background-image: url(/static/images/background-1.png);object-fit: cover;">
+							<h4 class="popup-message"></h4>
+							<button class="popup-close btn btn-secondary ">Close</button>
+						</div>
+					</div>
+					
 					<div class="col-md-12 d-flex justify-content-end">
 						<div class="switch-wrap pick_del">
 							<label class="switch">
-								<span id="delivery-option" class="switch-delivery active switch-ot" data-id="Delivery">
+								<span id="delivery-option" data-resid="{{restaurant.id}}" class="switch-delivery active switch-ot" data-id="Delivery">
 									Delivery
 								</span>
-								<span id="pickup-option" class="switch-pickup switch-ot" data-id="Pickup">
+								<span id="pickup-option" data-resid="{{restaurant.id}}" class="switch-pickup switch-ot" data-id="Pickup">
 									Pickup
 								</span>
 							</label>
@@ -264,9 +299,9 @@
 														<input type="hidden" class="carditem{{item.id}}">
 														
 														{% if restaurant.start|is_restaurant_open:restaurant.end %}
-														<button class="btn add-to-cart" style="background-color:#F29F05; color: white;" data-id="{{ item.id }}" data-title="{{ item.title }}" data-image="{% if item.image %}{{ item.image.url }}{% endif %}" data-price="{{ item.price }}">Add to Cart</button>
-														{% else %}
 														<button class="btn btn-secondary " disabled>Closed</button>
+														{% else %}
+														<button class="btn add-to-cart" style="background-color:#F29F05; color: white;" data-id="{{ item.id }}" data-title="{{ item.title }}" data-image="{% if item.image %}{{ item.image.url }}{% endif %}" data-price="{{ item.price }}">Add to Cart</button>
 														{% endif %}
 														
 														<button class="btn btn-danger decrease-qty d-none" data-id="{{ item.id }}">-</button>
