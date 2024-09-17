@@ -22,27 +22,27 @@
 	<link rel="stylesheet" href="{% static 'css/color.css' %}">
 	<link rel="stylesheet" href="{% static 'css/aos.css' %}">
 	<link rel="stylesheet" href="{% static 'css/new.css' %}">
-    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+	<link rel="stylesheet" href="{% static 'css/custom.css' %}">
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJyohCbfGZAjBsj2HddGPlY3YjwJ3i1To&libraries=places"></script>
 
-<style>
-	.cart-drop.show {
-		opacity: var(--bs-backdrop-opacity);
-	}
-	.cart-drop {
-		--bs-backdrop-zindex: 1050;
-		--bs-backdrop-bg: #000;
-		--bs-backdrop-opacity: 0.5;
-		position: fixed;
-		top: 0;
-		left: 0;
-		z-index: 500;
-		width: 100vw;
-		height: 100vh;
-		background-color: var(--bs-backdrop-bg);
-		display:none;
-	}
-</style>
+	<style>
+		.cart-drop.show {
+			opacity: var(--bs-backdrop-opacity);
+		}
+		.cart-drop {
+			--bs-backdrop-zindex: 1050;
+			--bs-backdrop-bg: #000;
+			--bs-backdrop-opacity: 0.5;
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: 500;
+			width: 100vw;
+			height: 100vh;
+			background-color: var(--bs-backdrop-bg);
+			display: none;
+		}
+	</style>
 </head>
 
 <body style="word-wrap: break-word;">
@@ -57,9 +57,9 @@
 			<span>Loading</span>
 		</div>
 	</div>
-	<header class="pb-0 fixed-header" >
+	<header class="pb-0 fixed-header">
 		<div class="{% if user_address %}mx-md-5{% else %}container{% endif %}">
-			<div class="d-flex align-items-center justify-content-between  mx-0" >
+			<div class="d-flex align-items-center justify-content-between  mx-0">
 				<div class="">
 					<div class="header-style">
 						<a href="{% url 'home:home-page' %}">
@@ -84,12 +84,12 @@
 							</li>
 							{% if request.user and request.user.role == 'Owner' %}
 								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'my_restaurant' %}active{% endif %}">
-									<a href="{% url 'restaurant:my_restaurant' %}">My Restaurants</a>
-								</li>
+								<a href="{% url 'restaurant:my_restaurant' %}">My Restaurants</a>
+							</li>
 							{% else %}
 								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'restaurant' %}active{% endif %}">
-									<a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
-								</li>
+								<a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
+							</li>
 							{% endif %}
 							<li class="navbar-dropdown {% if request.resolver_match.url_name == 'blog_page' %}active{% endif %}">
 								<a href="{% url 'blog:blog_page' %}">Blog</a>
@@ -97,7 +97,7 @@
 							<li class="navbar-dropdown {% if request.resolver_match.url_name == 'about-page' %}active{% endif %}">
 								<a href="{% url 'home:about-page' %}">About Us</a>
 							</li>
-							
+
 							<!-- <li class="navbar-dropdown">
 								<a href="JavaScript:void(0)">Pages</a>
 								<div class="dropdown">
@@ -115,19 +115,19 @@
 							</li>
 							{% if request.user.is_authenticated %}
 								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
-									<a href="{% url  'home:profile'  %}">Profile</a>
-								</li>
+								<a href="{% url  'home:profile'  %}">Profile</a>
+							</li>
 							{% endif %}
 							{% if request.user.is_authenticated %}
 								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
-									<a href="{% url 'home:myorder' %}">My Orders</a>
-								</li>
+								<a href="{% url 'home:myorder' %}">My Orders</a>
+							</li>
 							{% endif %}
-							
+
 						</ul>
 					</nav>
 				</div>
-				<div id="web" class="d-flex justify-content-between align-items-center" >
+				<div id="web" class="d-flex justify-content-between align-items-center">
 					<div class="d-flex align-items-center ">
 						{% if user_address %}
 						<!-- <div class="d-flex align-items-center">
@@ -136,15 +136,16 @@
 								<span>{{user_address.add}}</span>
 							</div>
 						</div> -->
-						<form class="d-flex align-items-center w-md-80" id="location-form-2" method="post" action="{% url 'restaurant:restaurant' %}">
+						<form class="d-flex align-items-center w-md-80" id="location-form-2" method="post"
+							action="{% url 'restaurant:restaurant' %}">
 							{% csrf_token %}
 							<!-- <div class="d-flex align-items-center"> -->
-								<div class="input-group">
-									<span class="input-group-text mt-2 bg-white" id="basic-addon1">
-										<i class="fa-solid fa-location-dot text-danger"></i>
-									</span>
+							<div class="input-group">
+								<span class="input-group-text mt-2 bg-white" id="basic-addon1">
+									<i class="fa-solid fa-location-dot text-danger"></i>
+								</span>
 									<input required type="text" id="location-input-2" name="location" value="{{ user_address.display }}" class="form-control me-5 mt-2" placeholder="Enter your address...">
-								</div>
+							</div>
 							<!-- </div> -->
 							<input type="hidden" id="address-2" name="address">
 							<input type="hidden" id="latitude-2" name="latitude">
@@ -153,20 +154,20 @@
 						{% endif %}
 						{% if request.user and request.user.role == 'Owner' %}
 						{% else %}
-							<div class="extras bag">
-								<a href="javascript:void(0)" id="desktop-menu" class="menu-btn p-2">
+						<div class="extras bag">
+							<a href="javascript:void(0)" id="desktop-menu" class="menu-btn p-2">
 									<i class="fa-solid fa-bag-shopping px-2">&nbsp;<span id="cart-total-amount">$ 0</span></i>
-								</a>
-								<!-- Cart Section -->
-								<!-- <a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a> -->
-							</div>
+							</a>
+							<!-- Cart Section -->
+							<!-- <a href="{% url 'restaurant:restaurant' %}" class="button button-2">Order Now</a> -->
+						</div>
 						{% endif %}
-						
+
 						<div class="bag">
 							{% if user.is_authenticated %}
-								<a href="{% url 'home:logout' %}" class="button button-2 text-nowrap">Logout</a>
+							<a href="{% url 'home:logout' %}" class="button button-2 text-nowrap">Logout</a>
 							{% else %}
-								<a href="{% url 'home:login' %}" class="button button-2 text-nowrap">Sign In</a>
+							<a href="{% url 'home:login' %}" class="button button-2 text-nowrap">Sign In</a>
 							{% endif %}
 						</div>
 					</div>
@@ -195,10 +196,10 @@
 									<a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
 									{% if restaurants and restaurants.first %}
 									<a href="{% url 'restaurant:restaurant-card' slug=restaurants.first.slug %}">Restaurant Card</a>
-								{% else %}
+									{% else %}
 									<a href="">Restaurant Card</a>
-								{% endif %}									
-								<a href="{% url  'home:checkout'  %}">Checkout</a>
+									{% endif %}
+									<a href="{% url  'home:checkout'  %}">Checkout</a>
 								</div>
 							</li>
 							<hr>
@@ -207,7 +208,7 @@
 								<div class="dropdown-content">
 									<a href="{% url 'blog:blog_page' %}">Blog</a>
 									<a href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single Blog</a>
-									<a href="{% url  'blog:service'  %}">Services</a> 
+									<a href="{% url  'blog:service'  %}">Services</a>
 									<a href="{% url 'home:faq' %}">FAQ</a>
 									<a href="{% url  'home:pricing-table'  %}">Pricing Table</a>
 									<a href="{% url  'home:become-partner'  %}">Become A Partner</a>
@@ -219,10 +220,10 @@
 								<a href="{% url  'home:contact'  %}">Contact</a>
 							</li>
 							{% if request.user.is_authenticated %}
-								<hr>
-								<li class="navbar-dropdown">
-									<a href="{% url  'home:profile'  %}">Profile</a>
-								</li>
+							<hr>
+							<li class="navbar-dropdown">
+								<a href="{% url  'home:profile'  %}">Profile</a>
+							</li>
 							{% endif %}
 							<hr>
 						</ul>
@@ -365,19 +366,19 @@
 					<ul>
 						<li><a href="{% url 'home:home-page' %}">Home</a></li>
 						{% if request.user and request.user.role == 'Owner' %}
-							<li>
-								<a href="{% url 'restaurant:my_restaurant' %}">My Restaurants</a>
-							</li>
+						<li>
+							<a href="{% url 'restaurant:my_restaurant' %}">My Restaurants</a>
+						</li>
 						{% else %}
-							<li>
-								<a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
-							</li>
+						<li>
+							<a href="{% url 'restaurant:restaurant' %}">Restaurants</a>
+						</li>
 						{% endif %}
 						<li>
 							<a href="{% url 'blog:blog_page' %}">Blog</a>
 						</li>
 						<li><a href="{% url 'home:about-page' %}">About Us</a></li>
-							<!-- <ul class="sub-menu">
+						<!-- <ul class="sub-menu">
 								<li><a href="{% url 'restaurant:restaurant' %}">Restaurants</a></li>
 								<li>     {% if restaurants and restaurants.first %}
 									<a href="{% url 'restaurant:restaurant-card' slug=restaurants.first.slug %}">Restaurant Card</a>
@@ -396,7 +397,7 @@
 										href="{% if post.last %}{% url  'blog:blog_detail' post.last.slug  %}{% else %} javascript:void(0);{% endif %}">Single
 										Blog</a>
 								</li>
-								 <li><a href="{% url  'blog:service'  %}">Services</a></li> 
+								<li><a href="{% url  'blog:service'  %}">Services</a></li>
 								<li><a href="{% url 'home:faq' %}">FAQ</a></li>
 								<li><a href="{% url  'home:pricing-table'  %}">Pricing Table</a></li>
 								<li><a href="{% url  'home:become-partner'  %}">Become A Partner</a></li>
@@ -406,7 +407,7 @@
 						{% endcomment %}
 						<li><a href="{% url  'home:contact'  %}">Contact</a></li>
 						{% if request.user.is_authenticated %}
-							<li><a href="{% url  'home:profile'  %}">Profile</a></li>
+						<li><a href="{% url  'home:profile'  %}">Profile</a></li>
 						{% endif %}
 					</ul>
 					<a href="JavaScript:void(0)" id="res-cross"></a>
@@ -434,10 +435,10 @@
 			{% csrf_token %}
 			<div id="cart-content">
 				<div class="cart-items"></div>
-				<input type="hidden" id="order-type-input" name="order_type" value="Delivery">                                
-				<input type="hidden" id="restaurent-input" name="restaurent_id">                                
-				<input type="hidden" id="dcharge" name="charge">      
-				<input type="hidden" id="voucher_id" name="voucher_id">                          
+				<input type="hidden" id="order-type-input" name="order_type" value="Delivery">
+				<input type="hidden" id="restaurent-input" name="restaurent_id">
+				<input type="hidden" id="dcharge" name="charge">
+				<input type="hidden" id="voucher_id" name="voucher_id">
 				<div class="omc-sv">
 					<!-- <div class="voucher-code voucher-section mt-4">
 						<input type="text" name="VoucherCode" id="voucher-code"
@@ -445,7 +446,7 @@
 						<button class="btn add-voucher" id="apply-voucher">Add</button>
 					</div> -->
 				</div>
-				<input type="hidden" name="cart_data" id="cart-data">    
+				<input type="hidden" name="cart_data" id="cart-data">
 				<div class="cart-footer">
 					<p id="total-amount"></p>
 					<button type="submit" id="checkout" name="cart_checkout" class="btn btn-success">Checkout</button>
@@ -483,7 +484,7 @@
 							<li><a href="{% url 'restaurant:restaurant' %}">Restaurants<i
 										class="fa-solid fa-arrow-right"></i></a></li>
 							<li><a href="{% url  'home:contact'  %}">Contact<i class="fa-solid fa-arrow-right"></i></a>
-							<!-- <li><a href="{% url 'home:faq' %}">FAQ's<i class="fa-solid fa-arrow-right"></i></a> -->
+								<!-- <li><a href="{% url 'home:faq' %}">FAQ's<i class="fa-solid fa-arrow-right"></i></a> -->
 							</li>
 						</ul>
 					</div>
@@ -521,7 +522,7 @@
 	</footer>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-	integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+		integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
 		crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
@@ -531,10 +532,10 @@
 	<script src="{% static 'js/custom.js' %}"></script>
 	<script src="{% static 'js/ownchar.js' %}"></script>
 	<script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-        import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-messaging.js";
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+		import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-messaging.js";
 
-        const firebaseConfig = {
+		const firebaseConfig = {
 			apiKey: "AIzaSyBZgRCZexv8ErSYGyo6IpbO1Q438e-CFTA",
 			authDomain: "timestint-st.firebaseapp.com",
 			projectId: "timestint-st",
@@ -542,44 +543,47 @@
 			messagingSenderId: "507688135519",
 			appId: "1:507688135519:web:1b3a39ef85863310fce4ea",
 			measurementId: "G-6XJ70609DK"
-        };
+		};
 
-        const app = initializeApp(firebaseConfig);
-        const messaging = getMessaging();
+		const app = initializeApp(firebaseConfig);
+		const messaging = getMessaging();
 
-        getToken(messaging, { vapidKey: 'BHzwzJsxsIu-lTCvdZQfK1eqfCJd1tqDzGySY9DEjX6CwlZA1LB42062q2bv9uH3B2R18H_TVxbGVZl9X0yZjwI' }).then((currentToken) => {
-            if (currentToken) {
-                sendTokenToServer(currentToken);
+		getToken(messaging, { vapidKey: 'BHzwzJsxsIu-lTCvdZQfK1eqfCJd1tqDzGySY9DEjX6CwlZA1LB42062q2bv9uH3B2R18H_TVxbGVZl9X0yZjwI' }).then((currentToken) => {
+			if (currentToken) {
+				sendTokenToServer(currentToken);
                 // console.log("Token is: ", currentToken);
-            } else {
+			} else {
                 // console.log('No registration token available. Request permission to generate one.');
-            }
-        }).catch((err) => {
+			}
+		}).catch((err) => {
             // console.log('An error occurred while retrieving token: ', err);
-        });
+		});
 
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('js/firebase-messaging-sw.js')
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.register('js/firebase-messaging-sw.js')
             .then(function(registration) {
                 // console.log('Service Worker registered with scope:', registration.scope);
             }).catch(function(err) {
                 // console.log('Service Worker registration failed:', err);
-            });
-        }
-    </script>
+				});
+		}
+	</script>
 	{% block script_js %}
 	{% endblock %}
 	<script>
 		function cartupdate(res) {
+			// localStorage.setItem('distance', res['distance']);
 			var cartsection = $('#cart-section');
 			var cart = res['cart'];
 			cartsection.find('.cart-items .cart-item').remove();
 			$('.add-to-cart').show();
 			$('.decrease-qty, .increase-qty, .item-quantity').addClass('d-none');
 			$("#cart-total-amount").text('$0');
-			cartsection.find('input[name="order_type"]').val(cart[0]['order_type']);
-			cartsection.find('input[name="restaurent_id"]').val(cart[0]['restaurant']);
-			cartsection.find('input[name="cart_data"]').val(JSON.stringify(cart));
+			if (cart.length > 0) {
+				cartsection.find('input[name="order_type"]').val(cart[0]['order_type']);
+				cartsection.find('input[name="restaurent_id"]').val(cart[0]['restaurant']);
+				cartsection.find('input[name="cart_data"]').val(JSON.stringify(cart));
+			}
 			for (let i = 0; i < cart.length; i++) {
 				var itemCard = $(".carditem" + cart[i].item_id);
 				if (itemCard) {
@@ -696,7 +700,7 @@
 	<script>
 		$("#cart-section").on("click", ".decrease-qty", function() {
 			var item_id = $(this).data("id");
-		
+
 			$.ajax({
 				url: '{% url "restaurant:add_to_cart" %}',
 				method: 'PATCH',
@@ -711,72 +715,117 @@
 				}
 			});
 		});
-		
+
 	</script>
 	<script>
 		$(".increase-qty").on("click", function() {
-		var item_id = $(this).data("id");
-	
-		$.ajax({
-			url: '{% url "restaurant:add_to_cart" %}',
-			method: 'PATCH',
-			contentType: 'application/x-www-form-urlencoded',
-			data: {
-				csrfmiddlewaretoken: '{{ csrf_token }}',
-				'item_id': item_id,
-				'type': "increase"
-			},
+			var item_id = $(this).data("id");
+
+			$.ajax({
+				url: '{% url "restaurant:add_to_cart" %}',
+				method: 'PATCH',
+				contentType: 'application/x-www-form-urlencoded',
+				data: {
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+					'item_id': item_id,
+					'type': "increase"
+				},
 			success: function(res) {
-				cartupdate(res);
-			}
+					cartupdate(res);
+				}
+			});
 		});
-	});
-	
+
 	</script>
 	<script>
 		$(".decrease-qty").on("click", function() {
-		var item_id = $(this).data("id");
-	
-		$.ajax({
-			url: '{% url "restaurant:add_to_cart" %}',
-			method: 'PATCH',
-			contentType: 'application/x-www-form-urlencoded',
-			data: {
-				csrfmiddlewaretoken: '{{ csrf_token }}',
-				'item_id': item_id,
-				'type': "decrease"
-			},
-			success: function(res) {
-				cartupdate(res);
-			}
-		});
-	});
-	</script>
-	
-	<script>
-		$(".switch-wrap").on("click", ".switch-ot", function() {
-			var option = $(this).data("id");
-			if (option == 'Delivery') {
-				$("#delivery-option").addClass('active');
-				$("#pickup-option").removeClass('active');
-			} else {
-				$("#delivery-option").removeClass('active');
-				$("#pickup-option").addClass('active');
-			}
-			var otype = localStorage.setItem('order_type', option);
+			var item_id = $(this).data("id");
+
 			$.ajax({
-			url: '{% url "restaurant:update_order_type" %}', 
-			method: 'POST',
-			data: {
-				csrfmiddlewaretoken: '{{ csrf_token }}',
-				'order_type': option
-			},
+				url: '{% url "restaurant:add_to_cart" %}',
+				method: 'PATCH',
+				contentType: 'application/x-www-form-urlencoded',
+				data: {
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+					'item_id': item_id,
+					'type': "decrease"
+				},
 			success: function(res) {
-				if (res.status === 'success') {
 					cartupdate(res);
 				}
-			}
+			});
 		});
+	</script>
+
+	<script>
+		$(document).ready(function () {
+			$(".switch-wrap").on("click", ".switch-ot", function () {
+				var option = $(this).data("id");
+				var resid = $(this).data("resid");
+				var distance = parseFloat(localStorage.getItem('rdistance'+resid));
+
+				if (option == 'Delivery' && distance > 15) {
+					$(".popup-overlay").show();
+					$(".popup-message").text("Delivery is not available for distances greater than 15 km.");
+					return;
+				}
+
+				if (option == 'Delivery') {
+					$("#delivery-option").addClass('active');
+					$("#pickup-option").removeClass('active');
+				} else {
+					$("#delivery-option").removeClass('active');
+					$("#pickup-option").addClass('active');
+				}
+				localStorage.setItem('order_type', option);
+				$.ajax({
+					url: '{% url "restaurant:update_order_type" %}',
+					method: 'POST',
+					data: {
+						csrfmiddlewaretoken: '{{ csrf_token }}',
+						'order_type': option,
+						'resid': resid
+					},
+					success: function (res) {
+						if (res.status === 'rchange') {
+							$('#staticBackdrop').modal('show');
+							$('#confirmDeleteBtn').on('click', function () {
+								$.ajax({
+									url: '{% url "restaurant:clear_cart" %}',
+									method: 'POST',
+									data: {
+										csrfmiddlewaretoken: '{{ csrf_token }}',
+									},
+									success: function (response) {
+										
+										if (response.status === 'success') {
+											$('#staticBackdrop').modal('hide');
+											$('#successModal').modal('show');
+											cartupdate(res);
+										}
+									},
+									error: function () {
+										$("#cart-message").html(`
+											<div class="alert alert-danger alert-dismissible fade show" role="alert">
+												Failed to delete previous items.
+												<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+											</div>
+										`);
+									}
+								});
+							});
+							$('#cancelDeleteBtn').on('click', function () {
+								$('#staticBackdrop').modal('hide');
+							});
+						} else {
+							cartupdate(res);
+						}
+					}
+				});
+			});
+			$(".popup-close").on("click", function () {
+				$(".popup-overlay").hide();
+			});
 		});
 	</script>
 	<script>
@@ -822,26 +871,38 @@
 		})
 	</script>
 	<script>
-		$("#desktop-menu").on("click", function() {
+		$("#desktop-menu").on("click", function () {
 			$("#cart-section").addClass('show');
-		})
-		$("#close-cart").on("click", function() {
+			$(".cart-drop").addClass('show');
+		});
+		$("#close-cart").on("click", function () {
 			$("#cart-section").removeClass('show');
-		})
+			$(".cart-drop").removeClass('show');
+		});
+		$(document).on("click", function (event) {
+			if (!$(event.target).closest("#cart-section, #desktop-menu").length) {
+				$("#cart-section").removeClass('show');
+				$(".cart-drop").removeClass('show').css('display', 'none');
+			}
+			});
+		$("#cart-section").on("click", function (event) {
+			event.stopPropagation();
+		});
+
 	</script>
 	<script>
 		function toggleVisibility() {
-		var content = document.getElementById("content");
-		var body = document.body;
-		
-		if (content.style.display === "none") {
-			content.style.display = "block";
-			body.classList.add("menu-open");
-		} else {
-			content.style.display = "none";
-			body.classList.remove("menu-open");
+			var content = document.getElementById("content");
+			var body = document.body;
+
+			if (content.style.display === "none") {
+				content.style.display = "block";
+				body.classList.add("menu-open");
+			} else {
+				content.style.display = "none";
+				body.classList.remove("menu-open");
+			}
 		}
-	}
 	</script>
 	<script>
 		document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
@@ -850,23 +911,23 @@
 					event.preventDefault();
 					var parent = this.parentNode;
 					var dropdownContent = parent.querySelector('.dropdown-content');
-	
+
 					if (window.innerWidth <= 768) {
 						parent.classList.toggle('active');
 						dropdownContent.style.display = parent.classList.contains('active') ? 'block' : 'none';
 					}
 				});
 			}
-	});
+		});
 	</script>
 	<script>
 		function trackLocation() {
 			navigator.geolocation.getCurrentPosition(
 				function(position) {
-					// console.log("Initial Position: ", position.coords.latitude, position.coords.longitude);
+					console.log("Initial Position: ", position.coords.latitude, position.coords.longitude);
 				},
 				function(error) {
-					// console.error("Error: ", error);
+					console.error("Error: ", error);
 				},
 				{ enableHighAccuracy: true }
 			);
@@ -875,7 +936,7 @@
 	</script>
 	<script>
 		function calculateMatrixDistance(lat1, lon1, lat2, lon2, useraddress, restaddress, callback) {
-            console.log("inside function", lat1, lon1, lat2, lon2, useraddress, restaddress);
+			console.log("inside function", lat1, lon1, lat2, lon2, useraddress, restaddress);
             const service = new google.maps.DistanceMatrixService();
 			// build request
 			let origin1 = null;
@@ -907,9 +968,8 @@
 			service.getDistanceMatrix(request).then((response) => {
 				console.log(response, "response")
 				if (response?.rows.length > 0) {
-					let value = response?.rows[0]?.elements[0]?.distance?.value / 1000; // Convert meters to kilometers
-					console.log(value, "value")
-					callback(value); // Call the callback function with the result
+						let value = response?.rows[0]?.elements[0]?.distance?.value / 1000; // Convert meters to kilometers
+						callback(value); // Call the callback function with the result
 				}
 			})
             // $.ajax({
@@ -936,15 +996,15 @@
             //         callback(fallbackDistance);
             //     }
             // });
-        }
+		}
 		function calculateDistance(lat1, lon1, lat2, lon2) {
-			const R = 6371; 
+			const R = 6371;
 			const dLat = (lat2 - lat1) * (Math.PI / 180);
 			const dLon = (lon2 - lon1) * (Math.PI / 180);
-			const a = 
+			const a =
 				Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-				Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * 
-				Math.sin(dLon / 2) * Math.sin(dLon / 2); 
+				Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+				Math.sin(dLon / 2) * Math.sin(dLon / 2);
 			const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 			return R * c; ''
 		}
@@ -955,54 +1015,54 @@
 					let userLon = position.coords.longitude;
 					let useraddress = {{ user_address|default:"null" |safe }};
 					if(useraddress){
-						userLat = useraddress.lat
-						userLon = useraddress.long;
-						useraddress = useraddress.add;
-					}
+				userLat = useraddress.lat
+				userLon = useraddress.long;
+				useraddress = useraddress.add;
+			}
 					document.querySelectorAll('.restaurant-card').forEach(function(card) {
-						const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
-						const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
-						const restaddress = card.getAttribute('data-address');
-						const restaurantID = parseInt(card.getAttribute('data-id'));
+				const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
+				const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
+				const restaddress = card.getAttribute('data-address');
+				const restaurantID = parseInt(card.getAttribute('data-id'));
 						calculateMatrixDistance(userLat, userLon, restaurantLat, restaurantLon, useraddress, restaddress, function(distance) {
-							console.log("final distance", distance.toFixed(2) + " km");
+					console.log("final distance", distance.toFixed(2) + " km");
 							if (distance.toFixed(2) != "NaN") {
 								localStorage.setItem('rdistance'+restaurantID, distance.toFixed(2));
-								card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
+					card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
 							}
 							else {
 								card.querySelector('.distance').innerText = '';
-							}
-						});
-					});
+					}
 				});
+			});
+		});
 			} else {
-				console.error("Geolocation is not supported by this browser.");
-			}
+			console.error("Geolocation is not supported by this browser.");
 		}
-		
+		}
+
 		document.addEventListener('DOMContentLoaded', displayDistances);
 	</script>
-<script>
-	let checkout = document.getElementById('checkout')
+	<script>
+		let checkout = document.getElementById('checkout')
 	if(checkout){
 		checkout.addEventListener('click', function() {
-			document.getElementById('cart-form').submit();
-		});
-	}
-</script>
+				document.getElementById('cart-form').submit();
+			});
+		}
+	</script>
 
 
-{% comment %} food items {% endcomment %}
-<script>
+	{% comment %} food items {% endcomment %}
+	<script>
 		let currentEditId = null;
-		
+
 		function openCreateForm() {
 			currentEditId = null;
 			$('#foodItemForm')[0].reset();
 			$('#foodItemModal').modal('show');
 		}
-		
+
 		$('.EditFoodItem').on("click", function() {
 			currentEditId =  $(this).data('slug')
 			var $row = $(`#foodItem-${currentEditId}`);
@@ -1012,14 +1072,14 @@
 			var price = $row.find('.food-price').text();
 			var available = $row.find('.food-available').data('available').trim() === 'True';
 			$('#id_title').val(title);
-			$('#id_category').val(category); 
-			$('#id_cuisine').val(cuisine); 
+			$('#id_category').val(category);
+			$('#id_cuisine').val(cuisine);
 			$('#id_price').val(price);
 			$('#id_available').prop('checked', available);
 			$('#foodItemModal').modal('show');
 		});
-		
-		
+
+
 		$('.saveFoodItem').on("click", function() {
 			let restro = $(this).data('restaurant')
 			let url = '{% url "restaurant:create_food_item" restro=0 %}'.replace('0',restro)
@@ -1069,16 +1129,16 @@
 		function sendTokenToServer(currentToken) {
 			$.ajax({
 				type: 'POST',
-				url: '{% url "home:fcm_token" %}',  
+				url: '{% url "home:fcm_token" %}',
 				data: {
 					'token': currentToken,
 					'csrfmiddlewaretoken': '{{ csrf_token }}'  // Ensure this token is available in the template context
 				},
 				success: function(response) {
-					// console.log('Token saved or retrieved:', response);
+					console.log('Token saved or retrieved:', response);
 				},
 				error: function(xhr, status, error) {
-					// console.error('Error saving token:', xhr.responseText);
+					console.error('Error saving token:', xhr.responseText);
 				}
 			});
 		}		
@@ -1086,11 +1146,11 @@
 	<script>
 		document.getElementById('desktop-menu').addEventListener('click', function() {
 			var cartDiv = document.querySelector('.cart-drop');
-			cartDiv.style.display = 'block'; 
+			cartDiv.style.display = 'block';
 		});
 		document.getElementById('close-cart').addEventListener('click', function() {
 			var cartDiv = document.querySelector('.cart-drop');
-			cartDiv.style.display = 'none'; 
+			cartDiv.style.display = 'none';
 		});
 	</script>
 
