@@ -263,7 +263,7 @@ def checkout(request):
                 del request.session['discount']
             request.session['display_checkout'] = True
             request.session['orderid'] = odr.id
-            return redirect('restaurant:restaurant')
+            return redirect('home:singelOrder', odr.identifier)
     oid = request.session.get('order', None)
     order = Order.objects.filter(id=oid).last()
     cart_items = request.session.get('cart_items', []) 
@@ -601,3 +601,8 @@ def myorder(request):
     page_number = request.GET.get('page') 
     page_obj = paginator.get_page(page_number)
     return render(request, 'ui/myorder.html', {'page_obj': page_obj})
+
+
+def singelOrder(request,identifier):
+    orderObj = Order.objects.get(identifier=identifier)
+    return render(request, 'ui/singe_order.html', {'order': orderObj})

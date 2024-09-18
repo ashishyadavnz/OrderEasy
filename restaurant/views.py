@@ -360,6 +360,7 @@ def update_order_type(request):
         if discount:
             voucher = discount
         order_type = request.POST.get('order_type')
+        distance = request.POST.get('distance')
         resid = request.POST['resid']
         cart = request.session.get('cart', [])
         if cart:
@@ -367,6 +368,7 @@ def update_order_type(request):
                 return JsonResponse({'status': 'rchange', 'message': 'Restaurant changed.'})
             for item in cart:
                 item['order_type'] = order_type
+                item['rdistance'] = distance
         request.session['cart'] = cart
         return JsonResponse({'status': 'success', 'cart': cart, 'type':cart[0]['order_type'] if len(cart)>0 else 'Delivery', 'distance':cart[0]['rdistance'] if len(cart)>0 else 0, 'voucher':voucher})
     

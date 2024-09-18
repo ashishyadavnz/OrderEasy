@@ -121,7 +121,7 @@
 								<a href="{% url  'home:profile'  %}">Profile</a>
 							</li>
 							{% endif %}
-							{% if request.user.is_authenticated %}
+							{% if request.user.is_authenticated  and request.user.role == 'Customer' %}
 								<li class="navbar-dropdown {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
 								<a href="{% url 'home:myorder' %}">My Orders</a>
 							</li>
@@ -650,10 +650,10 @@
 			} else {
 				deliveryCharge = 0;
 			}
-			cartsection.find('input[name="charge"]').val(deliveryCharge.toFixed(2));
+			cartsection.find('input[name="charge"]').val(Math.ceil(deliveryCharge.toFixed(2)));
 			final = (totalAmount + deliveryCharge).toFixed(2);
 			var dcharge_html = `<div class="cart-item">
-				<p class="dcharge">Delivery Charge: <span>$${deliveryCharge.toFixed(2)}</span></p>
+				<p class="dcharge">Delivery Charge: <span>$${Math.ceil(deliveryCharge.toFixed(2))}</span></p>
 			</div>`
 			var total_html = `<div class="cart-item price-div">
 				<p class="dtotal">Total: <span>$${final}</span></p>
@@ -807,7 +807,8 @@
 					data: {
 						csrfmiddlewaretoken: '{{ csrf_token }}',
 						'order_type': option,
-						'resid': resid
+						'resid': resid,
+						'distance': distance
 					},
 					success: function (res) {
 						if (res.status === 'rchange') {
@@ -1065,8 +1066,8 @@
 					console.log("final distance", distance.toFixed(2) + " km");
 							if (distance.toFixed(2) != "NaN") {
 								localStorage.removeItem('rdistance1')
-								localStorage.setItem('rdistance'+restaurantID, distance.toFixed(2));
-								card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
+								localStorage.setItem('rdistance'+restaurantID, Math.ceil(distance.toFixed(2)));
+								card.querySelector('.distance').innerText = `Distance: ${Math.ceil(distance.toFixed(2))} km`;
 							}
 							else {
 								localStorage.setItem('rdistance1'+restaurantID, true)

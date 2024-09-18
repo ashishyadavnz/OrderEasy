@@ -24,6 +24,11 @@ def order_add(sender, instance=None, created=False, **kwargs):
 		if instance.voucher:
 			total -= instance.voucher.discount
 		instance.total = total
+		if not instance.identifier:
+			instance.identifier = Signer().sign(str(instance.orderid)+str(instance.fname)+str(instance.lname)+str(instance.phone)).split(":")[1]
+		instance.save()
+	if not instance.identifier:
+		instance.identifier = Signer().sign(str(instance.orderid)+str(instance.fname)+str(instance.lname)+str(instance.phone)).split(":")[1]
 		instance.save()
 
 @receiver(post_save, sender=Cart)
