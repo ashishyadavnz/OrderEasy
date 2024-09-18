@@ -513,7 +513,7 @@
 		"email": "{{restaurant.email}}",
 		"url": "{{ request.build_absolute_uri }}",
 		"servesCuisine": "International",
-		"foundingDate": "{{restaurant.found}}",
+		"foundingDate": "{{restaurant.found|date:"Y-m-d"}}",
 		"ratingValue": "{{restaurant.rating}}",
 		"openingHoursSpecification": [
 		  {
