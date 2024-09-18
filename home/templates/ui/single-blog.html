@@ -196,3 +196,31 @@
 </div>
 
 {% endblock %}
+{% block schema %}
+    <script type="application/ld+json">
+        {
+			"@context": "https://schema.org",
+			"name": "{{ post.title }}",
+			"@type": "BlogPosting",
+			"headline": "{{ post.title }}",
+			"description": "{{ post.content|striptags }}",
+			"articleBody":"{{ post.content|striptags }}",
+			"datePublished": "{{ post.timestamp|date:"Y-m-d" }}",
+        	"dateModified": "{{ post.utimestamp|date:"Y-m-d" }}",
+			"url": "{{ request.build_absolute_uri }}",
+			"author": {
+			  "@type": "Person",
+			  "name": "{{post.author.first_name}} {{post.author.last_name}}"
+			  "image": "{{post.author.image.url}}"
+			},
+			
+			"articleSection": "Technology",
+			"image": {
+			  "@type": "ImageObject",
+			  "url": "{{request.get_host}}{{ post.thumbnail.url }}",
+			  "width": "800",
+			  "height": "600"
+			},
+        }
+    </script>
+{% endblock %}
