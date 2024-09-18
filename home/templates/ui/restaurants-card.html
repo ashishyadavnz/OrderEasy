@@ -450,11 +450,14 @@
 		setTimeout(() => {
 			var resid = "{{restaurant.id}}";
 			var distance = parseFloat(localStorage.getItem('rdistance'+resid));
-			if (distance > 15) {
-				// $(".switch-wrap .switch-ot").click();
-				document.getElementById("pickup-option").click();
-			} else {
-				document.getElementById("delivery-option").click();
+			var distance1 = parseFloat(localStorage.getItem('rdistance1'+resid));
+			if (distance1.toString() != 'NaN') {
+				if (distance > 15) {
+					// $(".switch-wrap .switch-ot").click();
+					document.getElementById("pickup-option").click();
+				} else {
+					document.getElementById("delivery-option").click();
+				}
 			}
 		}, 1000);
 	});
