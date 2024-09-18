@@ -32,9 +32,9 @@ def restaurant(request, cuisine_slug=None):
     order = None
     if orderid:
         order = Order.objects.get(id=orderid)
-    # if flag:
-    #     del request.session['display_checkout']
-    #     del request.session['orderid']
+    if flag:
+        del request.session['display_checkout']
+        del request.session['orderid']
     if request.method == 'POST':
         address = request.POST.get('address')
         location = request.POST.get('location')
