@@ -26,7 +26,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.core.paginator import Paginator
 import threading
-
+import pytz
 
 def home(request):
     today = datetime.datetime.now()
@@ -111,16 +111,16 @@ def update_dtype(request):
     return JsonResponse({'status': 'error', 'message': 'Only post method is allowed.'})
 
 def checkout(request):
-    if request.method == 'POST' and 'checkout_add' in request.POST:
-        address = request.POST.get('address')
-        location = request.POST.get('location')
-        latitude = request.POST.get('latitude')
-        longitude = request.POST.get('longitude')
-        cart = request.session.get('cart', [])
-        if location and latitude and longitude:
-            request.session['user_address'] = {'add': location, 'display': address, 'lat': latitude, 'long': longitude}
-        return redirect('home:checkout')
-    if request.method == 'POST' and ('cart_checkout' in request.POST or 'place_order' in request.POST):
+    if request.method == 'POST':
+        if 'checkout_add' in request.POST:
+            address = request.POST.get('address')
+            location = request.POST.get('location')
+            latitude = request.POST.get('latitude')
+            longitude = request.POST.get('longitude')
+            cart = request.session.get('cart', [])
+            if location and latitude and longitude:
+                request.session['user_address'] = {'add': location, 'display': address, 'lat': latitude, 'long': longitude}
+            return redirect('home:checkout')
         if 'cart_checkout' in request.POST:
             order = request.session.get('order', None)
             cart_items = request.session.get('cart_items', []) 
@@ -141,6 +141,18 @@ def checkout(request):
             except json.JSONDecodeError:
                 cart_items = []
             rests = Restaurant.objects.get(id=restaurent)
+            auckland_tz = pytz.timezone('Pacific/Auckland')
+            current_time = timezone.now().astimezone(auckland_tz).time()
+            if rests.start and rests.end:
+                if not (rests.start <= current_time <= rests.end):
+                    cart = request.session.get('cart', [])
+                    discount = request.session.get('discount', None)
+                    if len(cart) > 0:
+                        del request.session['cart']
+                    if discount:
+                        del request.session['discount']
+                    messages.error(request, "Restaurant is closed now. Unable to proceed your order.")
+                    return redirect('restaurant:restaurant')
             voucher = None
             if voucher_id:
                 voucher = Voucher.objects.filter(id=voucher_id).last()
@@ -251,58 +263,6 @@ def checkout(request):
                 del request.session['discount']
             request.session['display_checkout'] = True
             request.session['orderid'] = odr.id
-            # instruction = f'<p style="font-size: 18px;"><strong>Special Instructions:</strong> {odr.instruction}</p>' if odr.instruction else ''
-            # trs = ''
-            # for item in cartitems:
-            #     trs += f'''<tr>
-            #         <td style="padding: 8px; border-bottom: 1px solid #ddd;">{item['title']}</td>
-            #         <td style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">{item['quantity']}</td>
-            #         <td style="text-align: right; padding: 8px; border-bottom: 1px solid #ddd;"><span style="color: #5cb85c;">{item['price']}</span></td>
-            #     </tr>'''
-            # html = f'''
-            #     <div style="font-family: Arial, sans-serif; color: #333; background-color: #eaf6ea; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
-            #         <div style="text-align: center; margin-bottom: 20px;">
-            #             <img src="https://testing.ordereasy.co.nz/static/images/order-easy.png" alt="OrderEasy" style="max-width: 150px;">
-            #         </div>
-                    
-            #         <h1 style="color: #5cb85c; text-align: center; font-size: 24px;">Thank you for your order, {first_name} {last_name}!</h1>
-            #         <p style="font-size: 18px;">Thanks for ordering from ORDER EASY. Your order has been successfully placed with the following details:</p>
-                    
-            #         <ul style="font-size: 16px; padding-left: 20px;">
-            #             <li style="margin-bottom: 10px;"><strong>Order ID:</strong> {odr.orderid}</li>
-            #             <li style="margin-bottom: 10px;"><strong>Restaurant Name:</strong> {odr.restaurant.title}</li>
-            #             <li style="margin-bottom: 10px;"><strong>Order Type:</strong> {odr.otype}</li>
-            #             {instruction}
-            #             <li style="margin-bottom: 10px;"><strong>Total amount to pay:</strong> <span style="color: #d9534f;">${odr.total}</span></li>
-            #             <li style="margin-bottom: 10px;"><strong>Delivery Address:</strong> {odr.address}</li>
-
-            #         </ul>
-
-            #         <h2 style="color: #F29F05; font-size: 20px; border-bottom: 2px solid #F29F05; padding-bottom: 5px;">Order Details</h2>
-                
-            #         <table style="width: 100%; border-collapse: collapse; font-size: 16px; margin-top: 10px;">
-            #             <thead>
-            #                 <tr>
-            #                     <th style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Item Title</th>
-            #                     <th style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">Quantity</th>
-            #                     <th style="text-align: right; padding: 8px; border-bottom: 1px solid #ddd;">Price</th>
-            #                 </tr>
-            #             </thead>
-            #             <tbody>
-            #                 {trs}
-            #             </tbody>
-            #         </table>
-
-            #         <div style="text-align: center; margin-top: 20px;">
-            #             <p style="font-size: 18px;"><strong>Delivery Charge:</strong> <span style="color: #d9534f;">${odr.charge}</span></p>
-            #             <p style="font-size: 18px;"><strong>Total Price:</strong> <span style="color: #d9534f;">${odr.total}</span></p>
-            #         </div>
-
-
-            #         <p style="font-size: 16px; text-align: center; margin-top: 20px;">Thank you for choosing ORDER EASY!</p>
-            #     </div>
-            # '''
-            # messages.success(request, mark_safe(html))
             return redirect('restaurant:restaurant')
     oid = request.session.get('order', None)
     order = Order.objects.filter(id=oid).last()
