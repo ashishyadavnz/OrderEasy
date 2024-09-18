@@ -10,10 +10,9 @@
         {% if page_obj %}
         <div class="row mx-auto">
             {% for order in page_obj %}
-            <div class="col-md-4">
-                <div class="card custom-order-card mt-5 "  style="min-height: 87%;"   >
-                    <a href="{% url "home:singelOrder" order.identifier %}">
-                    <div class="card-body">
+            <div class="col-md-4 mb-4">
+                <div class="card custom-order-card mt-5 h-100 ">
+                    <a class="card-body " href="{% url "home:singelOrder" order.identifier %}">
                         <h5 class="card-title">{{ order.restaurant.title }}</h5> 
                         <h6 class="card-subtitle mb-2 text-muted">Order ID: {{ order.orderid }}</h6> 
                         <p class="card-text"><strong>Total:</strong> ${{ order.total|floatformat:2 }}</p> 
@@ -31,9 +30,7 @@
                         {% if order.timestamp %}
                         <p class="card-text"><strong>Order Date:</strong> {{ order.timestamp|date:"F j, Y" }}</p> 
                         {% endif %}
-
-                    </div>
-                </a>
+                    </a>
                 </div>
             </div>
             {% endfor %}
