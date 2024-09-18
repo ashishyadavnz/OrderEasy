@@ -4,6 +4,7 @@ app_name="home"
 urlpatterns = [
         path('<slug:slug>/submit-feedback/', views.submit_feedback, name='submit_feedback'),
         path('ajax/fcm-token/',views.fcm_token,name='fcm_token'),
+        path('ajax/update_dtype/',views.update_dtype,name='update_dtype'),
         path('faq/message/', views.faq_message, name='faq_message'),
         path('about/',views.about,name='about-page'),
         path('faq/',views.faq,name='faq'),

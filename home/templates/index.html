@@ -619,8 +619,8 @@
 								<p style="font-size:20px"><strong>$${cart[i].price} x <span class="cart-item-quantity">${cart[i].quantity}</span></strong></p>
 							</div>
 							<div class="col-md-2 float-right">
-								<a class="btn decrease-qty" data-id="${cart[i].item_id}">-</a>
-								<a class="btn increase-qty me-2" data-id="${cart[i].item_id}">+</a>
+								<a class="btn decrease-qty" data-resid="${cart[i].restaurant}" data-id="${cart[i].item_id}">-</a>
+								<a class="btn increase-qty me-2" data-resid="${cart[i].restaurant}" data-id="${cart[i].item_id}">+</a>
 							</div>
 						</div>
 					</div>
@@ -692,6 +692,8 @@
 	<script>
 		$("#cart-section").on("click", ".increase-qty", function() {
 			var item_id = $(this).data("id");
+			var resid = $(this).data("resid");
+			var rdistance = localStorage.getItem('rdistance'+resid);
 			$.ajax({
 				url: '{% url "restaurant:add_to_cart" %}',
 				method: 'PATCH',
@@ -699,7 +701,8 @@
 				data: {
 					csrfmiddlewaretoken: '{{ csrf_token }}',
 					'item_id': item_id,
-					'type': "increase"
+					'type': "increase",
+					'rdistance': rdistance ? rdistance : 0,
 				},
 				success: function(res) {
 					cartupdate(res);
@@ -710,6 +713,8 @@
 	<script>
 		$("#cart-section").on("click", ".decrease-qty", function() {
 			var item_id = $(this).data("id");
+			var resid = $(this).data("resid");
+			var rdistance = localStorage.getItem('rdistance'+resid);
 
 			$.ajax({
 				url: '{% url "restaurant:add_to_cart" %}',
@@ -718,7 +723,8 @@
 				data: {
 					csrfmiddlewaretoken: '{{ csrf_token }}',
 					'item_id': item_id,
-					'type': "decrease"
+					'type': "decrease",
+					'rdistance': rdistance ? rdistance : 0,
 				},
 				success: function(res) {
 					cartupdate(res);
@@ -730,6 +736,8 @@
 	<script>
 		$(".increase-qty").on("click", function() {
 			var item_id = $(this).data("id");
+			var resid = $(this).data("resid");
+			var rdistance = localStorage.getItem('rdistance'+resid);
 
 			$.ajax({
 				url: '{% url "restaurant:add_to_cart" %}',
@@ -738,7 +746,8 @@
 				data: {
 					csrfmiddlewaretoken: '{{ csrf_token }}',
 					'item_id': item_id,
-					'type': "increase"
+					'type': "increase",
+					'rdistance': rdistance ? rdistance : 0,
 				},
 			success: function(res) {
 					cartupdate(res);
@@ -750,6 +759,8 @@
 	<script>
 		$(".decrease-qty").on("click", function() {
 			var item_id = $(this).data("id");
+			var resid = $(this).data("resid");
+			var rdistance = localStorage.getItem('rdistance'+resid);
 
 			$.ajax({
 				url: '{% url "restaurant:add_to_cart" %}',
@@ -758,7 +769,8 @@
 				data: {
 					csrfmiddlewaretoken: '{{ csrf_token }}',
 					'item_id': item_id,
-					'type': "decrease"
+					'type': "decrease",
+					'rdistance': rdistance ? rdistance : 0,
 				},
 			success: function(res) {
 					cartupdate(res);

@@ -266,6 +266,8 @@ def add_to_cart(request):
         if len(cart) > 0:
             if restaurant_id != cart[0]['restaurant']:
                 return JsonResponse({'status': 'rchange', 'message': 'Restaurant changed.'})
+            for i in cart:
+                i['rdistance'] = rdistance
             items = next((i for i in cart if i['item_id'] == item_id), None)
             if items:
                 items['quantity'] += 1
@@ -311,8 +313,11 @@ def add_to_cart(request):
             voucher = discount
         patch_data = QueryDict(request.body)
         item_id = patch_data.get('item_id')
-        patch_type = patch_data.get('type')
         cart = request.session.get('cart', [])
+        rdistance = patch_data.get('rdistance')
+        for i in cart:
+            i['rdistance'] = rdistance
+        patch_type = patch_data.get('type')
         items = next((i for i in cart if i['item_id'] == item_id), None)
         if items:
             if patch_type == 'decrease':
