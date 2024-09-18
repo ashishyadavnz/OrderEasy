@@ -487,3 +487,84 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 {% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "Restaurant",
+		"name": "{{restaurant.title}}",
+		"image": "{{request.get_host}}{{ restaurant.image.url}}",
+		"description": "{{restaurant.content}}",
+		"address": {
+		  "@type": "PostalAddress",
+		  "streetAddress": "{{restaurant.address}}",
+		  "addressLocality": "{{restaurant.city}}",
+		  "addressRegion":"{{restaurant.state.name}}",
+		  "postalCode": "{{restaurant.postcode}}",
+		  "addressCountry": "{{restaurant.country.name}}"
+		},
+		"geo": {
+		  "@type": "GeoCoordinates",
+		  "latitude":"{{restaurant.latitude}}",
+			"longitude": "{{restaurant.longitude}}"
+		},
+		"telephone": "{{restaurant.phone}}",
+		"email": "{{restaurant.email}}",
+		"url": "{{ request.build_absolute_uri }}",
+		"servesCuisine": "International",
+		"foundingDate": "{{restaurant.found}}",
+		"ratingValue": "{{restaurant.rating}}",
+		"openingHoursSpecification": [
+		  {
+			"@type": "OpeningHoursSpecification",
+			"dayOfWeek": "Monday",
+			"opens": "{{restaurant.start}}",
+			"closes": "{{restaurant.end}}"
+		  },
+		  {
+			"@type": "OpeningHoursSpecification",
+			"dayOfWeek": "Tuesday",
+			"opens": "{{restaurant.start}}",
+			"closes": "{{restaurant.end}}"
+		  },
+		  {
+			"@type": "OpeningHoursSpecification",
+			"dayOfWeek": "Wednesday",
+			"opens": "{{restaurant.start}}",
+			"closes": "{{restaurant.end}}"
+		  },
+		  {
+			"@type": "OpeningHoursSpecification",
+			"dayOfWeek": "Thursday",
+			"opens": "{{restaurant.start}}",
+			"closes": "{{restaurant.end}}"
+		  },
+		  {
+			"@type": "OpeningHoursSpecification",
+			"dayOfWeek": "Friday",
+			"opens": "{{restaurant.start}}",
+			"closes": "{{restaurant.end}}"
+		  },
+		  {
+			"@type": "OpeningHoursSpecification",
+			"dayOfWeek": "Saturday",
+			"opens": "{{restaurant.start}}",
+			"closes": "{{restaurant.end}}"
+		  },
+		  {
+			"@type": "OpeningHoursSpecification",
+			"dayOfWeek": "Sunday",
+			"opens": "{{restaurant.start}}",
+			"closes": "{{restaurant.end}}"
+		  }
+		],
+		"sameAs": [
+		  "{{restaurant.facebook}}",
+		  "{{restaurant.twitter}}",
+		  "{{restaurant.instagram}}",
+		  "{{restaurant.linkedin}}"
+		]
+	  }
+</script>
+{% endblock %}
