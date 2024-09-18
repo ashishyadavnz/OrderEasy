@@ -26,7 +26,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.core.paginator import Paginator
 import threading
-
+import pytz
 
 def home(request):
     today = datetime.datetime.now()
@@ -102,7 +102,8 @@ def update_dtype(request):
         voucher = 0
         if order.voucher:
             voucher = order.voucher.discount
-        order.total = cart + order.charge - voucher
+        total = cart + order.charge - voucher
+        order.total = round(total, 2)
         order.save()
         orderobj = Order.objects.filter(id=oid)[:1]
         obj = serialize('json', orderobj, fields=['id', 'otype', 'charge', 'total'])
@@ -110,16 +111,16 @@ def update_dtype(request):
     return JsonResponse({'status': 'error', 'message': 'Only post method is allowed.'})
 
 def checkout(request):
-    if request.method == 'POST' and 'checkout_add' in request.POST:
-        address = request.POST.get('address')
-        location = request.POST.get('location')
-        latitude = request.POST.get('latitude')
-        longitude = request.POST.get('longitude')
-        cart = request.session.get('cart', [])
-        if location and latitude and longitude:
-            request.session['user_address'] = {'add': location, 'display': address, 'lat': latitude, 'long': longitude}
-        return redirect('home:checkout')
-    if request.method == 'POST' and ('cart_checkout' in request.POST or 'place_order' in request.POST):
+    if request.method == 'POST':
+        if 'checkout_add' in request.POST:
+            address = request.POST.get('address')
+            location = request.POST.get('location')
+            latitude = request.POST.get('latitude')
+            longitude = request.POST.get('longitude')
+            cart = request.session.get('cart', [])
+            if location and latitude and longitude:
+                request.session['user_address'] = {'add': location, 'display': address, 'lat': latitude, 'long': longitude}
+            return redirect('home:checkout')
         if 'cart_checkout' in request.POST:
             order = request.session.get('order', None)
             cart_items = request.session.get('cart_items', []) 
@@ -140,6 +141,18 @@ def checkout(request):
             except json.JSONDecodeError:
                 cart_items = []
             rests = Restaurant.objects.get(id=restaurent)
+            auckland_tz = pytz.timezone('Pacific/Auckland')
+            current_time = timezone.now().astimezone(auckland_tz).time()
+            if rests.start and rests.end:
+                if not (rests.start <= current_time <= rests.end):
+                    cart = request.session.get('cart', [])
+                    discount = request.session.get('discount', None)
+                    if len(cart) > 0:
+                        del request.session['cart']
+                    if discount:
+                        del request.session['discount']
+                    messages.error(request, "Restaurant is closed now. Unable to proceed your order.")
+                    return redirect('restaurant:restaurant')
             voucher = None
             if voucher_id:
                 voucher = Voucher.objects.filter(id=voucher_id).last()
