@@ -138,7 +138,7 @@
                     </div>
                 </div>
                 <div class="offset-xl-1 col-xl-6 col-lg-12" data-aos="flip-up" data-aos-delay="300" data-aos-duration="400">
-                    <form method="POST" class="checkout-form">
+                    <form method="POST" class="checkout-form" id="checkout-form" >
                         {% csrf_token %}
                         <h4>Buyer information</h4>
                         <input type="hidden" name="oid" value="{{ order.id }}" required>
@@ -152,7 +152,7 @@
                                 <input type="number" name="phone" placeholder="Phone" {% if order.phone %} value="{{ order.phone }}" readonly {% endif %} required>
                             </div>
                         </div>
-                        <h4 class="two">Delivery addresses</h4>
+                        <h4 class="two">Delivery details</h4>
                         <input type="text" id="location-input-3" name="address" placeholder="Address" value="{{ user_address.display }}" required>
                         {% comment %} <textarea name="address" id="daddress" rows="10" cols="12" placeholder="Address" required></textarea> {% endcomment %}
                         <textarea name="instructions" id="instructions" rows="10" cols="12" placeholder="Special Instructions"></textarea>
@@ -177,7 +177,7 @@
                             </label> -->
                         </div>
 
-                        <button type="submit" name="place_order" class="button-price">Place Order</button>
+                        <button type="submit" id="checkout_button" name="place_order" class="button-price">Place Order</button>
                         <!-- <input type="text" name="street" placeholder="Street">
                         <div class="row">
                             <div class="col-lg-6">
@@ -281,16 +281,23 @@
 			var address = place.name;
 			var latitude = place.geometry.location.lat();
 			var longitude = place.geometry.location.lng();
-			document.getElementById('address-2').value = address;
-			document.getElementById('latitude-2').value = latitude;
-			document.getElementById('longitude-2').value = longitude;
-            document.getElementById('location-form-2').action = "{% url 'home:checkout' %}"
-			document.getElementById('location-form-2').submit();
+			$('#address-2').val(address);
+			$('#latitude-2').val(latitude);
+			$('#longitude-2').val(longitude);
+            $('#location-form-2').attr('action',"{% url 'home:checkout' %}")
+			$('#location-form-2').submit();
 		});
 	}
 	google.maps.event.addDomListener(window, 'load', initAutocomplete);
 </script>
 <script>
+    $('#checkout-form').on('keyup keypress', function(e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) { 
+            e.preventDefault();
+            return false;
+        }
+    });
 	function initAutocomplete() {
 		var input = document.getElementById('location-input-3');
 		var autocomplete = new google.maps.places.Autocomplete(input);
@@ -333,31 +340,57 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        calculateMatrixDistance("{{user_address.lat}}", "{{user_address.long}}", "{{order.restaurant.latitude}}", "{{order.restaurant.longitude}}",  "{{user_address.add}}", "{{order.restaurant.address}}", function(distance) {
-            console.log("final distance", distance.toFixed(2) + " km");
-            if (distance.toFixed(2) != "NaN") {
-                localStorage.setItem('rdistance'+"{{order.restaurant.id}}", distance.toFixed(2));
-                $.ajax({
-                    url: '{% url "home:update_dtype" %}',
-                    method: 'POST',
-                    data: {
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                        'order_type': $('#doptions').val(),
-                        'oid': "{{order.id}}",
-                        'rdistance': distance.toFixed(2)
-                    },
-                    success: function (res) {
+        if("{{order.otype}}" == "Delivery"){
+            $('#location-input-3').show()
+            $('#location-input-3').attr('required', true);
+        }else{
+            $('#location-input-3').hide()
+            $('#location-input-3').removeAttr('required')
+        }
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                let userLat = position.coords.latitude;
+                let userLon = position.coords.longitude;
+                let useraddress = {{ user_address|default:"null" |safe }};
+                if(useraddress){
+                    userLat = useraddress.lat
+                    userLon = useraddress.long;
+                    useraddress = useraddress.add;
+                }
+                calculateMatrixDistance(userLat,userLon, "{{order.restaurant.latitude}}", "{{order.restaurant.longitude}}", useraddress, "{{order.restaurant.address}}", function(distance) {
+                    
+                    if (distance.toFixed(2) != "NaN") {
+                        localStorage.setItem('rdistance'+"{{order.restaurant.id}}", distance.toFixed(2));
+                        var resid = "{{order.restaurant.id}}";
+                        var distance = parseFloat(localStorage.getItem('rdistance'+resid));
+                        if (distance > 15) {
+                            $('#doptions').find('option[value="Pickup"]').attr('selected', true);
+                            $('#location-input-3').hide()
+                            $('#location-input-3').removeAttr('required')
+                        }
+                        $.ajax({
+                            url: '{% url "home:update_dtype" %}',
+                            method: 'POST',
+                            data: {
+                                csrfmiddlewaretoken: '{{ csrf_token }}',
+                                'order_type': $('#doptions').val(),
+                                'oid': "{{order.id}}",
+                                'rdistance': distance.toFixed(2)
+                            },
+                            success: function (res) {
+                                if (res['status'] == 'success') {
+                                    var order = JSON.parse(res['order'])[0]['fields'];
+                                    $('.totel-delivery').find('h5').text('$'+order['charge']);
+                                    $('.totel-price').find('h2').text('$'+order['total']);
+                                    $('#doptions').find('option[value="'+order['otype']+'"]').attr('selected', true);
+                                    $('#doptions').val(order['otype']);
+                                }
+                            }
+                        });
                     }
-                });
-            }
-        })
-        setTimeout(() => {
-			var resid = "{{order.restaurant.id}}";
-			var distance = parseFloat(localStorage.getItem('rdistance'+resid));
-			if (distance > 15) {
-				$('#doptions').find('option[value="Pickup"]').attr('selected', true);
-			}
-		}, 1000);
+                })
+            })
+        }
     });
     $('body').on("change", "#doptions", function() {
         console.log("hyyy")
@@ -374,6 +407,12 @@
                 $(".popup-message").text("Delivery is not available for distances greater than 15 km.");
                 return;
 			}
+            $('#location-input-3').show()
+            $('#location-input-3').attr('required', true);
+        }
+        else{
+            $('#location-input-3').hide()
+            $('#location-input-3').removeAttr('required')
         }
         localStorage.setItem('order_type', option);
         $.ajax({

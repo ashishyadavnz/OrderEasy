@@ -102,7 +102,8 @@ def update_dtype(request):
         voucher = 0
         if order.voucher:
             voucher = order.voucher.discount
-        order.total = cart + order.charge - voucher
+        total = cart + order.charge - voucher
+        order.total = round(total, 2)
         order.save()
         orderobj = Order.objects.filter(id=oid)[:1]
         obj = serialize('json', orderobj, fields=['id', 'otype', 'charge', 'total'])
