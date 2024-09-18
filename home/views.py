@@ -268,6 +268,8 @@ def checkout(request):
     order = Order.objects.filter(id=oid).last()
     cart_items = request.session.get('cart_items', []) 
     total = 0
+    if len(cart_items)==0:
+        return redirect('restaurant:restaurant')
     for idx, item in enumerate(cart_items):
         tl = item['price'] * item['quantity']
         cart_items[idx]['total'] = tl
