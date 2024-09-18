@@ -82,7 +82,16 @@ def becomePartner(request):
     return render(request, 'ui/become-partner.html')
 
 def checkout(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and 'checkout_add' in request.POST:
+        address = request.POST.get('address')
+        location = request.POST.get('location')
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+        cart = request.session.get('cart', [])
+        if location and latitude and longitude:
+            request.session['user_address'] = {'add': location, 'display': address, 'lat': latitude, 'long': longitude}
+        return redirect('home:checkout')
+    if request.method == 'POST' and ('cart_checkout' in request.POST or 'place_order' in request.POST):
         if 'cart_checkout' in request.POST:
             order = request.session.get('order', None)
             cart_items = request.session.get('cart_items', []) 
@@ -274,11 +283,12 @@ def checkout(request):
         tl = item['price'] * item['quantity']
         cart_items[idx]['total'] = tl
         total += tl
-    
+    user_address = request.session.get('user_address',None)
     context = {
         'cart': cart_items,
         'order': order,
-        'total': total
+        'total': total,
+        'user_address':user_address
     }
     return render(request, 'ui/checkout.html', context)
 

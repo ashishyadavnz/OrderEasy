@@ -4,7 +4,9 @@
 <html class="wide wow-animation" lang="en">
 
 <head>
-	<title>{% block title %}{% endblock %} Order Easy</title>
+	<title>Order Easy</title>
+	<meta name="description" content="Order Easy"/>
+	<meta name="keywords" content="Order Easy" />
 	<meta name="viewport" content="width=device-width height=device-height initial-scale=1.0">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -145,12 +147,13 @@
 								<span class="input-group-text mt-2 bg-white" id="basic-addon1">
 									<i class="fa-solid fa-location-dot text-danger"></i>
 								</span>
-									<input required type="text" id="location-input-2" name="location" value="{{ user_address.display }}" class="form-control me-5 mt-2" placeholder="Enter your address...">
+									<input required type="text" id="location-input-2" name="location" value="{{ user_address.display }}" class="form-control me-5 mt-2 location-input-2 " placeholder="Enter your address...">
 							</div>
 							<!-- </div> -->
 							<input type="hidden" id="address-2" name="address">
 							<input type="hidden" id="latitude-2" name="latitude">
 							<input type="hidden" id="longitude-2" name="longitude">
+							<input type="hidden" name="checkout_add" value="true">
 						</form>
 						{% endif %}
 						{% if request.user and request.user.role == 'Owner' %}

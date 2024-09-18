@@ -38,6 +38,9 @@ class Restaurant(BaseModel):
 	verified = models.BooleanField(default=False)
 	vip = models.BooleanField(default=False)
 	source = models.CharField(max_length=10, choices=source, default='Website')
+	keyword = models.CharField(max_length=160,null=True,blank=True)
+	meta_title = models.CharField(max_length=160,null=True,blank=True)
+	meta_description = models.TextField(null=True,blank=True)
 
 	class Meta:
 		verbose_name_plural = "01. Restaurants"
