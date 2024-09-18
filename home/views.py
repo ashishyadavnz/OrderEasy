@@ -2,6 +2,8 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
+from django.utils.safestring import mark_safe
+from django.core.serializers import serialize
 from django.urls import reverse
 from firebase_admin.messaging import Message, Notification
 from fcm_django.models import FCMDevice
@@ -80,9 +82,54 @@ def contact(request):
 def becomePartner(request):
     return render(request, 'ui/become-partner.html')
 
-def checkout(request):
+def update_dtype(request):
     if request.method == 'POST':
+        order_type = request.POST['order_type']
+        rdistance = request.POST['rdistance']
+        oid = request.POST['oid']
+        order = Order.objects.get(id=oid)
+        cart = Cart.objects.filter(order=order).aggregate(Sum('total'))['total__sum'] or 0
+        order.otype = order_type
+        if order_type == "Delivery":
+            if float(rdistance) > 7 and float(rdistance) <= 15:
+                order.charge = float(rdistance)
+            elif float(rdistance) < 7 and cart < 30:
+                order.charge = float(rdistance)
+            else:
+                order.charge = 0
+        else:
+            order.charge = 0
+        voucher = 0
+        if order.voucher:
+            voucher = order.voucher.discount
+        order.total = cart + order.charge - voucher
+        order.save()
+        orderobj = Order.objects.filter(id=oid)[:1]
+        obj = serialize('json', orderobj, fields=['id', 'otype', 'charge', 'total'])
+        return JsonResponse({'status': 'success', 'order': obj})
+    return JsonResponse({'status': 'error', 'message': 'Only post method is allowed.'})
+
+def checkout(request):
+    if request.method == 'POST' and 'checkout_add' in request.POST:
+        address = request.POST.get('address')
+        location = request.POST.get('location')
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+        cart = request.session.get('cart', [])
+        if location and latitude and longitude:
+            request.session['user_address'] = {'add': location, 'display': address, 'lat': latitude, 'long': longitude}
+        return redirect('home:checkout')
+    if request.method == 'POST' and ('cart_checkout' in request.POST or 'place_order' in request.POST):
         if 'cart_checkout' in request.POST:
+            order = request.session.get('order', None)
+            cart_items = request.session.get('cart_items', []) 
+            order_type = request.session.get('order_type', None)
+            if order:
+                del request.session['order']
+            if len(cart_items) > 0:
+                del request.session['cart_items']
+            if order_type:
+                del request.session['order_type']
             cart_data = request.POST.get('cart_data')
             order_type = request.POST['order_type']
             restaurent = request.POST['restaurent_id']
@@ -139,7 +186,7 @@ def checkout(request):
 
             odr = Order.objects.get(id=odrid)
             if not odr.user:
-                user = User.objects.filter(username=phone).last()
+                user = User.objects.filter(Q(username=phone) | Q(mobile=phone)).last()
                 print(user)
                 if not user:
                     user = User.objects.create_user(username=phone, password=str(first_name)[:3]+"@123", email=email, mobile=int(phone))
@@ -156,11 +203,11 @@ def checkout(request):
             odr.status = 'Active'
             odr.pmethod = payment_method
             odr.save()
-            
+            cartitems = request.session.get('cart_items', [])
             message = loader.render_to_string('email/order_owner.html', {
                 'restaurant_owner': odr.restaurant.owner,
                 'order': odr,
-                'cart_items': request.session.get('cart_items', [])
+                'cart_items': cartitems
             })
             to_email = odr.restaurant.email
             subject = f"New Order Received from {first_name} {last_name}"
@@ -172,9 +219,10 @@ def checkout(request):
             # email send to customer
             message = loader.render_to_string('email/order_confirm.html', {
                 'first_name': first_name,
+                'last_name': last_name,
                 'order': odr,
                 'url': request.META.get('HTTP_REFERER'),
-                'cart_items': request.session.get('cart_items', [])
+                'cart_items': cartitems
             })
             to_email = odr.email
             print(to_email)
@@ -191,8 +239,17 @@ def checkout(request):
             devices.send_message(
                 Message(notification=Notification(title=title, body=body, image=settings.EASYLOGO),data={})
             )
-            request.session.clear()
-            messages.success(request, "Your order is placed successfully.")
+            del request.session['order']
+            del request.session['cart_items']
+            del request.session['order_type']
+            cart = request.session.get('cart', [])
+            discount = request.session.get('discount', None)
+            if len(cart) > 0:
+                del request.session['cart']
+            if discount:
+                del request.session['discount']
+            request.session['display_checkout'] = True
+            request.session['orderid'] = odr.id
             return redirect('restaurant:restaurant')
     oid = request.session.get('order', None)
     order = Order.objects.filter(id=oid).last()
@@ -202,11 +259,12 @@ def checkout(request):
         tl = item['price'] * item['quantity']
         cart_items[idx]['total'] = tl
         total += tl
-    
+    user_address = request.session.get('user_address',None)
     context = {
         'cart': cart_items,
         'order': order,
-        'total': total
+        'total': total,
+        'user_address':user_address
     }
     return render(request, 'ui/checkout.html', context)
 
