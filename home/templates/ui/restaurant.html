@@ -266,3 +266,39 @@
 	google.maps.event.addDomListener(window, 'load', initAutocomplete);
 </script>
 {% endblock %}
+{% block schema %}
+<script type="application/ld+json">
+{
+	"@context": "https://schema.org",
+	"@type": "ItemList",
+	"itemListElement": [
+	{% for rest in restaurants %}
+	  {
+		"@type": "ListItem",
+		"position": 1,
+		"item": {
+		  "@type": "Restaurant",
+		  "name": "{{rest.title}}",
+		  "image": "{{request.get_host}}{{ rest.image.url}}",
+		  "address": {
+			"@type": "PostalAddress",
+			"streetAddress": "{{rest.address}}",
+			"addressLocality": "{{rest.city}}",
+			"addressRegion":"{{rest.state.name}}",
+			"postalCode": "{{rest.postcode}}",
+			"addressCountry": "{{rest.country.name}}"
+		  },
+		  "geo": {
+			"@type": "GeoCoordinates",
+			"latitude":"{{rest.latitude}}",
+			"longitude": "{{rest.longitude}}"
+		  },
+		  "telephone": "{{rest.phone}}",
+		  "url": "{{ request.build_absolute_uri}}{{rest.slug}}/"
+		}
+	  }{% if not forloop.last %},{% endif %}
+		{% endfor %}
+	]
+  }
+</script>
+{% endblock %}

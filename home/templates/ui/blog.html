@@ -173,3 +173,27 @@
 	</div>
 </div>
 {% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+	{
+	  "@context": "http://schema.org",
+	  "@type": "Blog",
+	  "blogPosts": [
+		{% for post in posts %}
+		{
+		  "@type": "BlogPosting",
+		  "headline": "{{ post.title}}",
+		  "author": {
+			"@type": "Person",
+			"name": "Order Easy"
+		  },
+		  "datePublished": "{{ post.timestamp|date:"Y-m-d" }}",
+		  "image": "{{request.get_host}}{{ post.thumbnail.url}}",
+		  "url": "{{ request.build_absolute_uri}}{{ post.slug}}/"
+		}{% if not forloop.last %},{% endif %}
+		{% endfor %}
+	  ]
+	}
+	</script>
+{% endblock %}
