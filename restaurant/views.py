@@ -23,18 +23,19 @@ def restaurant(request, cuisine_slug=None):
     restaurants = Restaurant.objects.filter(status='Active')
     cat = Category.objects.all()
     user_address = request.session.get('user_address',None)
+    cuisine = None
     if cuisine_slug:
         cuisine = get_object_or_404(Cuisine, slug=cuisine_slug)
         fooditems = FoodItem.objects.filter(cuisine=cuisine)
         restaurants = restaurants.filter(fooditems_restaurant__in=fooditems).distinct()
-    flag = request.session.get("display_checkout", False)
-    orderid = request.session.get("orderid", None)
-    order = None
-    if orderid:
-        order = Order.objects.get(id=orderid)
-    if flag:
-        del request.session['display_checkout']
-        del request.session['orderid']
+    # flag = request.session.get("display_checkout", False)
+    # orderid = request.session.get("orderid", None)
+    # order = None
+    # if orderid:
+    #     order = Order.objects.get(id=orderid)
+    # if flag:
+    #     del request.session['display_checkout']
+    #     del request.session['orderid']
     if request.method == 'POST':
         address = request.POST.get('address')
         location = request.POST.get('location')
@@ -62,7 +63,7 @@ def restaurant(request, cuisine_slug=None):
                 Sin(Radians(user_lat)) * Sin(Radians(F('latitude')))
             )
         ).order_by('distance').distinct()
-    return render(request, 'ui/restaurant.html', {'restaurants': restaurants,'cat':cat,'user_address':user_address, "flag":flag, 'order':order})
+    return render(request, 'ui/restaurant.html', {'restaurants': restaurants,'cat':cat,'user_address':user_address,'cuisine':cuisine})
 
 # def calculate_distance(lat1, lon1, lat2, lon2):
 
