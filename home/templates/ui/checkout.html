@@ -138,7 +138,7 @@
                     </div>
                 </div>
                 <div class="offset-xl-1 col-xl-6 col-lg-12" data-aos="flip-up" data-aos-delay="300" data-aos-duration="400">
-                    <form method="POST" class="checkout-form" id="checkout-form" >
+                    <form method="POST" class="checkout-form" id="checkout-form" autocomplete="off">
                         {% csrf_token %}
                         <h4>Buyer information</h4>
                         <input type="hidden" name="oid" value="{{ order.id }}" required>
@@ -315,7 +315,7 @@
             calculateMatrixDistance(latitude, longitude, "{{order.restaurant.latitude}}", "{{order.restaurant.longitude}}", location, "{{order.restaurant.address}}", function(distance) {
                 console.log("final distance", distance.toFixed(2) + " km");
                         if (distance.toFixed(2) != "NaN") {
-                            localStorage.setItem('rdistance'+"{{order.restaurant.id}}", distance.toFixed(2));
+                            localStorage.setItem('rdistance'+"{{order.restaurant.id}}", Math.ceil(distance.toFixed(2)));
                             $.ajax({
                                 url: '{% url "home:update_dtype" %}',
                                 method: 'POST',
@@ -323,7 +323,7 @@
                                     csrfmiddlewaretoken: '{{ csrf_token }}',
                                     'order_type': $('#doptions').val(),
                                     'oid': "{{order.id}}",
-                                    'rdistance': distance.toFixed(2)
+                                    'rdistance': Math.ceil(distance.toFixed(2))
                                 },
                                 success: function (res) {
                                     document.getElementById('location-form-2').action = "{% url 'home:checkout' %}"
@@ -383,7 +383,7 @@
                 calculateMatrixDistance(userLat,userLon, "{{order.restaurant.latitude}}", "{{order.restaurant.longitude}}", useraddress, "{{order.restaurant.address}}", function(distance) {
                     
                     if (distance.toFixed(2) != "NaN") {
-                        localStorage.setItem('rdistance'+"{{order.restaurant.id}}", distance.toFixed(2));
+                        localStorage.setItem('rdistance'+"{{order.restaurant.id}}", Math.ceil(distance.toFixed(2)));
                         var resid = "{{order.restaurant.id}}";
                         var distance = parseFloat(localStorage.getItem('rdistance'+resid));
                         if (distance > 15) {
@@ -398,7 +398,7 @@
                                 csrfmiddlewaretoken: '{{ csrf_token }}',
                                 'order_type': $('#doptions').val(),
                                 'oid': "{{order.id}}",
-                                'rdistance': distance.toFixed(2)
+                                'rdistance': Math.ceil(distance.toFixed(2))
                             },
                             success: function (res) {
                                 if (res['status'] == 'success') {
