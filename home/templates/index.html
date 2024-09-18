@@ -1064,11 +1064,14 @@
 					calculateMatrixDistance(userLat, userLon, restaurantLat, restaurantLon, useraddress, restaddress, function(distance) {
 					console.log("final distance", distance.toFixed(2) + " km");
 							if (distance.toFixed(2) != "NaN") {
+								localStorage.removeItem('rdistance1')
 								localStorage.setItem('rdistance'+restaurantID, distance.toFixed(2));
-					card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
+								card.querySelector('.distance').innerText = `Distance: ${distance.toFixed(2)} km`;
 							}
 							else {
+								localStorage.setItem('rdistance1'+restaurantID, true)
 								card.querySelector('.distance').innerText = '';
+								document.getElementById("pickup-option").click();
 					}
 				});
 			});

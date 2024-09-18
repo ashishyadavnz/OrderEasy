@@ -331,6 +331,29 @@
                                 }
                             });
                         }
+                        else {
+                            $.ajax({
+                                url: '{% url "home:update_dtype" %}',
+                                method: 'POST',
+                                data: {
+                                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                                    'order_type': 'Pickup',
+                                    'oid': "{{order.id}}",
+                                    'rdistance': 0
+                                },
+                                success: function (res) {
+                                    if (res['status'] == 'success') {
+                                        var order = JSON.parse(res['order'])[0]['fields'];
+                                        $('.totel-delivery').find('h5').text('$'+order['charge']);
+                                        $('.totel-price').find('h2').text('$'+order['total']);
+                                        $('#doptions').find('option[value="'+order['otype']+'"]').attr('selected', true);
+                                        $('#doptions').val(order['otype']);
+                                        $('#location-input-3').hide()
+                                        $('#location-input-3').removeAttr('required')
+                                    }
+                                }
+                            });
+                        }
             })
 
 		});
@@ -388,6 +411,29 @@
                             }
                         });
                     }
+                    else {
+                        $.ajax({
+                            url: '{% url "home:update_dtype" %}',
+                            method: 'POST',
+                            data: {
+                                csrfmiddlewaretoken: '{{ csrf_token }}',
+                                'order_type': 'Pickup',
+                                'oid': "{{order.id}}",
+                                'rdistance': 0
+                            },
+                            success: function (res) {
+                                if (res['status'] == 'success') {
+                                    var order = JSON.parse(res['order'])[0]['fields'];
+                                    $('.totel-delivery').find('h5').text('$'+order['charge']);
+                                    $('.totel-price').find('h2').text('$'+order['total']);
+                                    $('#doptions').find('option[value="'+order['otype']+'"]').attr('selected', true);
+                                    $('#doptions').val(order['otype']);
+                                    $('#location-input-3').hide()
+                                    $('#location-input-3').removeAttr('required')
+                                }
+                            }
+                        });
+                    }
                 })
             })
         }
@@ -409,6 +455,7 @@
 			}
             $('#location-input-3').show()
             $('#location-input-3').attr('required', true);
+            $('#location-input-3').val('')
         }
         else{
             $('#location-input-3').hide()
