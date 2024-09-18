@@ -59,6 +59,12 @@
     <section class="gap">
         <div class="container">
             <div class="row">
+                <div class="popup-overlay" style="display: none; ">
+                    <div class="popup-content py-4" style="background-image: url(/static/images/background-1.png);object-fit: cover;">
+                        <h4 class="popup-message"></h4>
+                        <button class="popup-close btn btn-secondary ">Close</button>
+                    </div>
+                </div>
                 <div class="col-xl-5 col-lg-12" data-aos="flip-up" data-aos-delay="200" data-aos-duration="300">
                     <div class="checkout-order">
                         <div class="title-checkout">
@@ -108,18 +114,18 @@
                             {% endfor %}
                         </ul>
                         
-                        <div class="totel-price">
+                        <div class="totel-order">
                             <span>Total order:</span>
                             <h5>${{ total }}</h5>
                         </div>
 
-                        <div class="totel-price">
+                        <div class="totel-delivery">
                             <span>Delivery Charge:</span>
                             <h5>${{ order.charge }}</h5>
                         </div>
 
                         {% if order.voucher %}
-                            <div class="totel-price">
+                            <div class="totel-voucher">
                                 <span>Voucher Applied:</span>
                                 <h5>-${{ order.voucher.discount }}</h5>
                             </div>
@@ -149,10 +155,10 @@
                         <h4 class="two">Delivery addresses</h4>
                         <textarea name="address" id="daddress" rows="10" cols="12" placeholder="Address" required></textarea>
                         <textarea name="instructions" id="instructions" rows="10" cols="12" placeholder="Special Instructions"></textarea>
-                        <select class="nice-select Advice" name="otype" required>
+                        <select class="doption-css Advice" name="otype" id="doptions" required>
                             <option value="Delivery" {% if order.otype == "Delivery" %}selected{% endif %}>Delivery</option>
                             <option value="Pickup" {% if order.otype == "Pickup" %}selected{% endif %}>Pickup</option>
-                            <option value="Schedule" {% if order.otype == "Schedule" %}selected{% endif %}>Schedule</option>
+                            {% comment %} <option value="Schedule" {% if order.otype == "Schedule" %}selected{% endif %}>Schedule</option> {% endcomment %}
                         </select>
                         <div class="payment-method mt-5">
                             <h4 class="two">Payment Method</h4>
@@ -262,4 +268,57 @@
     <!-- bslthemes.com buttons assets begin -->
 
 </body>
+{% endblock %}
+{% block script_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => {
+			var resid = "{{order.restaurant.id}}";
+			var distance = parseFloat(localStorage.getItem('rdistance'+resid));
+			if (distance > 15) {
+				$('#doptions').find('option[value="Pickup"]').attr('selected', true);
+			}
+		}, 1000);
+    });
+    $('body').on("change", "#doptions", function() {
+        console.log("hyyy")
+        var option = $(this).val();
+        var resid = "{{order.restaurant.id}}";
+        var distance = parseFloat(localStorage.getItem('rdistance'+resid));
+        console.log(distance, "distance")
+        if (option == "Delivery") {
+			if (distance > 15) {
+                console.log($('#doptions').find('option[value="Pickup"]'))
+                $('#doptions').find('option[value="Pickup"]').attr('selected', true);
+                $(this).val("Pickup");
+				$(".popup-overlay").show();
+                $(".popup-message").text("Delivery is not available for distances greater than 15 km.");
+                return;
+			}
+        }
+        localStorage.setItem('order_type', option);
+        $.ajax({
+            url: '{% url "home:update_dtype" %}',
+            method: 'POST',
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                'order_type': option,
+                'oid': "{{order.id}}",
+                'rdistance': distance
+            },
+            success: function (res) {
+                if (res['status'] == 'success') {
+                    var order = JSON.parse(res['order'])[0]['fields'];
+                    $('.totel-delivery').find('h5').text('$'+order['charge']);
+                    $('.totel-price').find('h2').text('$'+order['total']);
+                    $('#doptions').find('option[value="'+order['otype']+'"]').attr('selected', true);
+                    $('#doptions').val(order['otype']);
+                }
+            }
+        });
+    });
+    $(".popup-close").on("click", function () {
+        $(".popup-overlay").hide();
+    });
+</script>
 {% endblock %}

@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.utils.safestring import mark_safe
+from django.core.serializers import serialize
 from django.urls import reverse
 from firebase_admin.messaging import Message, Notification
 from fcm_django.models import FCMDevice
@@ -80,6 +81,33 @@ def contact(request):
 
 def becomePartner(request):
     return render(request, 'ui/become-partner.html')
+
+def update_dtype(request):
+    if request.method == 'POST':
+        order_type = request.POST['order_type']
+        rdistance = request.POST['rdistance']
+        oid = request.POST['oid']
+        order = Order.objects.get(id=oid)
+        cart = Cart.objects.filter(order=order).aggregate(Sum('total'))['total__sum'] or 0
+        order.otype = order_type
+        if order_type == "Delivery":
+            if float(rdistance) > 7 and float(rdistance) <= 15:
+                order.charge = float(rdistance)
+            elif float(rdistance) < 7 and cart < 30:
+                order.charge = float(rdistance)
+            else:
+                order.charge = 0
+        else:
+            order.charge = 0
+        voucher = 0
+        if order.voucher:
+            voucher = order.voucher.discount
+        order.total = cart + order.charge - voucher
+        order.save()
+        orderobj = Order.objects.filter(id=oid)[:1]
+        obj = serialize('json', orderobj, fields=['id', 'otype', 'charge', 'total'])
+        return JsonResponse({'status': 'success', 'order': obj})
+    return JsonResponse({'status': 'error', 'message': 'Only post method is allowed.'})
 
 def checkout(request):
     if request.method == 'POST':
