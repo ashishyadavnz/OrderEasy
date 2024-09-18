@@ -27,6 +27,14 @@ def restaurant(request, cuisine_slug=None):
         cuisine = get_object_or_404(Cuisine, slug=cuisine_slug)
         fooditems = FoodItem.objects.filter(cuisine=cuisine)
         restaurants = restaurants.filter(fooditems_restaurant__in=fooditems).distinct()
+    flag = request.session.get("display_checkout", False)
+    orderid = request.session.get("orderid", None)
+    order = None
+    if orderid:
+        order = Order.objects.get(id=orderid)
+    # if flag:
+    #     del request.session['display_checkout']
+    #     del request.session['orderid']
     if request.method == 'POST':
         address = request.POST.get('address')
         location = request.POST.get('location')
@@ -54,7 +62,7 @@ def restaurant(request, cuisine_slug=None):
                 Sin(Radians(user_lat)) * Sin(Radians(F('latitude')))
             )
         ).order_by('distance').distinct()
-    return render(request, 'ui/restaurant.html', {'restaurants': restaurants,'cat':cat,'user_address':user_address})
+    return render(request, 'ui/restaurant.html', {'restaurants': restaurants,'cat':cat,'user_address':user_address, "flag":flag, 'order':order})
 
 # def calculate_distance(lat1, lon1, lat2, lon2):
 
@@ -322,10 +330,20 @@ def clear_cart(request):
         # Clear the session's cart
         cart = request.session.get('cart', [])
         discount = request.session.get('discount', None)
+        order = request.session.get('order', None)
+        cart_items = request.session.get('cart_items', [])
+        order_type = request.session.get('order_type', None)
+        print(cart_items, "pppp")
         if len(cart) > 0:
             del request.session['cart']
         if discount:
             del request.session['discount']
+        if order:
+            del request.session['order']
+        if len(cart_items) > 0:
+            del request.session['cart_items']
+        if order_type:
+            del request.session['order_type']
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 

@@ -2,6 +2,7 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
+from django.utils.safestring import mark_safe
 from django.urls import reverse
 from firebase_admin.messaging import Message, Notification
 from fcm_django.models import FCMDevice
@@ -83,6 +84,15 @@ def becomePartner(request):
 def checkout(request):
     if request.method == 'POST':
         if 'cart_checkout' in request.POST:
+            order = request.session.get('order', None)
+            cart_items = request.session.get('cart_items', []) 
+            order_type = request.session.get('order_type', None)
+            if order:
+                del request.session['order']
+            if len(cart_items) > 0:
+                del request.session['cart_items']
+            if order_type:
+                del request.session['order_type']
             cart_data = request.POST.get('cart_data')
             order_type = request.POST['order_type']
             restaurent = request.POST['restaurent_id']
@@ -139,7 +149,7 @@ def checkout(request):
 
             odr = Order.objects.get(id=odrid)
             if not odr.user:
-                user = User.objects.filter(username=phone).last()
+                user = User.objects.filter(Q(username=phone) | Q(mobile=phone)).last()
                 print(user)
                 if not user:
                     user = User.objects.create_user(username=phone, password=str(first_name)[:3]+"@123", email=email, mobile=int(phone))
@@ -156,11 +166,11 @@ def checkout(request):
             odr.status = 'Active'
             odr.pmethod = payment_method
             odr.save()
-            
+            cartitems = request.session.get('cart_items', [])
             message = loader.render_to_string('email/order_owner.html', {
                 'restaurant_owner': odr.restaurant.owner,
                 'order': odr,
-                'cart_items': request.session.get('cart_items', [])
+                'cart_items': cartitems
             })
             to_email = odr.restaurant.email
             subject = f"New Order Received from {first_name} {last_name}"
@@ -172,9 +182,10 @@ def checkout(request):
             # email send to customer
             message = loader.render_to_string('email/order_confirm.html', {
                 'first_name': first_name,
+                'last_name': last_name,
                 'order': odr,
                 'url': request.META.get('HTTP_REFERER'),
-                'cart_items': request.session.get('cart_items', [])
+                'cart_items': cartitems
             })
             to_email = odr.email
             print(to_email)
@@ -191,8 +202,69 @@ def checkout(request):
             devices.send_message(
                 Message(notification=Notification(title=title, body=body, image=settings.EASYLOGO),data={})
             )
-            request.session.clear()
-            messages.success(request, "Your order is placed successfully.")
+            del request.session['order']
+            del request.session['cart_items']
+            del request.session['order_type']
+            cart = request.session.get('cart', [])
+            discount = request.session.get('discount', None)
+            if len(cart) > 0:
+                del request.session['cart']
+            if discount:
+                del request.session['discount']
+            request.session['display_checkout'] = True
+            request.session['orderid'] = odr.id
+            # instruction = f'<p style="font-size: 18px;"><strong>Special Instructions:</strong> {odr.instruction}</p>' if odr.instruction else ''
+            # trs = ''
+            # for item in cartitems:
+            #     trs += f'''<tr>
+            #         <td style="padding: 8px; border-bottom: 1px solid #ddd;">{item['title']}</td>
+            #         <td style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">{item['quantity']}</td>
+            #         <td style="text-align: right; padding: 8px; border-bottom: 1px solid #ddd;"><span style="color: #5cb85c;">{item['price']}</span></td>
+            #     </tr>'''
+            # html = f'''
+            #     <div style="font-family: Arial, sans-serif; color: #333; background-color: #eaf6ea; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+            #         <div style="text-align: center; margin-bottom: 20px;">
+            #             <img src="https://testing.ordereasy.co.nz/static/images/order-easy.png" alt="OrderEasy" style="max-width: 150px;">
+            #         </div>
+                    
+            #         <h1 style="color: #5cb85c; text-align: center; font-size: 24px;">Thank you for your order, {first_name} {last_name}!</h1>
+            #         <p style="font-size: 18px;">Thanks for ordering from ORDER EASY. Your order has been successfully placed with the following details:</p>
+                    
+            #         <ul style="font-size: 16px; padding-left: 20px;">
+            #             <li style="margin-bottom: 10px;"><strong>Order ID:</strong> {odr.orderid}</li>
+            #             <li style="margin-bottom: 10px;"><strong>Restaurant Name:</strong> {odr.restaurant.title}</li>
+            #             <li style="margin-bottom: 10px;"><strong>Order Type:</strong> {odr.otype}</li>
+            #             {instruction}
+            #             <li style="margin-bottom: 10px;"><strong>Total amount to pay:</strong> <span style="color: #d9534f;">${odr.total}</span></li>
+            #             <li style="margin-bottom: 10px;"><strong>Delivery Address:</strong> {odr.address}</li>
+
+            #         </ul>
+
+            #         <h2 style="color: #F29F05; font-size: 20px; border-bottom: 2px solid #F29F05; padding-bottom: 5px;">Order Details</h2>
+                
+            #         <table style="width: 100%; border-collapse: collapse; font-size: 16px; margin-top: 10px;">
+            #             <thead>
+            #                 <tr>
+            #                     <th style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Item Title</th>
+            #                     <th style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">Quantity</th>
+            #                     <th style="text-align: right; padding: 8px; border-bottom: 1px solid #ddd;">Price</th>
+            #                 </tr>
+            #             </thead>
+            #             <tbody>
+            #                 {trs}
+            #             </tbody>
+            #         </table>
+
+            #         <div style="text-align: center; margin-top: 20px;">
+            #             <p style="font-size: 18px;"><strong>Delivery Charge:</strong> <span style="color: #d9534f;">${odr.charge}</span></p>
+            #             <p style="font-size: 18px;"><strong>Total Price:</strong> <span style="color: #d9534f;">${odr.total}</span></p>
+            #         </div>
+
+
+            #         <p style="font-size: 16px; text-align: center; margin-top: 20px;">Thank you for choosing ORDER EASY!</p>
+            #     </div>
+            # '''
+            # messages.success(request, mark_safe(html))
             return redirect('restaurant:restaurant')
     oid = request.session.get('order', None)
     order = Order.objects.filter(id=oid).last()

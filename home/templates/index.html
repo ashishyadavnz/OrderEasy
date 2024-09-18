@@ -583,6 +583,12 @@
 				cartsection.find('input[name="order_type"]').val(cart[0]['order_type']);
 				cartsection.find('input[name="restaurent_id"]').val(cart[0]['restaurant']);
 				cartsection.find('input[name="cart_data"]').val(JSON.stringify(cart));
+				$("#checkout").show();
+				$(".cart-items").show();
+			}
+			else {
+				$("#checkout").hide();
+				$(".cart-items").hide();
 			}
 			for (let i = 0; i < cart.length; i++) {
 				var itemCard = $(".carditem" + cart[i].item_id);
