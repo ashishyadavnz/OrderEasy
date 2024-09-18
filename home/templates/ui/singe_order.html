@@ -1,0 +1,92 @@
+{% extends "index.html" %}
+{% load custom_filter %}
+{% load static %}
+{% block content %}
+
+<div class="menu-layer container">	
+    <section class="hero-section about gap">
+       
+	</section>
+<div style="font-family: Arial, sans-serif; color: #333;  padding: 20px; ">
+	<div style="text-align: center; margin-bottom: 20px;">
+		<img src="https://testing.ordereasy.co.nz/static/images/order-easy.png" alt="OrderEasy" style="max-width: 150px;">
+	</div>
+	
+	<h1 style="color: #5cb85c; text-align: center; font-size: 24px;">Thank you for your order, {{ order.user.first_name }} {{ order.user.last_name }}!</h1>
+	<p style="font-size: 18px;">Thanks for ordering from ORDER EASY. Your order has been successfully placed with the following details:</p>
+	
+	<ul style="font-size: 16px; padding-left: 20px;">
+		<li style="margin-bottom: 10px;"><strong>Order ID:</strong> {{ order.orderid }}</li>
+		<li style="margin-bottom: 10px;"><strong>Restaurant Name:</strong> {{ order.restaurant.title }}</li>
+		<li style="margin-bottom: 10px;"><strong>Order Type:</strong> {{ order.otype }}</li>
+		{% if order.instruction %}<p style="font-size: 18px;"><strong>Special Instructions:</strong> {{ order.instruction }}</p>{% endif %}
+		<li style="margin-bottom: 10px;"><strong>Total amount to pay:</strong> <span style="color: #d9534f;">${{ order.total|floatformat:2 }}</span></li>
+		<li style="margin-bottom: 10px;"><strong>Delivery Address:</strong> {{ order.address }}</li>
+
+	</ul>
+
+	<h2 style="color: #F29F05; font-size: 20px; border-bottom: 2px solid #F29F05; padding-bottom: 5px;">Order Details</h2>
+ 
+	<table style="width: 100%; border-collapse: collapse; font-size: 16px; margin-top: 10px;">
+		<thead>
+			<tr>
+				<th style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Item Title</th>
+				<th style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">Quantity</th>
+				<th style="text-align: right; padding: 8px; border-bottom: 1px solid #ddd;">Price</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for item in order.cart_order.all %}
+				<tr>
+					<td style="padding: 8px; border-bottom: 1px solid #ddd;">{{ item.fooditem.title }}</td>
+					<td style="text-align: center; padding: 8px; border-bottom: 1px solid #ddd;">{{ item.quantity }}</td>
+					<td style="text-align: right; padding: 8px; border-bottom: 1px solid #ddd;"><span style="color: #5cb85c;">${{ item.total|floatformat:2 }}</span></td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<div style="text-align: center; margin-top: 20px;">
+		<p style="font-size: 18px;"><strong>Delivery Charge:</strong> <span style="color: #d9534f;">${{ order.charge|floatformat:2 }}</span></p>
+		<p style="font-size: 18px;"><strong>Total Price:</strong> <span style="color: #d9534f;">${{ order.total|floatformat:2 }}</span></p>
+	</div>
+
+	<p style="font-size: 16px; text-align: center; margin-top: 20px;">Thank you for choosing ORDER EASY!</p>
+
+</div>
+</div>
+{% endblock %}
+{% block script_js %}
+<script>
+    $(document).ready(function() {
+        {% if flag %}
+            $("#display_checkout").modal('show');
+        {% endif %}
+    });
+</script>
+<script>
+	function initAutocomplete() {
+		var input = document.getElementById('location-input-2');
+		var autocomplete = new google.maps.places.Autocomplete(input);
+		autocomplete.setFields(['address_components', 'geometry', 'name']);
+		autocomplete.addListener('place_changed', function () {
+			var place = autocomplete.getPlace();
+			// console.log("Selected Place: ", place);
+			var address = place.name;
+			var latitude = place.geometry.location.lat();
+			var longitude = place.geometry.location.lng();
+			// console.log( address,"dsfdsf");
+			// console.log(latitude,"dsfdsf");
+			// console.log(longitude,"dsfdsf");
+			// console.log(place,"dsfdsf");
+			// console.log(place.formatted_address,"dsfdsf");
+			document.getElementById('address-2').value = address;
+            document.getElementById('latitude-2').value = latitude;
+            document.getElementById('longitude-2').value = longitude;
+            document.getElementById('location-form-2').submit();
+			
+		});
+	}
+	google.maps.event.addDomListener(window, 'load', initAutocomplete);
+</script>
+{% endblock %}

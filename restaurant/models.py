@@ -1,6 +1,6 @@
 from django.db import models
 from home.models import *
-
+import uuid
 # Create your models here.
 
 otype = (('Delivery', 'Delivery'),('Pickup', 'Pickup'),('Schedule', 'Schedule'))
@@ -199,6 +199,7 @@ class Order(BaseModel):
 	user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='order_user', null=True, blank=True)
 	voucher = models.ForeignKey(Voucher, on_delete=models.PROTECT, related_name="order_voucher", null=True, blank=True)
 	orderid = models.CharField(max_length=30, null=True, blank=True)
+	identifier = models.CharField(max_length=100,unique=True,null=True,blank=True)
 	fname = models.CharField(max_length=160, null=True, blank=True, verbose_name="First Name")
 	lname = models.CharField(max_length=160, null=True, blank=True, verbose_name="Last Name")
 	email = models.EmailField(null=True, blank=True)

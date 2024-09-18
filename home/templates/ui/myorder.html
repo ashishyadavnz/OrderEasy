@@ -12,6 +12,7 @@
             {% for order in page_obj %}
             <div class="col-md-4">
                 <div class="card custom-order-card mt-5 "  style="min-height: 87%;"   >
+                    <a href="{% url "home:singelOrder" order.identifier %}">
                     <div class="card-body">
                         <h5 class="card-title">{{ order.restaurant.title }}</h5> 
                         <h6 class="card-subtitle mb-2 text-muted">Order ID: {{ order.orderid }}</h6> 
@@ -32,6 +33,7 @@
                         {% endif %}
 
                     </div>
+                </a>
                 </div>
             </div>
             {% endfor %}
