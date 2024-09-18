@@ -333,6 +333,24 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        calculateMatrixDistance("{{user_address.lat}}", "{{user_address.long}}", "{{order.restaurant.latitude}}", "{{order.restaurant.longitude}}",  "{{user_address.add}}", "{{order.restaurant.address}}", function(distance) {
+            console.log("final distance", distance.toFixed(2) + " km");
+            if (distance.toFixed(2) != "NaN") {
+                localStorage.setItem('rdistance'+"{{order.restaurant.id}}", distance.toFixed(2));
+                $.ajax({
+                    url: '{% url "home:update_dtype" %}',
+                    method: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        'order_type': $('#doptions').val(),
+                        'oid': "{{order.id}}",
+                        'rdistance': distance.toFixed(2)
+                    },
+                    success: function (res) {
+                    }
+                });
+            }
+        })
         setTimeout(() => {
 			var resid = "{{order.restaurant.id}}";
 			var distance = parseFloat(localStorage.getItem('rdistance'+resid));
