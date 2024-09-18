@@ -168,7 +168,7 @@
 								</div>
 								<div class="modal-body ">
 									<div class="modal-content p-3 ">
-										<div class="restaurant-card" data-address="{{ restaurant.address }}" data-latitude="{{ restaurant.latitude }}" data-longitude="{{ restaurant.longitude }}" data-vip="{{ restaurant.vip }}">
+										<div class="restaurant-card" data-id="{{ restaurant.id }}" data-address="{{ restaurant.address }}" data-latitude="{{ restaurant.latitude }}" data-longitude="{{ restaurant.longitude }}" data-vip="{{ restaurant.vip }}">
 											{% if restaurant.start and restaurant.end %}
 											<p><b>{{ restaurant.start }}</b> To <b>{{ restaurant.end }}</b></p>
 											{% endif %}								
@@ -450,10 +450,16 @@
 		setTimeout(() => {
 			var resid = "{{restaurant.id}}";
 			var distance = parseFloat(localStorage.getItem('rdistance'+resid));
-			if (distance > 15) {
-				// $(".switch-wrap .switch-ot").click();
-				document.getElementById("pickup-option").click();
-			} else {
+			var distance1 = parseFloat(localStorage.getItem('rdistance1'+resid));
+			if (distance1.toString() != 'NaN') {
+				if (distance > 15) {
+					// $(".switch-wrap .switch-ot").click();
+					document.getElementById("pickup-option").click();
+				} else {
+					document.getElementById("delivery-option").click();
+				}
+			}
+			else {
 				document.getElementById("delivery-option").click();
 			}
 		}, 1000);
