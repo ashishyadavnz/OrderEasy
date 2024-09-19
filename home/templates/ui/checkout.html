@@ -142,18 +142,18 @@
                         {% csrf_token %}
                         <h4>Buyer information</h4>
                         <input type="hidden" name="oid" value="{{ order.id }}" required>
-                        <input type="text" name="first_name" placeholder="First Name" {% if order.fname %} value="{{ order.fname }}" readonly {% endif %} required>
-                        <input type="text" name="last_name" placeholder="Last Name" {% if order.lname %} value="{{ order.lname }}" readonly {% endif %} required>
+                        <input type="text" name="first_name" placeholder="First Name" {% if order.fname %} value="{{ order.fname }}" readonly {% endif %} required autocomplete="new-password">
+                        <input type="text" name="last_name" placeholder="Last Name" {% if order.lname %} value="{{ order.lname }}" readonly {% endif %} required autocomplete="new-password">
                         <div class="row">
                             <div class="col-lg-6">
-                                <input class="email-input" type="email" name="email" placeholder="E-mail" {% if order.email %} value="{{ order.email }}" readonly {% endif %} required>
+                                <input class="email-input" type="email" name="email" placeholder="E-mail" {% if order.email %} value="{{ order.email }}" readonly {% endif %} required autocomplete="new-password">
                             </div>
                             <div class="col-lg-6">
-                                <input type="number" name="phone" placeholder="Phone" {% if order.phone %} value="{{ order.phone }}" readonly {% endif %} required>
+                                <input type="number" name="phone" placeholder="Phone" {% if order.phone %} value="{{ order.phone }}" readonly {% endif %} required autocomplete="new-password">
                             </div>
                         </div>
                         <h4 class="two">Delivery details</h4>
-                        <input type="text" id="location-input-3" name="address" placeholder="Address" value="{{ user_address.display }}" required>
+                        <input type="text" id="location-input-3" name="address" placeholder="Address" value="{{ user_address.add }}" required autocomplete="new-password">
                         {% comment %} <textarea name="address" id="daddress" rows="10" cols="12" placeholder="Address" required></textarea> {% endcomment %}
                         <textarea name="instructions" id="instructions" rows="10" cols="12" placeholder="Special Instructions"></textarea>
                         <select class="doption-css Advice" name="otype" id="doptions" required>
@@ -307,13 +307,26 @@
 			var address = place.name;
 			var latitude = place.geometry.location.lat();
 			var longitude = place.geometry.location.lng();
+			var location = document.getElementById('location-input-3').value
 			document.getElementById('address-2').value = address;
 			document.getElementById('latitude-2').value = latitude;
 			document.getElementById('longitude-2').value = longitude;
-			var location = document.getElementById('location-input-3').value
 			document.getElementById('location-input-2').value = location;
-            calculateMatrixDistance(latitude, longitude, "{{order.restaurant.latitude}}", "{{order.restaurant.longitude}}", location, "{{order.restaurant.address}}", function(distance) {
-                console.log("final distance", distance.toFixed(2) + " km");
+            $.ajax({
+                url: '{% url "home:update_user_address" %}',  
+                type: 'POST',
+                data: {
+                    'orderId':'{{order.id}}',
+                    'location': location,
+                    'address': address,
+                    'latitude': latitude,
+                    'longitude': longitude,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'  
+                },
+                success: function (response) {
+                    console.log('User address updated successfully');
+                    calculateMatrixDistance(latitude, longitude, "{{order.restaurant.latitude}}", "{{order.restaurant.longitude}}", location, "{{order.restaurant.address}}", function(distance) {
+                        console.log("final distance", distance.toFixed(2) + " km");
                         if (distance.toFixed(2) != "NaN") {
                             localStorage.setItem('rdistance'+"{{order.restaurant.id}}", Math.ceil(distance.toFixed(2)));
                             $.ajax({
@@ -326,8 +339,13 @@
                                     'rdistance': Math.ceil(distance.toFixed(2))
                                 },
                                 success: function (res) {
-                                    document.getElementById('location-form-2').action = "{% url 'home:checkout' %}"
-                                    document.getElementById('location-form-2').submit();
+                                    var order = JSON.parse(res['order'])[0]['fields'];
+                                    $('.totel-delivery').find('h5').text('$'+order['charge']);
+                                    $('.totel-price').find('h2').text('$'+order['total']);
+                                    $('#doptions').find('option[value="'+order['otype']+'"]').attr('selected', true);
+                                    $('#doptions').val(order['otype']);
+                                    //document.getElementById('location-form-2').action = "{% url 'home:checkout' %}"
+                                    //document.getElementById('location-form-2').submit();
                                 }
                             });
                         }
@@ -354,8 +372,12 @@
                                 }
                             });
                         }
-            })
-
+                    })
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error updating user address:', error);
+                }
+            });
 		});
 	}
 	google.maps.event.addDomListener(window, 'load', initAutocomplete);
@@ -455,7 +477,9 @@
 			}
             $('#location-input-3').show()
             $('#location-input-3').attr('required', true);
+            {% if not user_address %}
             $('#location-input-3').val('')
+            {% endif %}
         }
         else{
             $('#location-input-3').hide()

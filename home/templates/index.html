@@ -147,7 +147,7 @@
 								<span class="input-group-text mt-2 bg-white" id="basic-addon1">
 									<i class="fa-solid fa-location-dot text-danger"></i>
 								</span>
-									<input required type="text" id="location-input-2" name="location" value="{{ user_address.display }}" class="form-control me-5 mt-2 location-input-2 " placeholder="Enter your address...">
+									<input required type="text" id="location-input-2" name="location" value="{{ user_address.add }}" class="form-control me-5 mt-2 location-input-2 " placeholder="Enter your address...">
 							</div>
 							<!-- </div> -->
 							<input type="hidden" id="address-2" name="address">
@@ -607,19 +607,19 @@
 				}
 				var html = `
 					<div class="cart-item" data-id="{{item.id}}"><div class="container">
-						<div class="row">
-							<div class="col-md-3">
+						<div class="row mx-0">
+							<div class="col-md-3 p-0">
 								<img src="${cart[i].image}" alt="${cart[i].title}" class="cart-item-image" loading="lazy">
 							</div>
-							<div class="col-md-5 pt-2" style="text-align: center;">
+							<div class="col-md-5 d-flex justify-content-between align-items-center">
 								<p style="font-size:20px"><strong>${cart[i].title}</strong></p>
 							</div>
-							<div class="col-md-2 pt-2" style="text-align: center;">
+							<div class="col-md-2 d-flex justify-content-between align-items-center p-0">
 								<p style="font-size:20px"><strong>$${cart[i].price} x <span class="cart-item-quantity">${cart[i].quantity}</span></strong></p>
 							</div>
-							<div class="col-md-2 float-right">
-								<a class="btn decrease-qty" data-resid="${cart[i].restaurant}" data-id="${cart[i].item_id}">-</a>
-								<a class="btn increase-qty me-2" data-resid="${cart[i].restaurant}" data-id="${cart[i].item_id}">+</a>
+							<div class="col-md-2 d-flex justify-content-between align-items-center pe-0">
+								<a class="btn decrease-qty lh-1 me-1" data-resid="${cart[i].restaurant}" data-id="${cart[i].item_id}">-</a>
+								<a class="btn increase-qty  lh-1" data-resid="${cart[i].restaurant}" data-id="${cart[i].item_id}">+</a>
 							</div>
 						</div>
 					</div>

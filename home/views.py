@@ -99,6 +99,9 @@ def update_dtype(request):
                 order.charge = 0
         else:
             order.charge = 0
+        if order.charge == 0:
+            order_type == "Pickup"
+        
         voucher = 0
         if order.voucher:
             voucher = order.voucher.discount
@@ -608,3 +611,25 @@ def myorder(request):
 def singelOrder(request,identifier):
     orderObj = Order.objects.get(identifier=identifier)
     return render(request, 'ui/singe_order.html', {'order': orderObj})
+
+
+def update_user_address(request):
+    if request.method == 'POST':
+        location = request.POST.get('location')
+        address = request.POST.get('address')
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+        orderId = request.POST.get('orderId')
+        orderObj = Order.objects.filter(id=orderId)[:1]
+        obj = serialize('json', orderObj, fields=['id', 'otype', 'charge', 'total'])
+        request.session['user_address'] = {
+            'add': location,
+            'display': address,
+            'lat': latitude,
+            'long': longitude,
+            'order': obj
+        }
+        
+        return JsonResponse({'message': 'User address updated successfully'})
+    else:
+        return JsonResponse({'error': 'Invalid request'}, status=400)
