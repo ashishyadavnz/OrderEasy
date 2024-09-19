@@ -789,7 +789,7 @@
 				}
 				if (option == 'Delivery' && distance > 15) {
 					$(".popup-overlay").show();
-					$(".popup-message").text("Delivery is not available for distances greater than 15 km.");
+					$(".popup-message").html(`<p>Delivery is not available for distances greater than 15 km.</p><p> You can Pickup your order from restaurant.</p>`);
 					return;
 				}
 
