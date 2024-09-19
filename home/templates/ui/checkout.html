@@ -318,11 +318,11 @@
 			let address = place.name;
 			let latitude = place.geometry.location.lat();
 			let longitude = place.geometry.location.lng();
-			let location = document.getElementById('location-input-3').value
-			document.getElementById('address-2').value = address;
-			document.getElementById('latitude-2').value = latitude;
-			document.getElementById('longitude-2').value = longitude;
-			document.getElementById('location-input-2').value = location;
+			let location = $('#location-input-3').val()
+			$('#address-2').val(address);
+			$('#latitude-2').val(latitude);
+			$('#longitude-2').val(longitude);
+			$('#location-input-2').val(location);
             $.ajax({
                 url: '{% url "home:update_user_address" %}',  
                 type: 'POST',
