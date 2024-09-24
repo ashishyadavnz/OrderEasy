@@ -365,8 +365,8 @@
         left: 46%;
         top: 98%;
     }
-    .hero-section{
-        padding-top: 105px;
+    .hero-section , .hero-section.about{
+        padding-top:100px !important;
     }
     .good-taste {
         width: 100%;
@@ -520,21 +520,23 @@
     form.checkout-form {
         margin-top: 60px;
     }
-    /* .navbar,.extras.bag{
-        display: none;
-    } */
+   
     header{
         padding: 30px 0;
     }
     .header-style .extras.bag {
         display: flex;
     }
-    #web {
+    #web ,#navbar-container{
         display: none !important;
     }
     #mobile {
         display: block !important;
     }
+    .log-imag{
+        width:100px;
+    }
+  
     .mobile-nav{
         width: 45%;
     }

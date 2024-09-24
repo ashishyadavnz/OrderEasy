@@ -16,7 +16,7 @@
 						<div class="nice-select-one">
 							<form class="d-flex align-items-center w-md-80" id="location-form" method="post" action="{% url 'restaurant:restaurant' %}">
 								{% csrf_token %}
-								<input required type="text" id="location-input" name="location" class="form-control" placeholder="Enter your address...">
+								<input required type="text" id="location-input" name="location" class="form-control-2 w-sm-100" placeholder="Enter your address...">
 								<input type="hidden" id="address" name="address">
 								<input type="hidden" id="latitude" name="latitude">
 								<input type="hidden" id="longitude" name="longitude">
@@ -32,9 +32,9 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-6 mt-5" data-aos="fade-up"  data-aos-delay="300" data-aos-duration="400">
+				<div class="col-lg-6 mt-md-5 mt-3" data-aos="fade-up"  data-aos-delay="300" data-aos-duration="400">
 					<div class="img-restaurant">
-						<img alt="man" src="{% static 'images/photo-1.png' %}">
+						<img class="w-100 pt-0" alt="man" src="{% static 'images/photo-1.png' %}">
 						<div class="wilmington">
 							<img alt="img" src="https://bslthemes.com/html/quickeat/assets/img/photo-2.jpg">
 							<div>
@@ -104,18 +104,18 @@
 				</div>
 			</div>
 		</section> -->
-		<section class="mb-4">
-			<div class="container-fluid px-md-5 px-4 ms-5">
+		<section class="mb-4 pt-md-0 pt-4">
+			<div class="container-fluid px-md-5 px-4 ">
 				<div id="order_cat">
-					<h4 class="ms-4 my-3">Order now your favourite food &amp; drinks</h4>
+					<h4 class="ms-md-4 my-3">Order now your favourite food &amp; drinks</h4>
 						<div>
-							<div class="row">
+							<div class="row mx-xl-4">
 								{% for cuisine in cuisines %}
 								{% if forloop.counter0|divisibleby:11 %}
 							</div>
-							<div class="row mx-4">
+							<div class="row mx-xl-4">
 							{% endif %}
-								<div class="col-md-1 text-center">
+								<div class="col-xl-1 col-md-2 col-sm-3 col-4  text-center">
 									<div class="item">
 										<a href="{% url 'restaurant:restaurants-cuisine' cuisine.slug %}">
 											<div class="img-wrap">
