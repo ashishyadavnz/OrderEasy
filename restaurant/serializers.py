@@ -13,10 +13,10 @@ class UserSerializer(serializers.ModelSerializer):
 		return obj.display()
 
 class RestaurantSerializer(serializers.ModelSerializer):
-    owners = UserSerializer(source='owner', read_only = True)
-    counties = CountrySerializer(source='country', read_only = True)
-    states = StateSerializer(source='state', read_only = True)
-    timezones = TimezoneSerializer(source='timezone', read_only = True)
+    owners = UserSerializer(source='owner', read_only=True)
+    counties = CountrySerializer(source='country', read_only=True)
+    states = StateSerializer(source='state', read_only=True)
+    timezones = TimezoneSerializer(source='timezone', read_only=True)
 	
     class Meta:
         model = Restaurant
@@ -28,24 +28,24 @@ class CategorySerializer(serializers.ModelSerializer):
         exclude = ('track','utrack')
 
 class CuisineSerializer(serializers.ModelSerializer):
-    categories = CategorySerializer(source='category', read_only = True)
+    categories = CategorySerializer(source='category', read_only=True)
 
     class Meta:
         model = Cuisine
         exclude = ('track','utrack')
 
 class MenuSerializer(serializers.ModelSerializer):
-    restaurants = CategorySerializer(source='restaurant', read_only = True)
-    cuisines = CategorySerializer(source='cuisine', read_only = True)
+    restaurants = CategorySerializer(source='restaurant', read_only=True)
+    cuisines = CategorySerializer(source='cuisine', read_only=True)
 	
     class Meta:
         model = Menu
         exclude = ('track','utrack')
 
 class FoodItemSerializer(serializers.ModelSerializer):
-    restaurants = CategorySerializer(source='restaurant', read_only = True)
-    cuisines = CategorySerializer(source='cuisine', read_only = True)
-    categories = CategorySerializer(source='category', read_only = True)
+    restaurants = CategorySerializer(source='restaurant', read_only=True)
+    cuisines = CategorySerializer(source='cuisine', read_only=True)
+    categories = CategorySerializer(source='category', read_only=True)
 	
     class Meta:
         model = FoodItem
@@ -61,17 +61,37 @@ class ReservationSerializer(serializers.ModelSerializer):
         model = Reservation
         exclude = ('track','utrack')
 
-class CartSerializer(serializers.ModelSerializer):
-    fooditems = FoodItemSerializer(source='fooditem', read_only = True)
+class CartSerializer2(serializers.ModelSerializer):
+    fooditems = FoodItemSerializer(source='fooditem', read_only=True)
 	
     class Meta:
         model = Cart
         exclude = ('track','utrack')
 
 class OrderSerializer(serializers.ModelSerializer):
-    vouchers = VoucherSerializer(source='voucher', read_only = True)
-    carts = CartSerializer(source='cart', read_only = True)
+    vouchers = VoucherSerializer(source='voucher', read_only=True)
+    carts = CartSerializer2(source='cart_order', many=True, read_only=True)
 	
     class Meta:
         model = Order
+        exclude = ('track','utrack')
+
+    def create(self, validated_data):
+        order = Order.objects.create(**validated_data)
+        data = self.context['request'].data
+        food_items = data.getlist('food_items')
+        if food_items:
+            lst = []
+            for i in food_items:
+                fooditem = FoodItem.objects.get(id=i['id'])
+                lst.append(Cart(order=order,fooditem=fooditem, quantity=i['quantity']))
+            Cart.objects.bulk_create(lst)
+        return order
+
+class CartSerializer(serializers.ModelSerializer):
+    fooditems = FoodItemSerializer(source='fooditem', read_only=True)
+    orders = FoodItemSerializer(source='order', read_only=True)
+	
+    class Meta:
+        model = Cart
         exclude = ('track','utrack')
