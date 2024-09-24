@@ -2,8 +2,12 @@
 {% load custom_filter %}
 {% load static %}
 {% block content %}
-
-<div class="menu-layer container">	
+<style>
+	body{
+		background-color: #eaf6ea ;
+	}
+</style>
+<div class="menu-layer container" >	
     <section class="hero-section about gap">
        
 	</section>
@@ -12,7 +16,7 @@
 		<img src="https://testing.ordereasy.co.nz/static/images/order-easy.png" alt="OrderEasy" style="max-width: 150px;">
 	</div>
 	
-	<h1 style="color: #5cb85c; text-align: center; font-size: 24px;">Thank you for your order, {{ order.user.first_name }} {{ order.user.last_name }}!</h1>
+	<h1 style="color: #5cb85c; text-align: center; font-size: 24px;">Thank you for your order {% if order.user.first_name  %}, {{ order.user.first_name }} {{ order.user.last_name }}{% endif %}!</h1>
 	<p style="font-size: 18px;">Thanks for ordering from ORDER EASY. Your order has been successfully placed with the following details:</p>
 	
 	<ul style="font-size: 16px; padding-left: 20px;">

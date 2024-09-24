@@ -316,8 +316,8 @@ header {
 }
 .wilmington.location-restaurant {
     top: 28%;
-    right: 0;
-    width: 35%;
+    right: 10px;
+    /* width: 35%; */
 }
 .wilmington.location-restaurant p{
     line-height: 5px;

@@ -142,18 +142,19 @@
                         {% csrf_token %}
                         <h4>Buyer information</h4>
                         <input type="hidden" name="oid" value="{{ order.id }}" required>
-                        <input type="text" name="first_name" placeholder="First Name" {% if order.fname %} value="{{ order.fname }}" readonly {% endif %} required>
-                        <input type="text" name="last_name" placeholder="Last Name" {% if order.lname %} value="{{ order.lname }}" readonly {% endif %} required>
+                        <input type="text" name="first_name" placeholder="First Name" {% if order.fname %} value="{{ order.fname }}" readonly {% endif %} required autocomplete="new-password">
+                        <input type="text" name="last_name" placeholder="Last Name" {% if order.lname %} value="{{ order.lname }}" readonly {% endif %} required autocomplete="new-password">
                         <div class="row">
                             <div class="col-lg-6">
-                                <input class="email-input" type="email" name="email" placeholder="E-mail" {% if order.email %} value="{{ order.email }}" readonly {% endif %} required>
+                                <input class="email-input" type="email" name="email" placeholder="E-mail" {% if order.email %} value="{{ order.email }}" readonly {% endif %} required autocomplete="new-password">
                             </div>
                             <div class="col-lg-6">
-                                <input type="number" name="phone" placeholder="Phone" {% if order.phone %} value="{{ order.phone }}" readonly {% endif %} required>
+                                <input type="number" name="phone" placeholder="Phone" {% if order.phone %} value="{{ order.phone }}" readonly {% endif %} required autocomplete="new-password">
                             </div>
                         </div>
                         <h4 class="two">Delivery details</h4>
-                        <input type="text" id="location-input-3" name="address" placeholder="Address" value="{{ user_address.display }}" required>
+                        <input type="text" id="location-input-3" name="address" placeholder="Address" value="{{ user_address.add }}" required autocomplete="new-password">
+                        <button type="button" id="use-location-btn" class=" button-2  lh-lg rounded-4 mt-2 px-2" style="display:none;">Use My Current Location</button>
                         {% comment %} <textarea name="address" id="daddress" rows="10" cols="12" placeholder="Address" required></textarea> {% endcomment %}
                         <textarea name="instructions" id="instructions" rows="10" cols="12" placeholder="Special Instructions"></textarea>
                         <select class="doption-css Advice" name="otype" id="doptions" required>
@@ -291,7 +292,7 @@
 	google.maps.event.addDomListener(window, 'load', initAutocomplete);
 </script>
 <script>
-    $('#checkout-form').on('keyup keypress', function(e) {
+    $('#checkout-form #location-input-3').on('keyup keypress', function(e) {
         var keyCode = e.keyCode || e.which;
         if (keyCode === 13) { 
             e.preventDefault();
@@ -299,23 +300,68 @@
         }
     });
 	function initAutocomplete() {
-		var input = document.getElementById('location-input-3');
-		var autocomplete = new google.maps.places.Autocomplete(input);
+		let input = document.getElementById('location-input-3');
+		let autocomplete = new google.maps.places.Autocomplete(input);
+        let isPlaceSelected = false; 
+        let useLocationBtn = $('#use-location-btn');
 		autocomplete.setFields(['address_components', 'geometry', 'name']);
 		autocomplete.addListener('place_changed', function () {
-			var place = autocomplete.getPlace();
-			var address = place.name;
-			var latitude = place.geometry.location.lat();
-			var longitude = place.geometry.location.lng();
-			document.getElementById('address-2').value = address;
-			document.getElementById('latitude-2').value = latitude;
-			document.getElementById('longitude-2').value = longitude;
-			var location = document.getElementById('location-input-3').value
-			document.getElementById('location-input-2').value = location;
-            calculateMatrixDistance(latitude, longitude, "{{order.restaurant.latitude}}", "{{order.restaurant.longitude}}", location, "{{order.restaurant.address}}", function(distance) {
-                console.log("final distance", distance.toFixed(2) + " km");
+			let place = autocomplete.getPlace();
+            if (!place.geometry) {
+                input.value = ''; 
+                useLocationBtn.show()
+                isPlaceSelected = false;
+                alert("Please select an address from the suggestions.");
+                return;
+            }
+            isPlaceSelected = true
+			let address = place.name;
+			let latitude = place.geometry.location.lat();
+			let longitude = place.geometry.location.lng();
+			let location = $('#location-input-3').val()
+			$('#address-2').val(address);
+			$('#latitude-2').val(latitude);
+			$('#longitude-2').val(longitude);
+			$('#location-input-2').val(location);
+            $.ajax({
+                url: '{% url "home:update_user_address" %}',  
+                type: 'POST',
+                data: {
+                    'orderId':'{{order.id}}',
+                    'location': location,
+                    'address': address,
+                    'latitude': latitude,
+                    'longitude': longitude,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'  
+                },
+                success: function (response) {
+                    console.log('User address updated successfully');
+                    calculateMatrixDistance(latitude, longitude, "{{order.restaurant.latitude}}", "{{order.restaurant.longitude}}", location, "{{order.restaurant.address}}", function(distance) {
+                        console.log("final distance", distance.toFixed(2) + " km");
                         if (distance.toFixed(2) != "NaN") {
                             localStorage.setItem('rdistance'+"{{order.restaurant.id}}", Math.ceil(distance.toFixed(2)));
+                            let orderOPS = $('#doptions').val()
+                            if (orderOPS == "Delivery") {
+                                if (distance > 15) {
+                                    console.log($('#doptions').find('option[value="Pickup"]'))
+                                    $('#doptions').find('option[value="Pickup"]').attr('selected', true);
+                                    $('#doptions').val("Pickup");
+                                    $('#location-input-3').hide()
+                                    $('#location-input-3').removeAttr('required')
+                                    $(".popup-overlay").show();
+                                    $(".popup-message").html(`<p>Delivery is not available for distances greater than 15 km.</p><p> You can Pickup your order from {{order.restaurant.title}}.</p>`);
+                                    return;
+                                }
+                                $('#location-input-3').show()
+                                $('#location-input-3').attr('required', true);
+                                {% if not user_address %}
+                                $('#location-input-3').val('')
+                                {% endif %}
+                            }
+                            else{
+                                $('#location-input-3').hide()
+                                $('#location-input-3').removeAttr('required')
+                            }
                             $.ajax({
                                 url: '{% url "home:update_dtype" %}',
                                 method: 'POST',
@@ -326,8 +372,13 @@
                                     'rdistance': Math.ceil(distance.toFixed(2))
                                 },
                                 success: function (res) {
-                                    document.getElementById('location-form-2').action = "{% url 'home:checkout' %}"
-                                    document.getElementById('location-form-2').submit();
+                                    var order = JSON.parse(res['order'])[0]['fields'];
+                                    $('.totel-delivery').find('h5').text('$'+order['charge']);
+                                    $('.totel-price').find('h2').text('$'+order['total']);
+                                    $('#doptions').find('option[value="'+order['otype']+'"]').attr('selected', true);
+                                    $('#doptions').val(order['otype']);
+                                    //document.getElementById('location-form-2').action = "{% url 'home:checkout' %}"
+                                    //document.getElementById('location-form-2').submit();
                                 }
                             });
                         }
@@ -354,9 +405,153 @@
                                 }
                             });
                         }
-            })
-
+                    })
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error updating user address:', error);
+                }
+            });
 		});
+        
+        input.addEventListener('focusout', function() {
+            setTimeout(function() {
+                console.log(isPlaceSelected)
+                if (!isPlaceSelected) {
+                    input.value = '';
+                    useLocationBtn.show()
+                    isPlaceSelected = true;
+                    alert("Please select a valid address from the suggestions.");
+                }
+         }, 200); 
+        });
+        input.addEventListener('input', function() {
+            isPlaceSelected = false;
+        });
+        useLocationBtn.on('click', function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    let latitude = position.coords.latitude;
+                    let longitude = position.coords.longitude;
+                    console.log(latitude,longitude)
+                    let geocoder = new google.maps.Geocoder();
+                    let latlng = { lat: latitude, lng: longitude };
+                    geocoder.geocode({ location: latlng }, function(results, status) {
+                        if (status === "OK") {
+                            if (results[0]) {
+                                var location = results[0].formatted_address;
+                                input.value = location;
+                                useLocationBtn.hide()  // Hide the button
+                                document.getElementById('address-2').value = location;
+                                document.getElementById('latitude-2').value = latitude;
+                                document.getElementById('longitude-2').value = longitude;
+                                document.getElementById('location-input-2').value = location;
+                                $.ajax({
+                                    url: '{% url "home:update_user_address" %}',  
+                                    type: 'POST',
+                                    data: {
+                                        'orderId':'{{order.id}}',
+                                        'location': location,
+                                        'address': location,
+                                        'latitude': latitude,
+                                        'longitude': longitude,
+                                        'csrfmiddlewaretoken': '{{ csrf_token }}'  
+                                    },
+                                    success: function (response) {
+                                        console.log('User address updated successfully');
+                                        calculateMatrixDistance(latitude, longitude, "{{order.restaurant.latitude}}", "{{order.restaurant.longitude}}", location, "{{order.restaurant.address}}", function(distance) {
+                                            console.log("final distance", distance.toFixed(2) + " km");
+                                            if (distance.toFixed(2) != "NaN") {
+                                                localStorage.setItem('rdistance'+"{{order.restaurant.id}}", Math.ceil(distance.toFixed(2)));
+                                                let orderOPS = $('#doptions').val()
+                                                if (orderOPS == "Delivery") {
+                                                    if (distance > 15) {
+                                                        console.log($('#doptions').find('option[value="Pickup"]'))
+                                                        $('#doptions').find('option[value="Pickup"]').attr('selected', true);
+                                                        $('#doptions').val("Pickup");
+                                                        $('#location-input-3').hide()
+                                                        useLocationBtn.hide()
+                                                        $('#location-input-3').removeAttr('required')
+                                                        $(".popup-overlay").show();
+                                                        $(".popup-message").html(`<p>Delivery is not available for distances greater than 15 km.</p><p> You can Pickup your order from {{order.restaurant.title}}.</p>`);
+                                                        return;
+                                                    }
+                                                    $('#location-input-3').show()
+                                                    $('#location-input-3').attr('required', true);
+                                                    {% if not user_address %}
+                                                    $('#location-input-3').val('')
+                                                    {% endif %}
+                                                }
+                                                else{
+                                                    $('#location-input-3').hide()
+                                                    useLocationBtn.hide()
+                                                    $('#location-input-3').removeAttr('required')
+                                                }
+                                                $.ajax({
+                                                    url: '{% url "home:update_dtype" %}',
+                                                    method: 'POST',
+                                                    data: {
+                                                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                                                        'order_type': $('#doptions').val(),
+                                                        'oid': "{{order.id}}",
+                                                        'rdistance': Math.ceil(distance.toFixed(2))
+                                                    },
+                                                    success: function (res) {
+                                                        var order = JSON.parse(res['order'])[0]['fields'];
+                                                        $('.totel-delivery').find('h5').text('$'+order['charge']);
+                                                        $('.totel-price').find('h2').text('$'+order['total']);
+                                                        $('#doptions').find('option[value="'+order['otype']+'"]').attr('selected', true);
+                                                        $('#doptions').val(order['otype']);
+                                                        //document.getElementById('location-form-2').action = "{% url 'home:checkout' %}"
+                                                        //document.getElementById('location-form-2').submit();
+                                                    }
+                                                });
+                                            }
+                                            else {
+                                                $.ajax({
+                                                    url: '{% url "home:update_dtype" %}',
+                                                    method: 'POST',
+                                                    data: {
+                                                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                                                        'order_type': 'Pickup',
+                                                        'oid': "{{order.id}}",
+                                                        'rdistance': 0
+                                                    },
+                                                    success: function (res) {
+                                                        if (res['status'] == 'success') {
+                                                            var order = JSON.parse(res['order'])[0]['fields'];
+                                                            $('.totel-delivery').find('h5').text('$'+order['charge']);
+                                                            $('.totel-price').find('h2').text('$'+order['total']);
+                                                            $('#doptions').find('option[value="'+order['otype']+'"]').attr('selected', true);
+                                                            $('#doptions').val(order['otype']);
+                                                            $('#location-input-3').hide()
+                                                            useLocationBtn.hide()
+                                                            $('#location-input-3').removeAttr('required')
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        })
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error('Error updating user address:', error);
+                                    }
+                                });
+
+                            } else {
+                                alert("No results found for your location.");
+                            }
+                        } else {
+                            alert("Geocoder failed due to: " + status);
+                        }
+                    });
+                }, function() {
+                    alert("Geolocation failed. Please allow location access.");
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        });
+    
 	}
 	google.maps.event.addDomListener(window, 'load', initAutocomplete);
 
@@ -450,12 +645,14 @@
                 $('#doptions').find('option[value="Pickup"]').attr('selected', true);
                 $(this).val("Pickup");
 				$(".popup-overlay").show();
-                $(".popup-message").text("Delivery is not available for distances greater than 15 km.");
+                $(".popup-message").html(`<p>Delivery is not available for distances greater than 15 km.</p><p> You can Pickup your order from {{order.restaurant.title}}.</p>`);
                 return;
 			}
             $('#location-input-3').show()
             $('#location-input-3').attr('required', true);
+            {% if not user_address %}
             $('#location-input-3').val('')
+            {% endif %}
         }
         else{
             $('#location-input-3').hide()
