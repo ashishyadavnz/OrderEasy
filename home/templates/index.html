@@ -946,15 +946,17 @@
 	</script>
 	<script>
 		function trackLocation() {
-			navigator.geolocation.getCurrentPosition(
-				function(position) {
-					console.log("Initial Position: ", position.coords.latitude, position.coords.longitude);
-				},
-				function(error) {
-					console.error("Error: ", error);
-				},
-				{ enableHighAccuracy: true }
-			);
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(
+					function(position) {
+						console.log("Initial Position: ", position.coords.latitude, position.coords.longitude);
+					},
+					function(error) {
+						console.error("Error: ", error);
+					},
+					{ enableHighAccuracy: true }
+				);
+			}
 		}
 		trackLocation();
 	</script>
@@ -1048,38 +1050,67 @@
 		}
 		function displayDistances() {
 			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(function(position) {
-					let userLat = position.coords.latitude;
-					let userLon = position.coords.longitude;
-					let useraddress = {{ user_address|default:"null" |safe }};
-					if(useraddress){
-						userLat = useraddress.lat
-						userLon = useraddress.long;
-						useraddress = useraddress.add;
+				navigator.geolocation.getCurrentPosition(
+					function(position) {
+						let userLat = position.coords.latitude;
+						let userLon = position.coords.longitude;
+						let useraddress = {{ user_address|default:"null" |safe }};
+						if(useraddress){
+							userLat = useraddress.lat
+							userLon = useraddress.long;
+							useraddress = useraddress.add;
+						}
+						document.querySelectorAll('.restaurant-card').forEach(function(card) {
+							const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
+							const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
+							const restaddress = card.getAttribute('data-address');
+							const restaurantID = parseInt(card.getAttribute('data-id'));
+							calculateMatrixDistance(userLat, userLon, restaurantLat, restaurantLon, useraddress, restaddress, function(distance) {
+								console.log("final distance", distance.toFixed(2) + " km");
+								if (distance.toFixed(2) != "NaN") {
+									localStorage.removeItem('rdistance1')
+									localStorage.setItem('rdistance'+restaurantID, Math.ceil(distance.toFixed(2)));
+									card.querySelector('.distance').innerText = `Distance: ${Math.ceil(distance.toFixed(2))} km`;
+								}
+								else {
+									localStorage.setItem('rdistance1'+restaurantID, true)
+									card.querySelector('.distance').innerText = '';
+									document.getElementById("pickup-option").click();
+								}
+							});
+						});
+					},
+					function(error) {
+						let useraddress = {{ user_address|default:"null" |safe }};
+						if(useraddress){
+							userLat = useraddress.lat
+							userLon = useraddress.long;
+							useraddress = useraddress.add;
+							document.querySelectorAll('.restaurant-card').forEach(function(card) {
+								const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
+								const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
+								const restaddress = card.getAttribute('data-address');
+								const restaurantID = parseInt(card.getAttribute('data-id'));
+								calculateMatrixDistance(userLat, userLon, restaurantLat, restaurantLon, useraddress, restaddress, function(distance) {
+									console.log("final distance", distance.toFixed(2) + " km");
+									if (distance.toFixed(2) != "NaN") {
+										localStorage.removeItem('rdistance1')
+										localStorage.setItem('rdistance'+restaurantID, Math.ceil(distance.toFixed(2)));
+										card.querySelector('.distance').innerText = `Distance: ${Math.ceil(distance.toFixed(2))} km`;
+									}
+									else {
+										localStorage.setItem('rdistance1'+restaurantID, true)
+										card.querySelector('.distance').innerText = '';
+										document.getElementById("pickup-option").click();
+									}
+								})
+							});
+						}
 					}
-					document.querySelectorAll('.restaurant-card').forEach(function(card) {
-					const restaurantLat = parseFloat(card.getAttribute('data-latitude'));
-					const restaurantLon = parseFloat(card.getAttribute('data-longitude'));
-					const restaddress = card.getAttribute('data-address');
-					const restaurantID = parseInt(card.getAttribute('data-id'));
-					calculateMatrixDistance(userLat, userLon, restaurantLat, restaurantLon, useraddress, restaddress, function(distance) {
-					console.log("final distance", distance.toFixed(2) + " km");
-							if (distance.toFixed(2) != "NaN") {
-								localStorage.removeItem('rdistance1')
-								localStorage.setItem('rdistance'+restaurantID, Math.ceil(distance.toFixed(2)));
-								card.querySelector('.distance').innerText = `Distance: ${Math.ceil(distance.toFixed(2))} km`;
-							}
-							else {
-								localStorage.setItem('rdistance1'+restaurantID, true)
-								card.querySelector('.distance').innerText = '';
-								document.getElementById("pickup-option").click();
-					}
-				});
-			});
-		});
+				);	
 			} else {
-			console.error("Geolocation is not supported by this browser.");
-		}
+				console.error("Geolocation is not supported by this browser.");
+			}
 		}
 
 		document.addEventListener('DOMContentLoaded', displayDistances);
