@@ -16,11 +16,11 @@
 						<div class="nice-select-one">
 							<form class="d-flex align-items-center w-md-80" id="location-form" method="post" action="{% url 'restaurant:restaurant' %}">
 								{% csrf_token %}
-								<input required type="text" id="location-input" name="location" class="form-control-2 w-sm-100" placeholder="Enter your address...">
+								<input style="height:47px;" required type="text" id="location-input" name="location" class="form-control w-sm-100" placeholder="Enter your address...">
 								<input type="hidden" id="address" name="address">
 								<input type="hidden" id="latitude" name="latitude">
 								<input type="hidden" id="longitude" name="longitude">
-								<button type="submit" class="btn  button-2 ms-2 lh-lg">Search</button>
+								<button style="height:47px;"  type="submit" class="btn  button-2 ms-2 lh-lg">Search</button>
 							</form>
 							{% comment %} <select class="nice-select Advice">
 								{% for rs in restaurants  %}  
