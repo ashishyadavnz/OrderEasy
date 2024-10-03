@@ -68,6 +68,12 @@ class CartSerializer2(serializers.ModelSerializer):
         model = Cart
         exclude = ('track','utrack')
 
+class OrderSerializer2(serializers.ModelSerializer):
+    vouchers = VoucherSerializer(source='voucher', read_only=True)
+    class Meta:
+        model = Order
+        exclude = ('track','utrack')
+
 class OrderSerializer(serializers.ModelSerializer):
     vouchers = VoucherSerializer(source='voucher', read_only=True)
     carts = CartSerializer2(source='cart_order', many=True, read_only=True)
@@ -79,7 +85,7 @@ class OrderSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         order = Order.objects.create(**validated_data)
         data = self.context['request'].data
-        food_items = data.getlist('food_items')
+        food_items = data.get('food_items')
         if food_items:
             lst = []
             for i in food_items:
@@ -90,7 +96,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class CartSerializer(serializers.ModelSerializer):
     fooditems = FoodItemSerializer(source='fooditem', read_only=True)
-    orders = FoodItemSerializer(source='order', read_only=True)
+    orders = OrderSerializer2(source='order', read_only=True)
 	
     class Meta:
         model = Cart

@@ -59,7 +59,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.filter(status='Active').order_by("-id")
     serializer_class = CartSerializer
-    filterset_fields = ['fooditem','status']
+    filterset_fields = ['order','fooditem','status']
     search_fields=['fooditem__title']
     http_method_names = ['get', 'post', 'patch']
 
