@@ -13,6 +13,11 @@
 .payment-method label {
     margin-right: 10px;
 }
+.button-price.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    border:unset;
+}
 
 </style>
 <div class="menu-layer">
@@ -167,11 +172,11 @@
                             If you have any allergy, please order from the restaurant directly.
                         </div>
                         <div class="payment-method ">
-                            <h4 class="two">Payment Method</h4>
+                            <h4 >Payment Method</h4>
                             <label>
                                 Pay with Cash
                             </label>
-                                <input type="radio" name="payment_method" value="Cash" {% if order.payment_method == "Cash" or not order.payment_method %}checked{% endif %}>
+                            <input type="radio" name="payment_method" value="Cash" {% if order.payment_method == "Cash" or not order.payment_method %}checked{% endif %}>
                             <!-- <label>
                                 <input type="radio" name="payment_method" value="Card" {% if order.payment_method == "Card" %}checked{% endif %}>
                                 Pay with Card
@@ -181,8 +186,11 @@
                                 Other
                             </label> -->
                         </div>
-
-                        <button type="submit" id="checkout_button" name="place_order" class="button-price">Place Order</button>
+                        <div class="payment-method d-flex ">
+                            <input class="me-2" type="checkbox"  id="accept_term"  name="accept_term" >
+                            <div> I accept all the terms & conditions. <a target="_blank" class="text-primary" href="{% url 'home:page_detail' 'terms-conditions' %}">View T&C</a></div>
+                        </div>
+                        <button type="submit" id="checkout_button" name="place_order" class="button-price disabled" disabled>Place Order</button>
                         <!-- <input type="text" name="street" placeholder="Street">
                         <div class="row">
                             <div class="col-lg-6">
@@ -687,4 +695,41 @@
         $(".popup-overlay").hide();
     });
 </script>
+<script>
+    function validateForm() {
+        var isValid = true;
+        $('#checkout-form input[required]').each(function() {
+            if ($(this).val().trim() === '') {
+                isValid = false;
+            }
+        });
+
+        var email = $('input[type="email"]').val();
+        var phone = $('input[name="phone"]').val();
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        var phonePattern = /^[0-9]{10}$/;
+        //|| !phonePattern.test(phone)
+        if (!emailPattern.test(email) ) {
+            isValid = false;
+        }
+        if (!$('#accept_term').is(':checked')) {
+            isValid = false;
+        }
+
+        if (isValid) {
+            $('#checkout_button').removeAttr('disabled').removeClass('disabled');
+        } else {
+            $('#checkout_button').attr('disabled', 'disabled').addClass('disabled');
+        }
+    }
+
+    $('#checkout-form input, #accept_term').on('input change', function() {
+        validateForm();
+    });
+
+    $(document).ready(function() {
+        validateForm();
+    });
+</script>
+
 {% endblock %}
